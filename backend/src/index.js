@@ -18,9 +18,8 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: (origin, cb) => {
-    // Permite requests sem origin (ex: Postman, curl) em dev
-    if (!origin && process.env.NODE_ENV !== 'production') return cb(null, true);
-    if (!origin) return cb(new Error('Origem não permitida'), false);
+    // Sem origin = curl, Postman, server-to-server — sempre permite
+    if (!origin) return cb(null, true);
     const ok = allowedOrigins.some(o =>
       o instanceof RegExp ? o.test(origin) : o === origin
     );
