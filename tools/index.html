@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tools — fillipeai.com</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#0f0f0f;color:#e5e5e5;font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;display:flex;flex-direction:column}
+  header{padding:1.25rem 2rem;border-bottom:1px solid #1a1a1a;display:flex;align-items:center;gap:1rem}
+  header a{color:#888;text-decoration:none;font-size:.85rem}
+  header a:hover{color:#fff}
+  header span{color:#444}
+  header h1{font-size:1.1rem;font-weight:600}
+  main{flex:1;max-width:860px;width:100%;margin:0 auto;padding:3rem 2rem}
+  .page-title{font-size:1.75rem;font-weight:700;margin-bottom:.5rem}
+  .page-sub{color:#555;font-size:.9rem;margin-bottom:2.5rem}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem}
+  .card{background:#141414;border:1px solid #1e1e1e;border-radius:10px;padding:1.5rem;text-decoration:none;color:inherit;transition:border-color .2s,background .2s;display:flex;flex-direction:column;gap:.75rem}
+  .card:hover{border-color:#333;background:#181818}
+  .card-icon{font-size:2rem}
+  .card-title{font-size:1rem;font-weight:600;color:#e5e5e5}
+  .card-desc{font-size:.82rem;color:#555;line-height:1.55}
+  .card-badge{font-size:.7rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:4px;width:fit-content;margin-top:auto}
+  .badge-gray{background:#1e1e1e;color:#555;border:1px solid #252525}
+  .badge-purple{background:#1e1430;color:#a5b4fc;border:1px solid #2d1d5a}
+</style>
+</head>
+<body>
+<header>
+  <a href="/">fillipeai.com</a>
+  <span>/</span>
+  <h1>tools</h1>
+</header>
+<main>
+  <div class="page-title">Tools</div>
+  <div class="page-sub">Ferramentas de automação para o meu workflow</div>
+  <div class="grid">
+    <a class="card" href="/tools/create-pdf">
+      <div class="card-icon">📄</div>
+      <div class="card-title">create-pdf</div>
+      <div class="card-desc">Carregue um arquivo HTML e gere um PDF diretamente no navegador. Sem upload para servidor.</div>
+      <span class="card-badge badge-gray">client-side</span>
+    </a>
+    <a class="card" href="/tools/ebook-generator">
+      <div class="card-icon">✦</div>
+      <div class="card-title">ebook-generator</div>
+      <div class="card-desc">Gere ebooks completos em HTML usando Claude AI. Cole seu prompt, escolha o modelo e baixe o arquivo.</div>
+      <span class="card-badge badge-purple">Claude AI</span>
+    </a>
+  </div>
+</main>
+</body>
+</html>

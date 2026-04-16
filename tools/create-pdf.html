@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create PDF — Tools</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#0f0f0f;color:#e5e5e5;font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;display:flex;flex-direction:column}
+  header{padding:1rem 2rem;border-bottom:1px solid #222;display:flex;align-items:center;gap:1rem}
+  header a{color:#888;text-decoration:none;font-size:.85rem}
+  header a:hover{color:#fff}
+  header span{color:#444}
+  header h1{font-size:1.1rem;font-weight:600;color:#fff}
+  .badge{background:#1a1a1a;border:1px solid #333;border-radius:4px;padding:2px 8px;font-size:.75rem;color:#888}
+  main{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:0;height:calc(100vh - 57px)}
+  .panel{display:flex;flex-direction:column}
+  .panel-header{padding:1rem 1.5rem;border-bottom:1px solid #222;font-size:.8rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#666;display:flex;align-items:center;justify-content:space-between}
+  .left-panel{border-right:1px solid #222}
+
+  /* Drop zone */
+  .dropzone{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;padding:2rem;cursor:pointer;transition:background .2s;position:relative}
+  .dropzone:hover,.dropzone.drag-over{background:#161616}
+  .dropzone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer}
+  .drop-icon{width:64px;height:64px;border:2px dashed #333;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:2rem;color:#444;transition:border-color .2s,color .2s}
+  .dropzone:hover .drop-icon,.dropzone.drag-over .drop-icon{border-color:#555;color:#888}
+  .drop-title{font-size:1rem;color:#aaa;font-weight:500}
+  .drop-sub{font-size:.8rem;color:#555}
+
+  /* File loaded state */
+  .file-info{display:none;flex-direction:column;gap:.75rem;width:100%;max-width:360px}
+  .file-card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;padding:1rem;display:flex;align-items:center;gap:.75rem}
+  .file-icon{width:36px;height:36px;background:#222;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+  .file-name{font-size:.85rem;color:#ccc;font-weight:500;word-break:break-all}
+  .file-size{font-size:.75rem;color:#555;margin-top:2px}
+  .btn-clear{background:none;border:none;color:#555;cursor:pointer;padding:4px;border-radius:4px;margin-left:auto;font-size:.9rem;flex-shrink:0}
+  .btn-clear:hover{color:#888;background:#222}
+
+  .actions{display:flex;flex-direction:column;gap:.5rem;width:100%;max-width:360px}
+  .btn{width:100%;padding:.75rem 1.5rem;border-radius:8px;border:none;cursor:pointer;font-size:.9rem;font-weight:600;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:.5rem}
+  .btn-primary{background:#e5e5e5;color:#0f0f0f}
+  .btn-primary:hover{background:#fff}
+  .btn-secondary{background:#1a1a1a;color:#aaa;border:1px solid #2a2a2a}
+  .btn-secondary:hover{background:#222;color:#ccc}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+
+  /* Preview */
+  .preview-panel{background:#161616;flex:1;display:flex;flex-direction:column}
+  .preview-panel iframe{flex:1;border:none;width:100%;background:#fff}
+  .preview-empty{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.5rem;color:#333;font-size:.85rem}
+  .preview-empty-icon{font-size:3rem;opacity:.3}
+
+  @media(max-width:768px){
+    main{grid-template-columns:1fr;grid-template-rows:auto 1fr}
+    .left-panel{border-right:none;border-bottom:1px solid #222}
+    .dropzone{padding:1.5rem}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="/">fillipeai.com</a>
+  <span>/</span>
+  <a href="/tools">tools</a>
+  <span>/</span>
+  <h1>create-pdf</h1>
+  <span style="flex:1"></span>
+  <span class="badge">client-side</span>
+</header>
+
+<main>
+  <div class="panel left-panel">
+    <div class="panel-header">
+      <span>Arquivo HTML</span>
+      <span id="file-status" style="color:#555;font-size:.75rem;font-weight:400">nenhum arquivo</span>
+    </div>
+
+    <div class="dropzone" id="dropzone">
+      <input type="file" accept=".html,.htm" id="file-input">
+      <div class="drop-icon">📄</div>
+      <div class="drop-title">Arraste um arquivo HTML</div>
+      <div class="drop-sub">ou clique para selecionar</div>
+
+      <div class="file-info" id="file-info">
+        <div class="file-card">
+          <div class="file-icon">🗒️</div>
+          <div>
+            <div class="file-name" id="fname">—</div>
+            <div class="file-size" id="fsize">—</div>
+          </div>
+          <button class="btn-clear" id="btn-clear" title="Remover">✕</button>
+        </div>
+        <div class="actions">
+          <button class="btn btn-primary" id="btn-pdf" disabled>
+            🖨️ Abrir para PDF
+          </button>
+          <button class="btn btn-secondary" id="btn-preview">
+            👁️ Prévia
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel preview-panel">
+    <div class="panel-header">
+      <span>Prévia</span>
+      <span id="preview-label" style="color:#555;font-size:.75rem;font-weight:400">aguardando arquivo</span>
+    </div>
+    <div class="preview-empty" id="preview-empty">
+      <span class="preview-empty-icon">🖼️</span>
+      <span>Carregue um arquivo para visualizar</span>
+    </div>
+    <iframe id="preview-frame" style="display:none"></iframe>
+  </div>
+</main>
+
+<script>
+const dropzone = document.getElementById('dropzone');
+const fileInput = document.getElementById('file-input');
+const fileInfo = document.getElementById('file-info');
+const fname = document.getElementById('fname');
+const fsize = document.getElementById('fsize');
+const btnPdf = document.getElementById('btn-pdf');
+const btnPreview = document.getElementById('btn-preview');
+const btnClear = document.getElementById('btn-clear');
+const previewFrame = document.getElementById('preview-frame');
+const previewEmpty = document.getElementById('preview-empty');
+const fileStatus = document.getElementById('file-status');
+const previewLabel = document.getElementById('preview-label');
+
+let currentHTML = null;
+let currentName = '';
+
+function formatSize(bytes) {
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+  return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+}
+
+function loadFile(file) {
+  if (!file || !file.name.match(/\.html?$/i)) {
+    alert('Por favor selecione um arquivo .html');
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = e => {
+    currentHTML = e.target.result;
+    currentName = file.name;
+
+    // Show file info, hide drop prompt
+    dropzone.querySelector('.drop-icon').style.display = 'none';
+    dropzone.querySelector('.drop-title').style.display = 'none';
+    dropzone.querySelector('.drop-sub').style.display = 'none';
+    fileInfo.style.display = 'flex';
+    fileInput.style.pointerEvents = 'none';
+
+    fname.textContent = file.name;
+    fsize.textContent = formatSize(file.size);
+    btnPdf.disabled = false;
+    fileStatus.textContent = file.name;
+
+    // Auto-preview
+    showPreview();
+  };
+  reader.readAsText(file);
+}
+
+function showPreview() {
+  if (!currentHTML) return;
+  const blob = new Blob([currentHTML], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  previewFrame.src = url;
+  previewFrame.style.display = 'block';
+  previewEmpty.style.display = 'none';
+  previewLabel.textContent = currentName;
+}
+
+function clearFile() {
+  currentHTML = null;
+  currentName = '';
+  fileInput.value = '';
+
+  dropzone.querySelector('.drop-icon').style.display = '';
+  dropzone.querySelector('.drop-title').style.display = '';
+  dropzone.querySelector('.drop-sub').style.display = '';
+  fileInfo.style.display = 'none';
+  fileInput.style.pointerEvents = '';
+
+  btnPdf.disabled = true;
+  fileStatus.textContent = 'nenhum arquivo';
+
+  previewFrame.style.display = 'none';
+  previewEmpty.style.display = '';
+  previewLabel.textContent = 'aguardando arquivo';
+}
+
+function openForPdf() {
+  if (!currentHTML) return;
+
+  const printCSS = `
+    <style>
+      @media print {
+        a[href]::after { content: none !important; }
+        .no-print, button { display: none !important; }
+        @page { margin: 1.5cm; }
+      }
+    </style>
+  `;
+
+  // Inject print CSS before </head> or at end of <head>
+  let html = currentHTML;
+  if (html.includes('</head>')) {
+    html = html.replace('</head>', printCSS + '</head>');
+  } else {
+    html = printCSS + html;
+  }
+
+  const win = window.open('', '_blank');
+  if (!win) {
+    alert('Popup bloqueado! Permita popups para este site e tente novamente.');
+    return;
+  }
+  win.document.write(html);
+  win.document.close();
+  setTimeout(() => win.print(), 800);
+}
+
+// Events
+fileInput.addEventListener('change', e => {
+  if (e.target.files[0]) loadFile(e.target.files[0]);
+});
+
+btnClear.addEventListener('click', e => {
+  e.stopPropagation();
+  clearFile();
+});
+
+btnPdf.addEventListener('click', e => {
+  e.stopPropagation();
+  openForPdf();
+});
+
+btnPreview.addEventListener('click', e => {
+  e.stopPropagation();
+  showPreview();
+});
+
+// Drag & drop
+dropzone.addEventListener('dragover', e => {
+  e.preventDefault();
+  dropzone.classList.add('drag-over');
+});
+dropzone.addEventListener('dragleave', () => dropzone.classList.remove('drag-over'));
+dropzone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropzone.classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file) loadFile(file);
+});
+</script>
+</body>
+</html>
