@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+
+  <!-- ============================================================
+       CUSTOMIZE BELOW — troque estas variáveis para cada campanha
+       ============================================================ -->
+
+  <!-- SEO / título da aba -->
+  <title><!-- EX: Sistema de Gestão para Clínicas | FillipeAI --></title>
+  <meta name="description" content="<!-- EX: Automatize sua clínica e pare de perder pacientes por desorganização. -->"/>
+
+  <!-- Open Graph (WhatsApp / redes sociais) -->
+  <meta property="og:title"       content="<!-- EX: Sistema feito pra sua clínica -->"/>
+  <meta property="og:description" content="<!-- EX: Do agendamento ao financeiro — tudo em um só lugar. -->"/>
+  <meta property="og:image"       content="https://fillipeai.com/assets/og-image.png"/>
+  <meta property="og:url"         content="https://fillipeai.com/sales/lp01"/>
+  <meta property="og:type"        content="website"/>
+  <meta name="twitter:card"       content="summary_large_image"/>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23050505'/%3E%3Crect x='4' y='4' width='92' height='92' fill='none' stroke='%2300ff41' stroke-width='3' opacity='.55'/%3E%3Ctext x='50' y='68' font-family='Courier New' font-weight='700' font-size='52' text-anchor='middle' fill='%2300ff41'%3EFA%3C/text%3E%3Ccircle cx='82' cy='82' r='7' fill='%2300ff41'/%3E%3C/svg%3E"/>
+
+  <style>
+    /* ─── Reset & Base ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green:   #00ff41;
+      --cyan:    #00d4ff;
+      --red:     #ff3b3b;
+      --bg:      #050505;
+      --bg2:     #0a0c0a;
+      --bg3:     #0e100e;
+      --border:  rgba(0,255,65,.18);
+      --text:    #e0e0e0;
+      --muted:   #666;
+
+      /* ── CORES DA CAMPANHA — altere se quiser outro tema ── */
+      --accent:  var(--green);
+      --accent2: var(--cyan);
+    }
+
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Courier New', monospace;
+      overflow-x: clip;
+      scroll-behavior: smooth;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    /* ─── Utilities ─── */
+    .container { width: min(900px, 92%); margin: 0 auto; }
+    .text-center { text-align: center; }
+    .accent  { color: var(--accent); }
+    .accent2 { color: var(--accent2); }
+    .red     { color: var(--red); }
+    .muted   { color: var(--muted); }
+
+    /* ─── Scroll reveal ─── */
+    .reveal { opacity: 0; transform: translateY(40px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ═══════════════════════════════════════════
+       NAVBAR
+    ═══════════════════════════════════════════ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: .9rem 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(5,5,5,.92);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+    }
+    .nav-brand {
+      font-size: 1.1rem; font-weight: 700; color: var(--accent);
+      letter-spacing: 1px;
+    }
+    .nav-brand span { color: var(--text); font-weight: 400; }
+    .nav-cta {
+      padding: .45rem 1.1rem;
+      background: var(--accent); color: #000;
+      font-family: inherit; font-weight: 700; font-size: .82rem;
+      border: none; cursor: pointer; letter-spacing: 1px;
+      transition: opacity .2s;
+    }
+    .nav-cta:hover { opacity: .8; }
+
+    /* ═══════════════════════════════════════════
+       HERO
+    ═══════════════════════════════════════════ */
+    .hero {
+      min-height: 100svh;
+      display: flex; align-items: center;
+      padding: 7rem 0 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* grid decorativo de fundo */
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(0,255,65,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,255,65,.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative; z-index: 1;
+      display: grid; gap: 3rem;
+      align-items: center;
+    }
+
+    /* badge de urgência/segmentação */
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .35rem .9rem;
+      border: 1px solid var(--accent); color: var(--accent);
+      font-size: .78rem; letter-spacing: 2px; text-transform: uppercase;
+      margin-bottom: 1.4rem;
+    }
+    .hero-badge::before {
+      content: '';
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 1.4s ease-in-out infinite;
+    }
+
+    .hero-title {
+      font-size: clamp(2rem, 5.5vw, 3.6rem);
+      font-weight: 700; line-height: 1.15;
+      margin-bottom: 1.4rem;
+    }
+
+    .hero-sub {
+      font-size: clamp(.95rem, 2vw, 1.15rem);
+      color: var(--muted); line-height: 1.8;
+      max-width: 580px; margin-bottom: 2.2rem;
+    }
+
+    .hero-ctas { display: flex; flex-wrap: wrap; gap: 1rem; }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: .6rem;
+      padding: .85rem 2rem;
+      background: var(--accent); color: #000;
+      font-family: inherit; font-weight: 700; font-size: 1rem;
+      border: none; cursor: pointer; letter-spacing: 1px;
+      transition: opacity .2s, transform .2s;
+    }
+    .btn-primary:hover { opacity: .85; transform: translateY(-2px); }
+
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: .6rem;
+      padding: .85rem 2rem;
+      background: transparent; color: var(--text);
+      font-family: inherit; font-size: 1rem;
+      border: 1px solid var(--border); cursor: pointer;
+      transition: border-color .2s, color .2s;
+    }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+    .hero-proof {
+      margin-top: 2.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex; flex-wrap: wrap; gap: 1.8rem;
+    }
+    .proof-item { font-size: .82rem; color: var(--muted); }
+    .proof-item strong { color: var(--accent); display: block; font-size: 1.3rem; }
+
+    /* ═══════════════════════════════════════════
+       SECTION BASE
+    ═══════════════════════════════════════════ */
+    section { padding: 5rem 0; }
+    section + section { border-top: 1px solid var(--border); }
+
+    .section-label {
+      font-size: .72rem; letter-spacing: 4px; text-transform: uppercase;
+      color: var(--accent); margin-bottom: .8rem;
+    }
+    .section-title {
+      font-size: clamp(1.5rem, 3.5vw, 2.4rem);
+      font-weight: 700; line-height: 1.25;
+      margin-bottom: 1rem;
+    }
+    .section-sub {
+      font-size: 1rem; color: var(--muted); line-height: 1.8;
+      max-width: 620px;
+    }
+
+    /* ═══════════════════════════════════════════
+       PROBLEM  (dores do cliente)
+    ═══════════════════════════════════════════ */
+    .problems-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.2rem;
+      margin-top: 2.5rem;
+    }
+    .problem-card {
+      padding: 1.4rem 1.6rem;
+      border: 1px solid rgba(255,59,59,.25);
+      background: rgba(255,59,59,.04);
+    }
+    .problem-card .icon { font-size: 1.5rem; margin-bottom: .8rem; }
+    .problem-card p { font-size: .92rem; color: var(--muted); line-height: 1.7; }
+    .problem-card strong { color: var(--text); }
+
+    /* ═══════════════════════════════════════════
+       SOLUTION  (o que você entrega)
+    ═══════════════════════════════════════════ */
+    .solution-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+      margin-top: 2.5rem;
+    }
+
+    /* terminal mockup */
+    .terminal {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      font-size: .88rem; line-height: 1.9;
+    }
+    .terminal-bar {
+      display: flex; align-items: center; gap: .45rem;
+      padding: .6rem 1rem;
+      background: var(--bg2); border-bottom: 1px solid var(--border);
+    }
+    .terminal-bar span {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: #333;
+    }
+    .terminal-bar span:first-child { background: #ff5f56; }
+    .terminal-bar span:nth-child(2) { background: #ffbd2e; }
+    .terminal-bar span:nth-child(3) { background: #27c93f; }
+    .terminal-body { padding: 1.2rem 1.4rem; }
+    .terminal-body .line { display: block; margin-bottom: .2rem; }
+    .terminal-body .prompt { color: var(--accent); }
+    .terminal-body .out { color: #aaa; padding-left: 1.4rem; }
+    .terminal-body .ok  { color: var(--accent); padding-left: 1.4rem; }
+    .terminal-body .cursor {
+      display: inline-block; width: 8px; height: 1em;
+      background: var(--accent); vertical-align: bottom;
+      animation: blink .9s step-end infinite;
+    }
+
+    .benefits-list { list-style: none; }
+    .benefits-list li {
+      padding: .9rem 0;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: flex-start; gap: 1rem;
+      font-size: .95rem; line-height: 1.6;
+    }
+    .benefits-list li::before {
+      content: '▸';
+      color: var(--accent); flex-shrink: 0; margin-top: .05rem;
+    }
+    .benefits-list li strong { color: var(--text); display: block; }
+    .benefits-list li span  { color: var(--muted); font-size: .87rem; }
+
+    /* ═══════════════════════════════════════════
+       HOW IT WORKS  (passo a passo)
+    ═══════════════════════════════════════════ */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2.5rem; position: relative;
+    }
+    .step {
+      padding: 1.6rem;
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      position: relative;
+    }
+    .step-num {
+      font-size: 2.4rem; font-weight: 700;
+      color: var(--accent); opacity: .25;
+      line-height: 1; margin-bottom: .8rem;
+    }
+    .step h3 { font-size: 1rem; margin-bottom: .5rem; }
+    .step p  { font-size: .87rem; color: var(--muted); line-height: 1.7; }
+
+    /* ═══════════════════════════════════════════
+       SOCIAL PROOF  (depoimentos)
+    ═══════════════════════════════════════════ */
+    .testimonials {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.2rem; margin-top: 2.5rem;
+    }
+    .testimonial {
+      padding: 1.6rem;
+      border: 1px solid var(--border);
+      background: var(--bg2);
+    }
+    .testimonial blockquote {
+      font-size: .9rem; color: var(--muted);
+      line-height: 1.75; margin-bottom: 1.2rem;
+      font-style: italic;
+    }
+    .testimonial blockquote::before { content: '"'; color: var(--accent); font-size: 1.4rem; }
+    .testimonial cite {
+      font-size: .8rem; color: var(--text);
+      font-style: normal; letter-spacing: .5px;
+    }
+    .testimonial cite span { color: var(--muted); display: block; }
+
+    /* ═══════════════════════════════════════════
+       FAQ
+    ═══════════════════════════════════════════ */
+    .faq { max-width: 680px; margin: 2.5rem auto 0; }
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+    }
+    .faq-q {
+      width: 100%; background: none; border: none; cursor: pointer;
+      text-align: left; font-family: inherit; font-size: .95rem;
+      color: var(--text); padding: 1.1rem 0;
+      display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+    }
+    .faq-q::after { content: '+'; color: var(--accent); font-size: 1.3rem; flex-shrink: 0; }
+    .faq-item.open .faq-q::after { content: '−'; }
+    .faq-a {
+      font-size: .88rem; color: var(--muted); line-height: 1.8;
+      max-height: 0; overflow: hidden;
+      transition: max-height .35s ease, padding .35s ease;
+    }
+    .faq-item.open .faq-a { max-height: 300px; padding-bottom: 1.1rem; }
+
+    /* ═══════════════════════════════════════════
+       FINAL CTA
+    ═══════════════════════════════════════════ */
+    .cta-section {
+      text-align: center; padding: 6rem 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(0,255,65,.05), transparent);
+    }
+    .cta-section .section-title { margin: 0 auto 1rem; max-width: 600px; }
+    .cta-section .section-sub   { margin: 0 auto 2.4rem; }
+    .cta-availability {
+      margin-top: 1.6rem;
+      font-size: .8rem; color: var(--muted); letter-spacing: 1px;
+    }
+    .cta-availability::before {
+      content: '● ';
+      color: var(--accent);
+      animation: pulse 1.4s ease-in-out infinite;
+    }
+
+    /* ═══════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════ */
+    footer {
+      padding: 2rem 0;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: .78rem; color: var(--muted);
+    }
+    footer a { color: var(--muted); }
+    footer a:hover { color: var(--accent); }
+
+    /* ═══════════════════════════════════════════
+       FLOATING WA BUTTON
+    ═══════════════════════════════════════════ */
+    .wa-float {
+      position: fixed; bottom: 1.8rem; right: 1.5rem; z-index: 200;
+      display: flex; align-items: center; gap: .7rem;
+    }
+    .wa-btn {
+      width: 54px; height: 54px; border-radius: 50%;
+      background: #25d366;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 20px rgba(37,211,102,.4);
+      transition: transform .2s, box-shadow .2s;
+      cursor: pointer;
+    }
+    .wa-btn:hover { transform: scale(1.08); box-shadow: 0 6px 28px rgba(37,211,102,.55); }
+    .wa-btn svg { width: 28px; height: 28px; fill: #fff; }
+    .wa-label {
+      background: var(--bg2); border: 1px solid var(--border);
+      padding: .4rem .85rem; font-size: .78rem; color: var(--text);
+      white-space: nowrap; pointer-events: none;
+    }
+    @media (max-width: 480px) { .wa-label { display: none; } }
+
+    /* ═══════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════ */
+    @media (max-width: 700px) {
+      .solution-wrap { grid-template-columns: 1fr; }
+      .hero-proof    { gap: 1.2rem; }
+    }
+
+    /* ═══════════════════════════════════════════
+       ANIMATIONS
+    ═══════════════════════════════════════════ */
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: .35; }
+    }
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ NAVBAR ═══════════════════════════════════════════════ -->
+  <nav>
+    <div class="nav-brand">Fillipe<span>AI</span></div>
+    <a href="#cta">
+      <button class="nav-cta">Falar no WhatsApp</button>
+    </a>
+  </nav>
+
+
+  <!-- ═══ HERO ══════════════════════════════════════════════════
+       CUSTOMIZE: badge, título, subtítulo, provas sociais
+  ════════════════════════════════════════════════════════════ -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-inner">
+        <div>
+
+          <!-- badge de segmentação — ex: "Para clínicas" / "Para lojistas" -->
+          <div class="hero-badge">
+            Para <!-- SEGMENTO DO CLIENTE -->
+          </div>
+
+          <h1 class="hero-title">
+            <!-- Título chamativo — foque na transformação, não no produto -->
+            <!-- EX: Pare de perder clientes<br>por <span class="red">desorganização</span>. -->
+            Pare de perder clientes<br>
+            por <span class="red">desorganização</span>.
+          </h1>
+
+          <p class="hero-sub">
+            <!-- Subtítulo: explique o problema e a solução em 2 frases -->
+            <!-- EX: Criamos um sistema feito do zero para o seu negócio... -->
+            Criamos um sistema feito do zero para o seu negócio —
+            do atendimento ao financeiro, tudo num só lugar,
+            sem planilha, sem papel, sem erro.
+          </p>
+
+          <div class="hero-ctas">
+            <a href="https://wa.me/5585936183594?text=Ol%C3%A1%2C+vim+pelo+an%C3%BAncio+e+quero+saber+mais" target="_blank">
+              <button class="btn-primary">
+                <!-- ícone WhatsApp -->
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                Quero meu sistema
+              </button>
+            </a>
+            <a href="#solucao">
+              <button class="btn-secondary">Ver como funciona ↓</button>
+            </a>
+          </div>
+
+          <!-- Números de prova social — customize os valores -->
+          <div class="hero-proof reveal">
+            <div class="proof-item"><strong class="accent">+20</strong> sistemas entregues</div>
+            <div class="proof-item"><strong class="accent">100%</strong> personalizados</div>
+            <div class="proof-item"><strong class="accent">0</strong> mensalidade</div>
+            <div class="proof-item"><strong class="accent">7 dias</strong> de suporte pós-entrega</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══ PROBLEMA ══════════════════════════════════════════════
+       CUSTOMIZE: liste as dores reais do segmento-alvo
+  ════════════════════════════════════════════════════════════ -->
+  <section id="problema">
+    <div class="container">
+      <p class="section-label reveal">// o problema</p>
+      <h2 class="section-title reveal">
+        Reconhece alguma dessas situações?
+      </h2>
+
+      <div class="problems-grid">
+        <!-- Repita este bloco para cada dor do cliente -->
+        <div class="problem-card reveal">
+          <div class="icon">📋</div>
+          <p><strong>Controle em planilha</strong> — dados espalhados, versões diferentes, sempre um risco de perder tudo.</p>
+        </div>
+        <div class="problem-card reveal">
+          <div class="icon">🕐</div>
+          <p><strong>Tempo desperdiçado</strong> — horas do seu dia em tarefas repetitivas que um sistema faria em segundos.</p>
+        </div>
+        <div class="problem-card reveal">
+          <div class="icon">📞</div>
+          <p><strong>Clientes sem resposta</strong> — sem histórico de atendimento, você esquece e o cliente some.</p>
+        </div>
+        <div class="problem-card reveal">
+          <div class="icon">💸</div>
+          <p><strong>Financeiro no escuro</strong> — não sabe exatamente quanto entrou, quanto saiu, nem o que está devendo.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══ SOLUÇÃO ════════════════════════════════════════════════
+       CUSTOMIZE: terminal mostrando o que o sistema faz
+                  + lista de benefícios à direita
+  ════════════════════════════════════════════════════════════ -->
+  <section id="solucao">
+    <div class="container">
+      <p class="section-label reveal">// a solução</p>
+      <h2 class="section-title reveal">
+        Um sistema feito <span class="accent">pra você</span>,<br>
+        não pra todo mundo.
+      </h2>
+      <p class="section-sub reveal">
+        Cada detalhe do sistema é construído de acordo com a forma que seu negócio funciona.
+        Não é um software genérico — é uma solução criada do zero para resolver o seu problema específico.
+      </p>
+
+      <div class="solution-wrap">
+
+        <!-- Terminal mockup — customize as linhas -->
+        <div class="terminal reveal">
+          <div class="terminal-bar"><span></span><span></span><span></span></div>
+          <div class="terminal-body">
+            <span class="line"><span class="prompt">$ </span>sistema --iniciar</span>
+            <span class="line out">Carregando módulos...</span>
+            <span class="line ok">✔ Cadastro de clientes</span>
+            <span class="line ok">✔ Histórico de atendimentos</span>
+            <span class="line ok">✔ Controle financeiro</span>
+            <span class="line ok">✔ Relatórios automáticos</span>
+            <span class="line ok">✔ Notificações no WhatsApp</span>
+            <span class="line out">&nbsp;</span>
+            <span class="line"><span class="prompt">$ </span>status<span class="cursor"></span></span>
+          </div>
+        </div>
+
+        <!-- Benefícios — customize cada item -->
+        <ul class="benefits-list reveal">
+          <li>
+            <div>
+              <strong>Acesso de qualquer lugar</strong>
+              <span>Pelo celular, computador ou tablet — sem instalar nada.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <strong>Sem mensalidade</strong>
+              <span>Você paga uma vez e o sistema é seu para sempre.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <strong>Treinamento incluído</strong>
+              <span>Ensinamos você e sua equipe a usar do zero.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <strong>Suporte após a entrega</strong>
+              <span>7 dias de suporte para garantir que tudo funcione certo.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <strong>Personalizado para você</strong>
+              <span>Criamos exatamente o que você precisa, nada a mais, nada a menos.</span>
+            </div>
+          </li>
+        </ul>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══ COMO FUNCIONA ══════════════════════════════════════════
+       CUSTOMIZE: passo a passo do processo de contratação
+  ════════════════════════════════════════════════════════════ -->
+  <section id="processo">
+    <div class="container">
+      <p class="section-label reveal">// como funciona</p>
+      <h2 class="section-title reveal">Do primeiro contato<br>ao sistema rodando.</h2>
+
+      <div class="steps">
+        <div class="step reveal">
+          <div class="step-num">01</div>
+          <h3>Conversa gratuita</h3>
+          <p>Você explica como seu negócio funciona e quais são os maiores problemas. Sem compromisso.</p>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">02</div>
+          <h3>Proposta personalizada</h3>
+          <p>Apresentamos o que vamos construir, prazo e valor. Você aprova antes de qualquer pagamento.</p>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">03</div>
+          <h3>Desenvolvimento</h3>
+          <p>Construímos o sistema e te mostramos o progresso. Você acompanha e ajusta o que precisar.</p>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">04</div>
+          <h3>Entrega e treinamento</h3>
+          <p>Sistema no ar, equipe treinada e suporte pós-entrega. Pronto para usar no primeiro dia.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══ DEPOIMENTOS ════════════════════════════════════════════
+       CUSTOMIZE: troque pelos depoimentos reais dos seus clientes
+  ════════════════════════════════════════════════════════════ -->
+  <section id="depoimentos">
+    <div class="container">
+      <p class="section-label reveal">// clientes</p>
+      <h2 class="section-title reveal">Quem já usa, recomenda.</h2>
+
+      <div class="testimonials">
+        <!-- Repita este bloco para cada depoimento -->
+        <div class="testimonial reveal">
+          <blockquote>
+            Antes eu perdia o controle de tudo no WhatsApp. Hoje tenho o histórico completo de cada cliente na tela.
+          </blockquote>
+          <cite>
+            Nome do Cliente
+            <span>Segmento · Cidade</span>
+          </cite>
+        </div>
+        <div class="testimonial reveal">
+          <blockquote>
+            O sistema que o Fillipe criou economiza umas 3 horas do meu dia. Valeu muito mais do que paguei.
+          </blockquote>
+          <cite>
+            Nome do Cliente
+            <span>Segmento · Cidade</span>
+          </cite>
+        </div>
+        <div class="testimonial reveal">
+          <blockquote>
+            Achei que ia ser complicado, mas ele ensinou minha equipe em menos de uma hora. Simples e direto ao ponto.
+          </blockquote>
+          <cite>
+            Nome do Cliente
+            <span>Segmento · Cidade</span>
+          </cite>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══ FAQ ════════════════════════════════════════════════════
+       CUSTOMIZE: perguntas frequentes do seu segmento
+  ════════════════════════════════════════════════════════════ -->
+  <section id="faq">
+    <div class="container text-center">
+      <p class="section-label reveal">// dúvidas</p>
+      <h2 class="section-title reveal">Perguntas frequentes</h2>
+
+      <div class="faq">
+        <!-- Repita .faq-item para cada pergunta -->
+        <div class="faq-item reveal">
+          <button class="faq-q">Preciso entender de tecnologia para usar?</button>
+          <div class="faq-a">Não. O sistema é criado para ser simples e intuitivo. Se você usa WhatsApp, você consegue usar.</div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-q">Quanto tempo leva para ficar pronto?</button>
+          <div class="faq-a">Depende da complexidade, mas a maioria dos projetos fica pronta entre 1 e 3 semanas.</div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-q">Pago mensalidade depois que o sistema estiver pronto?</button>
+          <div class="faq-a">Não. Você paga uma única vez pelo desenvolvimento. Não há mensalidade para o sistema em si.</div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-q">E se eu precisar de alguma alteração depois?</button>
+          <div class="faq-a">Melhorias e ajustes após a entrega são orçadas separadamente, sempre com transparência no valor e no prazo.</div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-q">Funciona no celular?</button>
+          <div class="faq-a">Sim. O sistema funciona em qualquer dispositivo com acesso à internet — celular, tablet ou computador.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══ CTA FINAL ══════════════════════════════════════════════
+       CUSTOMIZE: headline e urgência
+  ════════════════════════════════════════════════════════════ -->
+  <section class="cta-section" id="cta">
+    <div class="container">
+      <p class="section-label reveal">// próximo passo</p>
+      <h2 class="section-title reveal">
+        Pronto para parar de<br>
+        <span class="red">improvisar</span> e começar a<br>
+        <span class="accent">crescer de verdade</span>?
+      </h2>
+      <p class="section-sub reveal">
+        A conversa é gratuita e sem compromisso.
+        Me conta o seu problema — e eu te mostro o que é possível fazer.
+      </p>
+
+      <a href="https://wa.me/5585936183594?text=Ol%C3%A1%2C+vim+pelo+an%C3%BAncio+e+quero+saber+mais" target="_blank">
+        <button class="btn-primary reveal" style="margin: 0 auto; font-size: 1.1rem; padding: 1rem 2.4rem;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Falar com o Fillipe agora
+        </button>
+      </a>
+
+      <p class="cta-availability reveal">Disponível agora · Resposta em até 1h</p>
+    </div>
+  </section>
+
+
+  <!-- ═══ FOOTER ════════════════════════════════════════════════ -->
+  <footer>
+    <div class="container">
+      <p>
+        <a href="https://fillipeai.com">fillipeai.com</a> &nbsp;·&nbsp;
+        <a href="mailto:fillipealves13@gmail.com">fillipealves13@gmail.com</a>
+      </p>
+    </div>
+  </footer>
+
+
+  <!-- ═══ FLOATING WA BUTTON ════════════════════════════════════ -->
+  <div class="wa-float">
+    <div class="wa-label">Falar no WhatsApp</div>
+    <a href="https://wa.me/5585936183594?text=Ol%C3%A1%2C+vim+pelo+an%C3%BAncio+e+quero+saber+mais" target="_blank">
+      <div class="wa-btn">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      </div>
+    </a>
+  </div>
+
+
+  <script>
+    // ─── Scroll reveal ────────────────────────────────────────────
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+      });
+    }, { threshold: .12 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // ─── FAQ accordion ────────────────────────────────────────────
+    document.querySelectorAll('.faq-q').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.faq-item');
+        const open = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        if (!open) item.classList.add('open');
+      });
+    });
+  </script>
+</body>
+</html>

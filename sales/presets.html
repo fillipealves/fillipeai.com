@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<script>!function(){if(location.hash.replace(/^#/,'')!=='Pr4vW8'){location.replace('https://fillipeai.com')}}();</script>
+<noscript><meta http-equiv="refresh" content="0;url=https://fillipeai.com"></noscript>
+
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title><!-- CUSTOMIZE: ex: Dark Channel Kit | FillipeAI --></title>
+<meta name="description" content=""/>
+<meta name="robots" content="noindex, nofollow"/>
+<meta property="og:title"       content=""/>
+<meta property="og:description" content=""/>
+<meta property="og:image"       content="https://fillipeai.com/assets/og-image.png"/>
+<meta property="og:type"        content="website"/>
+<meta name="twitter:card"       content="summary_large_image"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23050505'/%3E%3Crect x='4' y='4' width='92' height='92' fill='none' stroke='%2300ff41' stroke-width='3' opacity='.55'/%3E%3Ctext x='50' y='68' font-family='Courier New' font-weight='700' font-size='52' text-anchor='middle' fill='%2300ff41'%3EFA%3C/text%3E%3Ccircle cx='82' cy='82' r='7' fill='%2300ff41'/%3E%3C/svg%3E"/>
+
+<style>
+:root{
+  --accent:#f59e0b;--accent2:#00ff41;--red:#ff3b3b;
+  --bg:#030303;--bg2:#080806;--bg3:#0d0d0a;
+  --border:rgba(245,158,11,.18);--text:#e0e0e0;--muted:#666;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--text);font-family:'Courier New',monospace;overflow-x:clip;scroll-behavior:smooth}
+a{color:var(--accent);text-decoration:none}
+.container{width:min(900px,92%);margin:0 auto}
+.text-center{text-align:center}
+.accent{color:var(--accent)}
+.green{color:var(--accent2)}
+.red{color:var(--red)}
+.muted{color:var(--muted)}
+.strike{text-decoration:line-through;color:var(--muted)}
+
+.reveal{opacity:0;transform:translateY(36px);transition:opacity .55s ease,transform .55s ease}
+.reveal.visible{opacity:1;transform:none}
+
+/* STICKY */
+.sticky-bar{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.7rem 1.5rem;background:rgba(3,3,3,.97);border-bottom:1px solid var(--border);backdrop-filter:blur(12px);transform:translateY(-100%);transition:transform .3s ease}
+.sticky-bar.show{transform:none}
+.sticky-bar .brand{font-size:.95rem;font-weight:700;color:var(--accent);letter-spacing:1px}
+.sticky-bar .price-tag{font-size:.85rem;color:var(--muted)}
+.sticky-bar .price-tag strong{color:var(--accent);font-size:1rem}
+.sticky-cta{padding:.45rem 1.2rem;background:var(--accent);color:#000;font-family:inherit;font-weight:700;font-size:.8rem;border:none;cursor:pointer;letter-spacing:1px;white-space:nowrap}
+@media(max-width:500px){.sticky-bar .price-tag{display:none}}
+
+/* URGENCY */
+.urgency-bar{background:rgba(245,158,11,.07);border-bottom:1px solid rgba(245,158,11,.3);padding:.55rem 1rem;text-align:center;font-size:.78rem;color:var(--muted);letter-spacing:.5px}
+.urgency-bar strong{color:var(--accent)}
+
+/* HERO */
+.hero{
+  min-height:95svh;display:flex;align-items:center;
+  padding:5rem 0 4rem;position:relative;overflow:hidden;
+  background:
+    radial-gradient(ellipse 60% 70% at 50% 50%,rgba(245,158,11,.06),transparent),
+    radial-gradient(ellipse 100% 100% at 50% 100%,rgba(245,158,11,.04),transparent);
+}
+/* scanlines effect */
+.hero::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.15) 2px,rgba(0,0,0,.15) 4px);
+  z-index:0;
+}
+.hero .container{position:relative;z-index:1}
+
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.32rem .9rem;margin-bottom:1.2rem;border:1px solid var(--accent);color:var(--accent);font-size:.72rem;letter-spacing:3px;text-transform:uppercase}
+.hero-badge::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 1.4s ease-in-out infinite}
+.hero-title{font-size:clamp(2rem,5.5vw,3.5rem);font-weight:700;line-height:1.1;margin-bottom:1.2rem}
+.hero-sub{font-size:clamp(.9rem,2vw,1.1rem);color:var(--muted);line-height:1.9;margin-bottom:2rem;max-width:560px}
+
+/* VIDEO MOCKUP */
+.video-mockup{
+  width:100%;max-width:440px;
+  border:2px solid rgba(245,158,11,.3);
+  background:var(--bg2);margin-bottom:2rem;
+  overflow:hidden;position:relative;
+}
+.video-topbar{display:flex;align-items:center;gap:.5rem;padding:.5rem .8rem;background:var(--bg3);border-bottom:1px solid var(--border)}
+.video-topbar span{width:8px;height:8px;border-radius:50%;background:#333}
+.video-topbar span:nth-child(1){background:#ff5f56}
+.video-topbar span:nth-child(2){background:#ffbd2e}
+.video-topbar span:nth-child(3){background:#27c93f}
+.video-topbar .v-title{font-size:.65rem;color:var(--muted);margin-left:.4rem;letter-spacing:1px}
+.before-after{display:grid;grid-template-columns:1fr 1fr}
+.ba-panel{padding:1.4rem 1rem;text-align:center;min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem}
+.ba-panel:first-child{border-right:1px solid var(--border)}
+.ba-label{font-size:.6rem;letter-spacing:3px;text-transform:uppercase;padding:.2rem .6rem;margin-bottom:.4rem}
+.ba-label.before-label{background:rgba(255,59,59,.12);color:var(--red);border:1px solid rgba(255,59,59,.25)}
+.ba-label.after-label{background:rgba(245,158,11,.12);color:var(--accent);border:1px solid rgba(245,158,11,.25)}
+.ba-mock{width:70px;height:50px;position:relative}
+.ba-mock .screen{width:100%;height:100%;background:var(--bg3);border:1px solid rgba(255,255,255,.1)}
+.ba-mock .screen.dull{background:#1a1a18;filter:grayscale(1) brightness(.5)}
+.ba-mock .screen.dark-styled{background:linear-gradient(135deg,#080806 0%,#151510 50%,#0a0a08 100%);border-color:rgba(245,158,11,.4);box-shadow:0 0 12px rgba(245,158,11,.15)}
+.ba-mock .play-btn{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:1rem}
+.ba-desc{font-size:.72rem;color:var(--muted);line-height:1.4}
+
+/* COMPAT */
+.compat-grid{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:1.4rem;margin-bottom:1.8rem}
+.compat-tag{padding:.3rem .8rem;border:1px solid var(--border);color:var(--muted);font-size:.72rem;background:rgba(245,158,11,.03)}
+.compat-tag.main{border-color:var(--accent);color:var(--accent);background:rgba(245,158,11,.06)}
+
+/* PRICE BOX */
+.price-box{display:inline-flex;flex-direction:column;align-items:flex-start;gap:.3rem;padding:1.2rem 1.6rem;margin-bottom:1.6rem;border:1px solid rgba(245,158,11,.35);background:rgba(245,158,11,.04)}
+.price-box .from{font-size:.75rem;color:var(--muted)}
+.price-box .now{font-size:.75rem;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-top:.2rem}
+.price-box .current{font-size:2.6rem;font-weight:700;color:var(--accent);line-height:1}
+.price-box .installment{font-size:.82rem;color:var(--muted)}
+
+/* BUTTONS */
+.btn-buy{display:inline-flex;align-items:center;justify-content:center;gap:.7rem;width:100%;max-width:400px;padding:1rem 2rem;background:var(--accent);color:#000;font-family:inherit;font-weight:700;font-size:1rem;border:none;cursor:pointer;letter-spacing:1px;transition:opacity .2s,transform .15s;position:relative;overflow:hidden}
+.btn-buy::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);transform:translateX(-100%);transition:transform .5s ease}
+.btn-buy:hover::after{transform:translateX(100%)}
+.btn-buy:hover{opacity:.9;transform:translateY(-2px)}
+.guarantee-note{font-size:.72rem;color:var(--muted);margin-top:.7rem;display:flex;align-items:center;gap:.4rem}
+.guarantee-note::before{content:'🔒'}
+
+/* PROOF BAR */
+.proof-bar{border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:1.5rem 0;display:flex;flex-wrap:wrap;justify-content:center;gap:2.5rem}
+.proof-item{text-align:center}
+.proof-item strong{display:block;font-size:1.5rem;color:var(--accent)}
+.proof-item span{font-size:.75rem;color:var(--muted);letter-spacing:.5px}
+
+/* SECTION */
+section{padding:4.5rem 0}
+section+section{border-top:1px solid var(--border)}
+.section-label{font-size:.7rem;letter-spacing:4px;text-transform:uppercase;color:var(--accent);margin-bottom:.7rem}
+.section-title{font-size:clamp(1.4rem,3.5vw,2.2rem);font-weight:700;line-height:1.25;margin-bottom:1rem}
+.section-sub{font-size:.95rem;color:var(--muted);line-height:1.8;max-width:600px}
+
+/* WHAT'S INCLUDED */
+.includes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;margin-top:2rem}
+.include-card{padding:1.4rem;border:1px solid var(--border);background:var(--bg2);transition:border-color .2s}
+.include-card:hover{border-color:rgba(245,158,11,.4)}
+.include-icon{font-size:1.7rem;margin-bottom:.7rem}
+.include-count{font-size:.65rem;letter-spacing:3px;color:var(--accent);text-transform:uppercase;margin-bottom:.4rem}
+.include-card h3{font-size:.9rem;margin-bottom:.4rem}
+.include-card p{font-size:.8rem;color:var(--muted);line-height:1.6}
+.include-formats{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.6rem}
+.fmt{font-size:.62rem;padding:.15rem .45rem;border:1px solid rgba(245,158,11,.3);color:var(--accent)}
+
+/* HOW TO INSTALL */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:2rem}
+@media(max-width:600px){.steps{grid-template-columns:1fr}}
+.step{padding:1.4rem;border:1px solid var(--border);background:var(--bg2);text-align:center}
+.step-num{font-size:2rem;font-weight:700;color:var(--accent);opacity:.3;line-height:1;margin-bottom:.6rem}
+.step h3{font-size:.88rem;margin-bottom:.4rem}
+.step p{font-size:.78rem;color:var(--muted);line-height:1.6}
+
+/* VALUE STACK */
+.stack-list{margin-top:2rem;border:1px solid var(--border);overflow:hidden}
+.stack-item{display:flex;align-items:center;gap:1.2rem;padding:1rem 1.4rem;border-bottom:1px solid var(--border);background:var(--bg2)}
+.stack-item:last-child{border-bottom:none}
+.stack-icon{font-size:1.4rem;flex-shrink:0}
+.stack-info{flex:1}
+.stack-info h4{font-size:.9rem;margin-bottom:.2rem}
+.stack-info p{font-size:.78rem;color:var(--muted);line-height:1.5}
+.stack-price{font-size:.9rem;color:var(--muted);white-space:nowrap}
+.stack-price strong{color:var(--accent)}
+.stack-total{padding:1rem 1.4rem;background:rgba(245,158,11,.06);border-top:2px solid rgba(245,158,11,.35);display:flex;align-items:center;justify-content:space-between}
+.stack-total span{font-size:.82rem;color:var(--muted)}
+.stack-total .total-price{font-size:1.5rem;font-weight:700;color:var(--accent)}
+
+/* TESTIMONIALS */
+.testimonials{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem;margin-top:2rem}
+.testimonial{padding:1.4rem;border:1px solid var(--border);background:var(--bg2)}
+.stars{color:#f59e0b;font-size:.85rem;margin-bottom:.8rem;letter-spacing:2px}
+.testimonial blockquote{font-size:.87rem;color:var(--muted);line-height:1.75;margin-bottom:1rem;font-style:italic}
+.testimonial cite{font-size:.78rem;color:var(--text);font-style:normal}
+.testimonial cite span{color:var(--muted);display:block;font-size:.72rem}
+
+/* GUARANTEE */
+.guarantee-box{display:flex;align-items:flex-start;gap:2rem;padding:2rem 2.4rem;border:2px solid rgba(245,158,11,.3);background:rgba(245,158,11,.03)}
+@media(max-width:600px){.guarantee-box{flex-direction:column;gap:1rem;padding:1.4rem}}
+.guarantee-icon{font-size:3.5rem;flex-shrink:0}
+.guarantee-box h3{font-size:1.1rem;margin-bottom:.6rem}
+.guarantee-box p{font-size:.88rem;color:var(--muted);line-height:1.8}
+
+/* CTA */
+.cta-section{padding:5rem 0;text-align:center;background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(245,158,11,.07),transparent)}
+
+/* FAQ */
+.faq{max-width:640px;margin:2rem auto 0}
+.faq-item{border-bottom:1px solid var(--border)}
+.faq-q{width:100%;background:none;border:none;cursor:pointer;text-align:left;font-family:inherit;font-size:.92rem;color:var(--text);padding:1rem 0;display:flex;justify-content:space-between;align-items:center;gap:1rem}
+.faq-q::after{content:'+';color:var(--accent);font-size:1.3rem;flex-shrink:0}
+.faq-item.open .faq-q::after{content:'−'}
+.faq-a{font-size:.85rem;color:var(--muted);line-height:1.8;max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s ease}
+.faq-item.open .faq-a{max-height:300px;padding-bottom:1rem}
+
+footer{padding:2rem 0;border-top:1px solid var(--border);text-align:center;font-size:.75rem;color:var(--muted)}
+.wa-float{position:fixed;bottom:1.8rem;right:1.5rem;z-index:199}
+.wa-btn{width:52px;height:52px;border-radius:50%;background:#25d366;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:transform .2s;cursor:pointer}
+.wa-btn:hover{transform:scale(1.1)}
+.wa-btn svg{width:26px;height:26px;fill:#fff}
+
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+</style>
+</head>
+<body>
+
+<div class="sticky-bar" id="stickyBar">
+  <div class="brand">FillipeAI</div>
+  <div class="price-tag">Dark Kit · <strong>R$&nbsp;47</strong></div>
+  <a href="#comprar"><button class="sticky-cta">Baixar presets →</button></a>
+</div>
+
+<div class="urgency-bar">
+  🎬 Pack exclusivo · <strong id="counter">112 criadores</strong> já baixaram · Preço sobe em breve
+</div>
+
+<section class="hero">
+  <div class="container">
+
+    <div class="hero-badge">Pack Digital · Canal Dark</div>
+
+    <!-- CUSTOMIZE: headline -->
+    <h1 class="hero-title">
+      Dê um upgrade no<br>
+      seu canal <span class="accent">dark</span> em<br>
+      menos de 10 minutos.
+    </h1>
+
+    <!-- CUSTOMIZE: subtítulo -->
+    <p class="hero-sub">
+      Presets de cor, LUTs, overlays, templates de thumbnail e transições
+      prontos para instalar — tudo no visual dark que para o scroll
+      e gera cliques de verdade.
+    </p>
+
+    <!-- Before/After mockup -->
+    <div class="video-mockup reveal">
+      <div class="video-topbar">
+        <span></span><span></span><span></span>
+        <span class="v-title">preview — antes vs depois</span>
+      </div>
+      <div class="before-after">
+        <div class="ba-panel">
+          <span class="ba-label before-label">Antes</span>
+          <div class="ba-mock">
+            <div class="screen dull">
+              <div class="play-btn">▶</div>
+            </div>
+          </div>
+          <div class="ba-desc">Visual opaco, sem identidade,<br>não chama atenção</div>
+        </div>
+        <div class="ba-panel">
+          <span class="ba-label after-label">Depois</span>
+          <div class="ba-mock">
+            <div class="screen dark-styled">
+              <div class="play-btn" style="color:var(--accent)">▶</div>
+            </div>
+          </div>
+          <div class="ba-desc">Visual dark, identidade forte,<br>para o scroll</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Compatibilidade -->
+    <div class="compat-grid reveal">
+      <span class="compat-tag main">✓ Premiere Pro</span>
+      <span class="compat-tag main">✓ DaVinci Resolve</span>
+      <span class="compat-tag main">✓ CapCut</span>
+      <span class="compat-tag">After Effects</span>
+      <span class="compat-tag">Final Cut</span>
+    </div>
+
+    <div id="comprar">
+      <!-- CUSTOMIZE: preços -->
+      <div class="price-box">
+        <span class="from">De <span class="strike">R$ 97</span></span>
+        <span class="now">por apenas</span>
+        <span class="current">R$ 47</span>
+        <span class="installment">Pagamento único · Download imediato</span>
+      </div>
+
+      <!-- CUSTOMIZE: link do checkout -->
+      <a href="https://wa.me/5585936183594?text=Quero+comprar+o+pack+de+presets+dark" target="_blank">
+        <button class="btn-buy">🎬 Baixar o pack agora</button>
+      </a>
+      <div class="guarantee-note">Garantia de 7 dias — 100% do dinheiro de volta</div>
+    </div>
+
+  </div>
+</section>
+
+<div class="proof-bar">
+  <!-- CUSTOMIZE -->
+  <div class="proof-item"><strong>+100</strong><span>Criadores usando</span></div>
+  <div class="proof-item"><strong>4.9★</strong><span>Avaliação média</span></div>
+  <div class="proof-item"><strong>5 soft.</strong><span>Compatíveis</span></div>
+  <div class="proof-item"><strong>Imediato</strong><span>Download na hora</span></div>
+</div>
+
+<!-- O QUE VEM NO PACK -->
+<section>
+  <div class="container">
+    <p class="section-label reveal">// conteúdo</p>
+    <h2 class="section-title reveal">Tudo que vem no<br>Dark Channel Kit</h2>
+    <p class="section-sub reveal muted">
+      <!-- CUSTOMIZE: quantidade total de arquivos -->
+      Mais de 60 arquivos organizados por categoria — prontos pra usar.
+    </p>
+
+    <div class="includes-grid">
+      <!-- CUSTOMIZE: arquivos do pack -->
+      <div class="include-card reveal">
+        <div class="include-icon">🎨</div>
+        <div class="include-count">12 presets</div>
+        <h3>Presets de cor dark</h3>
+        <p>Look cinematográfico com tons escuros, contraste alto e identidade visual marcante</p>
+        <div class="include-formats">
+          <span class="fmt">.xmp</span><span class="fmt">.cube</span>
+        </div>
+      </div>
+      <div class="include-card reveal">
+        <div class="include-icon">📽️</div>
+        <div class="include-count">8 LUTs</div>
+        <h3>LUTs cinematográficos</h3>
+        <p>Transforme qualquer filmagem num visual profissional de filme dark com um clique</p>
+        <div class="include-formats">
+          <span class="fmt">.cube</span><span class="fmt">.3dl</span>
+        </div>
+      </div>
+      <div class="include-card reveal">
+        <div class="include-icon">✨</div>
+        <div class="include-count">15 overlays</div>
+        <h3>Overlays e efeitos</h3>
+        <p>Partículas, glitch, scanlines, vinhetas e ruído cinematográfico em camadas</p>
+        <div class="include-formats">
+          <span class="fmt">.mov</span><span class="fmt">.mp4</span>
+        </div>
+      </div>
+      <div class="include-card reveal">
+        <div class="include-icon">🖼️</div>
+        <div class="include-count">10 thumbnails</div>
+        <h3>Templates de thumbnail</h3>
+        <p>Layouts dark prontos no Canva e Photoshop — só trocar texto e imagem</p>
+        <div class="include-formats">
+          <span class="fmt">.psd</span><span class="fmt">Canva</span>
+        </div>
+      </div>
+      <div class="include-card reveal">
+        <div class="include-icon">⚡</div>
+        <div class="include-count">10 transições</div>
+        <h3>Transições dark</h3>
+        <p>Cortes suaves, glitch transitions e motion blur para montar vídeos dinâmicos</p>
+        <div class="include-formats">
+          <span class="fmt">.mogrt</span><span class="fmt">.mov</span>
+        </div>
+      </div>
+      <div class="include-card reveal">
+        <div class="include-icon">🎵</div>
+        <div class="include-count">5 jingles</div>
+        <h3>Jingles dark (bônus)</h3>
+        <p>Sons de intro, transição e encerramento no estilo dark — livre de direitos autorais</p>
+        <div class="include-formats">
+          <span class="fmt">.mp3</span><span class="fmt">.wav</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMO INSTALAR -->
+<section>
+  <div class="container text-center">
+    <p class="section-label reveal">// fácil de usar</p>
+    <h2 class="section-title reveal">Instalado em 3 passos</h2>
+
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-num">01</div>
+        <h3>Baixe e extraia</h3>
+        <p>Faça download do arquivo ZIP, extraia e abra a pasta com os arquivos organizados por software</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">02</div>
+        <h3>Importe no seu editor</h3>
+        <p>Arraste os presets ou LUTs para dentro do Premiere, DaVinci ou CapCut. Leva menos de 1 minuto</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">03</div>
+        <h3>Aplique com um clique</h3>
+        <p>Clique uma vez no preset e veja a transformação. Ajuste opacidade se quiser e pronto</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VALUE STACK -->
+<section>
+  <div class="container">
+    <p class="section-label reveal">// o que você recebe</p>
+    <h2 class="section-title reveal">Valor total do pack</h2>
+
+    <div class="stack-list reveal">
+      <!-- CUSTOMIZE -->
+      <div class="stack-item">
+        <div class="stack-icon">🎨</div>
+        <div class="stack-info">
+          <h4>12 Presets de cor + 8 LUTs</h4>
+          <p>Look dark cinematográfico para qualquer tipo de conteúdo</p>
+        </div>
+        <div class="stack-price"><strong>R$ 67</strong></div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-icon">✨</div>
+        <div class="stack-info">
+          <h4>15 Overlays + 10 Transições</h4>
+          <p>Efeitos profissionais para deixar seus cortes dinâmicos e únicos</p>
+        </div>
+        <div class="stack-price"><strong>R$ 47</strong></div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-icon">🖼️</div>
+        <div class="stack-info">
+          <h4>10 Templates de Thumbnail</h4>
+          <p>Layouts dark para Canva e Photoshop que geram mais cliques</p>
+        </div>
+        <div class="stack-price"><strong>R$ 37</strong></div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-icon">🎵</div>
+        <div class="stack-info">
+          <h4>5 Jingles dark (bônus)</h4>
+          <p>Sons de intro, transição e encerramento livre de direitos autorais</p>
+        </div>
+        <div class="stack-price"><strong>R$ 27</strong></div>
+      </div>
+      <div class="stack-total">
+        <span>Valor total do que você recebe</span>
+        <div>
+          <span class="strike" style="font-size:.85rem;margin-right:.6rem">R$ 178</span>
+          <span class="total-price">R$ 47</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEPOIMENTOS -->
+<section>
+  <div class="container">
+    <p class="section-label reveal">// criadores que usam</p>
+    <h2 class="section-title reveal">O que dizem quem<br>já tem o pack</h2>
+
+    <div class="testimonials">
+      <!-- CUSTOMIZE: depoimentos reais -->
+      <div class="testimonial reveal">
+        <div class="stars">★★★★★</div>
+        <blockquote>Meu canal tinha 200 inscritos estagnado há meses. Depois que apliquei os presets, o CTR das minhas thumbnails subiu de 2% para 8,4%. É visual mesmo.</blockquote>
+        <cite>Vitor M.<span>Canal dark facts · YouTube</span></cite>
+      </div>
+      <div class="testimonial reveal">
+        <div class="stars">★★★★★</div>
+        <blockquote>Economizei semanas de tentativa e erro. Instalei tudo em 15 minutos no DaVinci e meu próximo vídeo ficou profissional do zero. Absurdo de bom.</blockquote>
+        <cite>Bruna K.<span>Criadora de conteúdo · TikTok / Reels</span></cite>
+      </div>
+      <div class="testimonial reveal">
+        <div class="stars">★★★★★</div>
+        <blockquote>As thumbnails prontas sozinhas valem mais do que paguei. Antes eu demorava 2 horas em cada uma. Agora são 10 minutos e o resultado é muito melhor.</blockquote>
+        <cite>Lucas A.<span>Editor de vídeo freelancer</span></cite>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GARANTIA -->
+<section>
+  <div class="container">
+    <div class="guarantee-box reveal">
+      <div class="guarantee-icon">🔒</div>
+      <div>
+        <h3>Garantia incondicional de 7 dias</h3>
+        <p>
+          Se você baixar, instalar e não gostar por qualquer motivo,
+          é só pedir o reembolso em até 7 dias e devolvemos 100% do valor.
+          Sem questionamento, sem burocracia.
+          O risco é nosso. Você só fica se quiser.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section>
+  <div class="container text-center">
+    <p class="section-label reveal">// dúvidas</p>
+    <h2 class="section-title reveal">Perguntas frequentes</h2>
+    <div class="faq">
+      <div class="faq-item reveal">
+        <button class="faq-q">Como recebo os arquivos?</button>
+        <div class="faq-a">Link de download imediato por e-mail após confirmação do pagamento. Você baixa um arquivo ZIP com tudo organizado por categoria e software.</div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-q">Funciona na versão gratuita do DaVinci?</button>
+        <div class="faq-a">Sim. Os LUTs e presets funcionam normalmente na versão gratuita do DaVinci Resolve. Não precisa do Studio pago.</div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-q">Funciona no CapCut (celular)?</button>
+        <div class="faq-a">Sim. Os arquivos LUT (.cube) são compatíveis com o CapCut tanto no celular quanto no desktop. Inclui instruções de importação.</div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-q">Posso usar comercialmente?</button>
+        <div class="faq-a">Sim. Todos os arquivos têm licença comercial — você pode usar em canais monetizados, projetos de clientes e conteúdo profissional.</div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-q">Recebo atualizações do pack?</button>
+        <div class="faq-a">Sim. Quem compra agora recebe as atualizações futuras do pack sem custo adicional.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-section" id="comprar2">
+  <div class="container">
+    <p class="section-label reveal">// hora de agir</p>
+    <h2 class="section-title reveal" style="max-width:560px;margin:0 auto 1rem">
+      Seu canal <span class="red">igual a todos</span><br>
+      ou com visual que<br>
+      <span class="accent">para o scroll</span>?
+    </h2>
+    <p class="section-sub reveal" style="margin:0 auto 2rem">
+      Por R$&nbsp;47 você tem um kit completo que levaria semanas pra montar do zero.
+      Instala hoje, usa no próximo vídeo.
+    </p>
+
+    <div class="price-box reveal" style="margin:0 auto 1.6rem;max-width:320px;align-items:center">
+      <span class="from">De <span class="strike">R$ 97</span></span>
+      <span class="now">por apenas</span>
+      <span class="current">R$ 47</span>
+      <span class="installment">Pagamento único · Download imediato</span>
+    </div>
+
+    <!-- CUSTOMIZE: link do checkout -->
+    <a href="https://wa.me/5585936183594?text=Quero+comprar+o+pack+dark" target="_blank">
+      <button class="btn-buy reveal" style="margin:0 auto;font-size:1.05rem">
+        🎬 Baixar o pack agora
+      </button>
+    </a>
+    <p class="guarantee-note reveal" style="justify-content:center;margin-top:.8rem">
+      Garantia 7 dias · Download imediato · Licença comercial inclusa
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p><a href="https://fillipeai.com">fillipeai.com</a> &nbsp;·&nbsp; <a href="mailto:fillipealves13@gmail.com">fillipealves13@gmail.com</a></p>
+    <p style="margin-top:.4rem">© 2026 FillipeAI · Todos os direitos reservados</p>
+  </div>
+</footer>
+
+<div class="wa-float">
+  <a href="https://wa.me/5585936183594?text=Quero+saber+mais+sobre+o+pack+dark" target="_blank">
+    <div class="wa-btn">
+      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </div>
+  </a>
+</div>
+
+<script>
+(function(){if(location.hash.replace(/^#/,'')!=='Pr4vW8'){location.replace('https://fillipeai.com')}})();
+
+// Contador de downloads (simulado)
+let count=112;
+function updateCounter(){
+  if(Math.random()<.25){count++;document.getElementById('counter').textContent=count+' criadores'}
+}
+setInterval(updateCounter,38000);
+
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+const bar=document.getElementById('stickyBar');
+const hero=document.querySelector('.hero');
+const heroObs=new IntersectionObserver(([e])=>{bar.classList.toggle('show',!e.isIntersecting)},{threshold:0});
+heroObs.observe(hero);
+
+document.querySelectorAll('.faq-q').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const item=btn.closest('.faq-item');
+    const open=item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+    if(!open)item.classList.add('open');
+  });
+});
+</script>
+</body>
+</html>

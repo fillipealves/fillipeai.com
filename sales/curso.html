@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<script>!function(){if(location.hash.replace(/^#/,'')!=='Cs9mP2'){location.replace('https://fillipeai.com')}}();</script>
+<noscript><meta http-equiv="refresh" content="0;url=https://fillipeai.com"></noscript>
+
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title><!-- CUSTOMIZE: ex: Do Zero ao Sistema | FillipeAI --></title>
+<meta name="description" content=""/>
+<meta name="robots" content="noindex, nofollow"/>
+<meta property="og:title"       content=""/>
+<meta property="og:description" content=""/>
+<meta property="og:image"       content="https://fillipeai.com/assets/og-image.png"/>
+<meta property="og:type"        content="website"/>
+<meta name="twitter:card"       content="summary_large_image"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23050505'/%3E%3Crect x='4' y='4' width='92' height='92' fill='none' stroke='%2300ff41' stroke-width='3' opacity='.55'/%3E%3Ctext x='50' y='68' font-family='Courier New' font-weight='700' font-size='52' text-anchor='middle' fill='%2300ff41'%3EFA%3C/text%3E%3Ccircle cx='82' cy='82' r='7' fill='%2300ff41'/%3E%3C/svg%3E"/>
+
+<style>
+:root{
+  --accent:#00d4ff;--accent2:#00ff41;--red:#ff3b3b;
+  --bg:#050505;--bg2:#050d10;--bg3:#070f12;
+  --border:rgba(0,212,255,.18);--text:#e0e0e0;--muted:#666;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--text);font-family:'Courier New',monospace;overflow-x:clip;scroll-behavior:smooth}
+a{color:var(--accent);text-decoration:none}
+.container{width:min(920px,92%);margin:0 auto}
+.text-center{text-align:center}
+.accent{color:var(--accent)}
+.green{color:var(--accent2)}
+.red{color:var(--red)}
+.muted{color:var(--muted)}
+.strike{text-decoration:line-through;color:var(--muted)}
+
+.reveal{opacity:0;transform:translateY(36px);transition:opacity .55s ease,transform .55s ease}
+.reveal.visible{opacity:1;transform:none}
+
+/* STICKY */
+.sticky-bar{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.7rem 1.5rem;background:rgba(5,5,5,.97);border-bottom:1px solid var(--border);backdrop-filter:blur(12px);transform:translateY(-100%);transition:transform .3s ease}
+.sticky-bar.show{transform:none}
+.sticky-bar .brand{font-size:.95rem;font-weight:700;color:var(--accent);letter-spacing:1px}
+.sticky-bar .price-tag{font-size:.85rem;color:var(--muted)}
+.sticky-bar .price-tag strong{color:var(--accent);font-size:1rem}
+.sticky-cta{padding:.45rem 1.2rem;background:var(--accent);color:#000;font-family:inherit;font-weight:700;font-size:.8rem;border:none;cursor:pointer;letter-spacing:1px;white-space:nowrap}
+@media(max-width:500px){.sticky-bar .price-tag{display:none}}
+
+/* VAGAS BAR */
+.vagas-bar{background:rgba(0,212,255,.07);border-bottom:1px solid rgba(0,212,255,.25);padding:.55rem 1rem;text-align:center;font-size:.78rem;color:var(--muted);letter-spacing:.5px}
+.vagas-bar strong{color:var(--accent)}
+
+/* HERO */
+.hero{
+  padding:5rem 0 4rem;
+  background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(0,212,255,.07),transparent),
+    repeating-linear-gradient(0deg,transparent,transparent 47px,rgba(0,212,255,.025) 48px),
+    repeating-linear-gradient(90deg,transparent,transparent 47px,rgba(0,212,255,.025) 48px);
+}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.32rem .9rem;margin-bottom:1.2rem;border:1px solid var(--accent);color:var(--accent);font-size:.72rem;letter-spacing:3px;text-transform:uppercase}
+.hero-badge::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 1.4s ease-in-out infinite}
+.hero-title{font-size:clamp(1.9rem,5vw,3.2rem);font-weight:700;line-height:1.15;margin-bottom:1.2rem}
+.hero-sub{font-size:clamp(.9rem,2vw,1.1rem);color:var(--muted);line-height:1.9;margin-bottom:2rem;max-width:600px}
+
+/* TRANSFORMATION BANNER */
+.transform-banner{
+  display:flex;align-items:center;justify-content:center;gap:1.2rem;flex-wrap:wrap;
+  padding:1.2rem 1.6rem;margin-bottom:1.8rem;
+  border:1px solid var(--border);background:rgba(0,212,255,.04);
+}
+.transform-item{text-align:center}
+.transform-item .label{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:.3rem}
+.transform-item .value{font-size:1.05rem;font-weight:700;color:var(--text)}
+.transform-arrow{font-size:1.4rem;color:var(--accent)}
+
+/* PRICE BOX */
+.price-box{display:inline-flex;flex-direction:column;align-items:flex-start;gap:.3rem;padding:1.2rem 1.6rem;margin-bottom:1.6rem;border:1px solid rgba(0,212,255,.35);background:rgba(0,212,255,.04)}
+.price-box .from{font-size:.75rem;color:var(--muted)}
+.price-box .full-price{font-size:1rem;color:var(--muted);text-decoration:line-through}
+.price-box .now{font-size:.75rem;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-top:.2rem}
+.price-box .current{font-size:2.6rem;font-weight:700;color:var(--accent);line-height:1}
+.price-box .installment{font-size:.82rem;color:var(--muted)}
+.price-box .pix{font-size:.78rem;color:var(--accent2)}
+
+/* BUTTONS */
+.btn-buy{display:inline-flex;align-items:center;justify-content:center;gap:.7rem;width:100%;max-width:400px;padding:1rem 2rem;background:var(--accent);color:#000;font-family:inherit;font-weight:700;font-size:1rem;border:none;cursor:pointer;letter-spacing:1px;transition:opacity .2s,transform .15s;position:relative;overflow:hidden}
+.btn-buy::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);transform:translateX(-100%);transition:transform .5s ease}
+.btn-buy:hover::after{transform:translateX(100%)}
+.btn-buy:hover{opacity:.9;transform:translateY(-2px)}
+.guarantee-note{font-size:.72rem;color:var(--muted);margin-top:.7rem;display:flex;align-items:center;gap:.4rem}
+.guarantee-note::before{content:'🔒'}
+
+/* PROOF BAR */
+.proof-bar{border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:1.5rem 0;display:flex;flex-wrap:wrap;justify-content:center;gap:2.5rem}
+.proof-item{text-align:center}
+.proof-item strong{display:block;font-size:1.5rem;color:var(--accent)}
+.proof-item span{font-size:.75rem;color:var(--muted);letter-spacing:.5px}
+
+/* SECTION */
+section{padding:4.5rem 0}
+section+section{border-top:1px solid var(--border)}
+.section-label{font-size:.7rem;letter-spacing:4px;text-transform:uppercase;color:var(--accent);margin-bottom:.7rem}
+.section-title{font-size:clamp(1.4rem,3.5vw,2.2rem);font-weight:700;line-height:1.25;margin-bottom:1rem}
+.section-sub{font-size:.95rem;color:var(--muted);line-height:1.8;max-width:600px}
+
+/* MODULES */
+.modules{margin-top:2rem;border:1px solid var(--border);overflow:hidden}
+.module{border-bottom:1px solid var(--border);overflow:hidden}
+.module:last-child{border-bottom:none}
+.module-header{
+  width:100%;background:var(--bg2);border:none;cursor:pointer;
+  text-align:left;font-family:inherit;color:var(--text);
+  padding:1.1rem 1.4rem;display:flex;align-items:center;gap:1rem;
+  transition:background .2s;
+}
+.module-header:hover{background:var(--bg3)}
+.module-num{font-size:.65rem;letter-spacing:3px;color:var(--accent);text-transform:uppercase;white-space:nowrap}
+.module-title{flex:1;font-size:.92rem;font-weight:700}
+.module-lessons{font-size:.75rem;color:var(--muted);white-space:nowrap}
+.module-arrow{color:var(--accent);font-size:1rem;flex-shrink:0;transition:transform .3s}
+.module.open .module-arrow{transform:rotate(90deg)}
+.module-content{max-height:0;overflow:hidden;transition:max-height .35s ease}
+.module.open .module-content{max-height:500px}
+.module-list{list-style:none;padding:.6rem 1.4rem 1.2rem 3.2rem}
+.module-list li{font-size:.84rem;color:var(--muted);padding:.3rem 0;display:flex;gap:.6rem;align-items:flex-start;line-height:1.5}
+.module-list li::before{content:'▸';color:var(--accent);flex-shrink:0}
+
+/* INSTRUCTOR */
+.instructor-box{display:grid;grid-template-columns:auto 1fr;gap:2rem;align-items:start;padding:2rem;border:1px solid var(--border);background:var(--bg2);margin-top:2rem}
+@media(max-width:600px){.instructor-box{grid-template-columns:1fr}}
+.instructor-avatar{
+  width:100px;height:100px;border-radius:50%;overflow:hidden;
+  border:2px solid rgba(0,212,255,.4);
+  background:var(--bg3);display:flex;align-items:center;justify-content:center;
+  font-size:2.8rem;flex-shrink:0;
+}
+.instructor-name{font-size:1.1rem;font-weight:700;margin-bottom:.3rem}
+.instructor-title{font-size:.78rem;color:var(--accent);letter-spacing:1px;margin-bottom:.8rem}
+.instructor-bio{font-size:.87rem;color:var(--muted);line-height:1.8}
+.instructor-stats{display:flex;flex-wrap:wrap;gap:1.4rem;margin-top:1rem}
+.istat{font-size:.8rem;color:var(--muted)}
+.istat strong{color:var(--text);display:block}
+
+/* BONUSES */
+.bonuses{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;margin-top:2rem}
+.bonus{padding:1.4rem;border:1px solid rgba(0,212,255,.2);background:rgba(0,212,255,.03);transition:border-color .2s}
+.bonus:hover{border-color:rgba(0,212,255,.4)}
+.bonus-badge{display:inline-block;background:var(--accent);color:#000;font-size:.62rem;font-weight:700;letter-spacing:2px;padding:.2rem .5rem;margin-bottom:.7rem;text-transform:uppercase}
+.bonus h3{font-size:.9rem;margin-bottom:.4rem}
+.bonus p{font-size:.8rem;color:var(--muted);line-height:1.6}
+.bonus-value{font-size:.78rem;color:var(--muted);margin-top:.6rem}
+.bonus-value strong{color:var(--accent)}
+
+/* TESTIMONIALS */
+.testimonials{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem;margin-top:2rem}
+.testimonial{padding:1.4rem;border:1px solid var(--border);background:var(--bg2)}
+.stars{color:#f59e0b;font-size:.85rem;margin-bottom:.8rem;letter-spacing:2px}
+.testimonial blockquote{font-size:.87rem;color:var(--muted);line-height:1.75;margin-bottom:1rem;font-style:italic}
+.testimonial cite{font-size:.78rem;color:var(--text);font-style:normal}
+.testimonial cite span{color:var(--muted);display:block;font-size:.72rem}
+
+/* GUARANTEE */
+.guarantee-box{display:flex;align-items:flex-start;gap:2rem;padding:2rem 2.4rem;border:2px solid rgba(0,212,255,.3);background:rgba(0,212,255,.03)}
+@media(max-width:600px){.guarantee-box{flex-direction:column;gap:1rem;padding:1.4rem}}
+.guarantee-icon{font-size:3.5rem;flex-shrink:0}
+.guarantee-box h3{font-size:1.1rem;margin-bottom:.6rem}
+.guarantee-box p{font-size:.88rem;color:var(--muted);line-height:1.8}
+
+/* CTA FINAL */
+.cta-section{padding:5rem 0;text-align:center;background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(0,212,255,.06),transparent)}
+
+/* FAQ */
+.faq{max-width:640px;margin:2rem auto 0}
+.faq-item{border-bottom:1px solid var(--border)}
+.faq-q{width:100%;background:none;border:none;cursor:pointer;text-align:left;font-family:inherit;font-size:.92rem;color:var(--text);padding:1rem 0;display:flex;justify-content:space-between;align-items:center;gap:1rem}
+.faq-q::after{content:'+';color:var(--accent);font-size:1.3rem;flex-shrink:0}
+.faq-item.open .faq-q::after{content:'−'}
+.faq-a{font-size:.85rem;color:var(--muted);line-height:1.8;max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s ease}
+.faq-item.open .faq-a{max-height:300px;padding-bottom:1rem}
+
+footer{padding:2rem 0;border-top:1px solid var(--border);text-align:center;font-size:.75rem;color:var(--muted)}
+.wa-float{position:fixed;bottom:1.8rem;right:1.5rem;z-index:199}
+.wa-btn{width:52px;height:52px;border-radius:50%;background:#25d366;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:transform .2s;cursor:pointer}
+.wa-btn:hover{transform:scale(1.1)}
+.wa-btn svg{width:26px;height:26px;fill:#fff}
+
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+</style>
+</head>
+<body>
+
+<!-- STICKY -->
+<div class="sticky-bar" id="stickyBar">
+  <div class="brand">FillipeAI</div>
+  <div class="price-tag">Curso · <strong>12x R$&nbsp;27</strong></div>
+  <!-- CUSTOMIZE: link do checkout -->
+  <a href="#comprar"><button class="sticky-cta">Garantir minha vaga →</button></a>
+</div>
+
+<!-- VAGAS -->
+<div class="vagas-bar">
+  🎓 Turma com vagas limitadas — <strong id="vagas">37 alunos</strong> já garantiram acesso hoje
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+
+    <!-- CUSTOMIZE: badge de nicho -->
+    <div class="hero-badge">Curso Online</div>
+
+    <!-- CUSTOMIZE: headline -->
+    <h1 class="hero-title">
+      Do <span class="red">zero</span> ao seu<br>
+      primeiro sistema digital<br>
+      em <span class="accent">30 dias.</span>
+    </h1>
+
+    <!-- CUSTOMIZE: subtítulo -->
+    <p class="hero-sub">
+      O curso completo para empresários e empreendedores que querem
+      usar tecnologia para crescer — sem precisar contratar um programador
+      e sem passar horas no YouTube assistindo coisa que não funciona.
+    </p>
+
+    <!-- Transformação antes/depois -->
+    <div class="transform-banner reveal">
+      <div class="transform-item">
+        <div class="label">Antes do curso</div>
+        <div class="value" style="color:var(--red)">Tudo no braço</div>
+      </div>
+      <div class="transform-arrow">→</div>
+      <div class="transform-item">
+        <div class="label">Depois do curso</div>
+        <div class="value" style="color:var(--accent)">Sistema rodando</div>
+      </div>
+    </div>
+
+    <div id="comprar">
+      <!-- CUSTOMIZE: preços -->
+      <div class="price-box">
+        <span class="from">De <span class="strike">R$ 497</span></span>
+        <span class="now">por apenas</span>
+        <span class="current">R$ 297</span>
+        <span class="installment">ou 12x de R$ 27,68 no cartão</span>
+        <span class="pix">⚡ Pix com 5% de desconto: R$ 282,15</span>
+      </div>
+
+      <!-- CUSTOMIZE: link do checkout -->
+      <a href="https://wa.me/5585936183594?text=Quero+me+matricular+no+curso" target="_blank">
+        <button class="btn-buy">🎓 Garantir minha vaga agora</button>
+      </a>
+      <div class="guarantee-note">Garantia incondicional de 7 dias · Acesso imediato</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROVA SOCIAL -->
+<div class="proof-bar">
+  <!-- CUSTOMIZE -->
+  <div class="proof-item"><strong>+300</strong><span>Alunos formados</span></div>
+  <div class="proof-item"><strong>4.8★</strong><span>Avaliação média</span></div>
+  <div class="proof-item"><strong>30 dias</strong><span>Resultado garantido</span></div>
+  <div class="proof-item"><strong>Vitalício</strong><span>Acesso sem prazo</span></div>
+</div>
+
+<!-- MÓDULOS -->
+<section>
+  <div class="container">
+    <p class="section-label reveal">// conteúdo</p>
+    <h2 class="section-title reveal">Grade completa do curso</h2>
+    <!-- CUSTOMIZE: X módulos, X aulas, X horas -->
+    <p class="section-sub reveal muted">6 módulos · 32 aulas · +8 horas de conteúdo — tudo gravado, assista no seu ritmo</p>
+
+    <div class="modules reveal">
+      <!-- CUSTOMIZE: módulos e aulas -->
+      <div class="module open">
+        <button class="module-header">
+          <span class="module-num">Módulo 01</span>
+          <span class="module-title">Fundamentos: como o seu negócio funciona na prática</span>
+          <span class="module-lessons">5 aulas</span>
+          <span class="module-arrow">▸</span>
+        </button>
+        <div class="module-content">
+          <ul class="module-list">
+            <li>Por que a maioria das empresas falha na tecnologia</li>
+            <li>Mapeando os gargalos do seu negócio</li>
+            <li>O que automatizar primeiro (e o que não vale a pena)</li>
+            <li>Ferramentas gratuitas que você pode usar hoje</li>
+            <li>Exercício prático: diagnóstico do seu negócio</li>
+          </ul>
+        </div>
+      </div>
+      <div class="module">
+        <button class="module-header">
+          <span class="module-num">Módulo 02</span>
+          <span class="module-title">Construindo seu primeiro fluxo de atendimento</span>
+          <span class="module-lessons">6 aulas</span>
+          <span class="module-arrow">▸</span>
+        </button>
+        <div class="module-content">
+          <ul class="module-list">
+            <li>Do primeiro contato ao fechamento — fluxo completo</li>
+            <li>Automatizando respostas no WhatsApp</li>
+            <li>Criando formulários inteligentes</li>
+            <li>Integrando WhatsApp com planilha automaticamente</li>
+            <li>Notificações e lembretes sem intervenção humana</li>
+            <li>Projeto prático: fluxo de atendimento rodando</li>
+          </ul>
+        </div>
+      </div>
+      <div class="module">
+        <button class="module-header">
+          <span class="module-num">Módulo 03</span>
+          <span class="module-title">Controle financeiro simples e eficiente</span>
+          <span class="module-lessons">5 aulas</span>
+          <span class="module-arrow">▸</span>
+        </button>
+        <div class="module-content">
+          <ul class="module-list">
+            <li>Entradas, saídas e fluxo de caixa automatizado</li>
+            <li>Relatórios que se geram sozinhos</li>
+            <li>Emissão de cobrança sem planilha manual</li>
+            <li>Acompanhando inadimplentes automaticamente</li>
+            <li>Exercício: seu DRE no piloto automático</li>
+          </ul>
+        </div>
+      </div>
+      <div class="module">
+        <button class="module-header">
+          <span class="module-num">Módulo 04</span>
+          <span class="module-title">Usando IA no dia a dia do seu negócio</span>
+          <span class="module-lessons">6 aulas</span>
+          <span class="module-arrow">▸</span>
+        </button>
+        <div class="module-content">
+          <ul class="module-list">
+            <li>ChatGPT aplicado ao seu setor — exemplos reais</li>
+            <li>Criando prompts que realmente funcionam</li>
+            <li>IA para atendimento ao cliente</li>
+            <li>IA para marketing e criação de conteúdo</li>
+            <li>IA para análise de dados da sua empresa</li>
+            <li>Exercício: criando seu assistente virtual</li>
+          </ul>
+        </div>
+      </div>
+      <div class="module">
+        <button class="module-header">
+          <span class="module-num">Módulo 05</span>
+          <span class="module-title">Quando contratar um sistema personalizado</span>
+          <span class="module-lessons">5 aulas</span>
+          <span class="module-arrow">▸</span>
+        </button>
+        <div class="module-content">
+          <ul class="module-list">
+            <li>Sinais de que você precisa de um sistema feito pra você</li>
+            <li>O que perguntar antes de contratar um desenvolvedor</li>
+            <li>Como avaliar orçamentos sem ser enganado</li>
+            <li>Documentando o que você precisa de forma profissional</li>
+            <li>Acompanhando o projeto sem saber programar</li>
+          </ul>
+        </div>
+      </div>
+      <div class="module">
+        <button class="module-header">
+          <span class="module-num">Módulo 06</span>
+          <span class="module-title">Escalando: do sistema ao negócio automatizado</span>
+          <span class="module-lessons">5 aulas</span>
+          <span class="module-arrow">▸</span>
+        </button>
+        <div class="module-content">
+          <ul class="module-list">
+            <li>Criando SOPs (procedimentos padrão) para sua equipe</li>
+            <li>Delegando com sistemas e sem perder o controle</li>
+            <li>Métricas que realmente importam para crescer</li>
+            <li>Plano de expansão: próximos 90 dias</li>
+            <li>Projeto final: seu negócio automatizado</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INSTRUTOR -->
+<section>
+  <div class="container">
+    <p class="section-label reveal">// instrutor</p>
+    <h2 class="section-title reveal">Quem vai te ensinar</h2>
+
+    <div class="instructor-box reveal">
+      <div class="instructor-avatar">👨‍💻</div>
+      <div>
+        <!-- CUSTOMIZE: bio do instrutor -->
+        <div class="instructor-name">Fillipe Alves</div>
+        <div class="instructor-title">Desenvolvedor Full-Stack · FillipeAI</div>
+        <p class="instructor-bio">
+          Desenvolvedor há mais de 5 anos, especializado em criar sistemas personalizados para
+          pequenas e médias empresas. Já transformou dezenas de negócios que viviam no caos
+          da planilha em operações organizadas e automatizadas.
+          Não ensino teoria — ensino o que funciona no dia a dia real dos negócios.
+        </p>
+        <div class="instructor-stats">
+          <div class="istat"><strong>+20</strong>sistemas entregues</div>
+          <div class="istat"><strong>+300</strong>alunos</div>
+          <div class="istat"><strong>5 anos</strong>de experiência</div>
+          <div class="istat"><strong>100%</strong>foco em resultado</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BÔNUS -->
+<section>
+  <div class="container">
+    <p class="section-label reveal">// bônus exclusivos</p>
+    <h2 class="section-title reveal">Bônus que vêm junto<br>sem custo adicional</h2>
+
+    <div class="bonuses">
+      <!-- CUSTOMIZE: bônus do curso -->
+      <div class="bonus reveal">
+        <div class="bonus-badge">Bônus 01</div>
+        <h3>Templates prontos de automação</h3>
+        <p>Fluxos, planilhas e scripts prontos pra copiar e usar no seu negócio hoje.</p>
+        <div class="bonus-value">Valor: <strong>R$ 97</strong></div>
+      </div>
+      <div class="bonus reveal">
+        <div class="bonus-badge">Bônus 02</div>
+        <h3>Pack de Prompts para Empresários</h3>
+        <p>50 prompts testados e validados para usar no ChatGPT no dia a dia da sua empresa.</p>
+        <div class="bonus-value">Valor: <strong>R$ 67</strong></div>
+      </div>
+      <div class="bonus reveal">
+        <div class="bonus-badge">Bônus 03</div>
+        <h3>Comunidade exclusiva no WhatsApp</h3>
+        <p>Grupo fechado com outros alunos e o instrutor para tirar dúvidas e compartilhar resultados.</p>
+        <div class="bonus-value">Valor: <strong>R$ 97</strong></div>
+      </div>
+      <div class="bonus reveal">
+        <div class="bonus-badge">Bônus 04</div>
+        <h3>Mentoria em grupo ao vivo (mensal)</h3>
+        <p>Uma sessão ao vivo por mês para tirar dúvidas, receber feedback e evoluir mais rápido.</p>
+        <div class="bonus-value">Valor: <strong>R$ 147</strong></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEPOIMENTOS -->
+<section>
+  <div class="container">
+    <p class="section-label reveal">// resultados reais</p>
+    <h2 class="section-title reveal">Alunos que já transformaram<br>seus negócios</h2>
+
+    <div class="testimonials">
+      <!-- CUSTOMIZE: depoimentos reais -->
+      <div class="testimonial reveal">
+        <div class="stars">★★★★★</div>
+        <blockquote>Em 3 semanas eu já tinha meu atendimento automatizado e parei de responder as mesmas perguntas o dia todo. Melhor investimento do ano.</blockquote>
+        <cite>Rafael S.<span>Clínica de fisioterapia · Fortaleza</span></cite>
+      </div>
+      <div class="testimonial reveal">
+        <div class="stars">★★★★★</div>
+        <blockquote>Achei que precisaria contratar alguém, mas com o que aprendi no curso consegui resolver tudo sem gastar com freelancer. Economizei uns R$ 2 mil.</blockquote>
+        <cite>Juliana M.<span>Loja de roupas · Mossoró</span></cite>
+      </div>
+      <div class="testimonial reveal">
+        <div class="stars">★★★★★</div>
+        <blockquote>O módulo de IA sozinho já valeu o preço do curso inteiro. Estou usando o ChatGPT para coisas que nunca imaginei. Meu tempo livre dobrou.</blockquote>
+        <cite>Henrique D.<span>Escritório de contabilidade · Natal</span></cite>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GARANTIA -->
+<section>
+  <div class="container">
+    <div class="guarantee-box reveal">
+      <div class="guarantee-icon">🔒</div>
+      <div>
+        <h3>Garantia incondicional de 7 dias</h3>
+        <p>
+          Assista as primeiras aulas. Se não gostar por qualquer motivo,
+          é só pedir o reembolso em até 7 dias e devolvemos 100% do valor —
+          sem questionamento, sem burocracia. O risco é zero.
+          Você só fica se quiser.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section>
+  <div class="container text-center">
+    <p class="section-label reveal">// dúvidas</p>
+    <h2 class="section-title reveal">Perguntas frequentes</h2>
+    <div class="faq">
+      <div class="faq-item reveal">
+        <button class="faq-q">Preciso saber programar para fazer o curso?</button>
+        <div class="faq-a">Não. O curso foi criado para pessoas sem conhecimento técnico. Tudo é ensinado do zero com linguagem simples.</div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-q">Por quanto tempo tenho acesso ao curso?</button>
+        <div class="faq-a">Para sempre. Você tem acesso vitalício a todo o conteúdo, incluindo atualizações futuras.</div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-q">Em quanto tempo vou ver resultado?</button>
+        <div class="faq-a">A maioria dos alunos começa a aplicar nas primeiras semanas. Em 30 dias você já tem algo funcionando — o módulo 2 sozinho transforma seu atendimento.</div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-q">Funciona para qualquer tipo de negócio?</button>
+        <div class="faq-a">Sim. O método foi aplicado em clínicas, lojas, escritórios, prestadores de serviço e outros segmentos. Os princípios são universais.</div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-q">Posso assistir pelo celular?</button>
+        <div class="faq-a">Sim. A plataforma é responsiva e funciona em qualquer dispositivo com internet.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-section" id="comprar2">
+  <div class="container">
+    <p class="section-label reveal">// decida agora</p>
+    <h2 class="section-title reveal" style="max-width:580px;margin:0 auto 1rem">
+      Todo dia que você espera,<br>
+      é mais um dia <span class="red">trabalhando no escuro</span>.
+    </h2>
+    <p class="section-sub reveal" style="margin:0 auto 2rem">
+      Enquanto você adia, seus concorrentes já estão automatizando.
+      A tecnologia não é mais diferencial — é sobrevivência.
+    </p>
+
+    <div class="price-box reveal" style="margin:0 auto 1.6rem;max-width:360px;align-items:center">
+      <span class="from">De <span class="strike">R$ 497</span></span>
+      <span class="now">por apenas</span>
+      <span class="current">R$ 297</span>
+      <span class="installment">ou 12x de R$ 27,68</span>
+      <span class="pix">⚡ Pix: R$ 282,15</span>
+    </div>
+
+    <a href="https://wa.me/5585936183594?text=Quero+me+matricular+no+curso" target="_blank">
+      <button class="btn-buy reveal" style="margin:0 auto;font-size:1.05rem;padding:1rem 2.4rem">
+        🎓 Garantir minha vaga agora
+      </button>
+    </a>
+    <p class="guarantee-note reveal" style="justify-content:center;margin-top:.8rem">
+      Garantia 7 dias · Acesso vitalício · Pagamento seguro
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p><a href="https://fillipeai.com">fillipeai.com</a> &nbsp;·&nbsp; <a href="mailto:fillipealves13@gmail.com">fillipealves13@gmail.com</a></p>
+    <p style="margin-top:.4rem">© 2026 FillipeAI · Todos os direitos reservados</p>
+  </div>
+</footer>
+
+<div class="wa-float">
+  <a href="https://wa.me/5585936183594?text=Quero+saber+mais+sobre+o+curso" target="_blank">
+    <div class="wa-btn">
+      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </div>
+  </a>
+</div>
+
+<script>
+(function(){if(location.hash.replace(/^#/,'')!=='Cs9mP2'){location.replace('https://fillipeai.com')}})();
+
+// Contador de vagas (simulado — increments periodicamente)
+let vagas=37;
+function updateVagas(){
+  if(Math.random()<.3&&vagas>5){vagas++;document.getElementById('vagas').textContent=vagas+' alunos'}
+}
+setInterval(updateVagas,45000);
+
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+const bar=document.getElementById('stickyBar');
+const hero=document.querySelector('.hero');
+const heroObs=new IntersectionObserver(([e])=>{bar.classList.toggle('show',!e.isIntersecting)},{threshold:0});
+heroObs.observe(hero);
+
+document.querySelectorAll('.faq-q').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const item=btn.closest('.faq-item');
+    const open=item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+    if(!open)item.classList.add('open');
+  });
+});
+
+document.querySelectorAll('.module-header').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const m=btn.closest('.module');
+    m.classList.toggle('open');
+  });
+});
+</script>
+</body>
+</html>
