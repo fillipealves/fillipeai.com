@@ -529,8 +529,18 @@ O HTML deve:
       currentHTML = extractHTML(raw);
       if (currentHTML) { btnDl.disabled = false; btnPdf.disabled = false; schedulePreview(currentHTML, true); }
     } else {
-      setStatus('erro: ' + err.message, 'err');
-      codeView.textContent = '❌ ' + err.message + '\n\n' + raw;
+      // Diagnóstico detalhado
+      let msg = err.message;
+      let hint = '';
+      if (msg === 'Failed to fetch' || msg.includes('fetch')) {
+        hint = '\n\n💡 Possíveis causas:\n' +
+          '1. API Key inválida ou expirada — verifique em console.anthropic.com\n' +
+          '2. Modelo indisponível no seu plano — tente trocar para Sonnet\n' +
+          '3. Sem créditos na conta Anthropic\n' +
+          '4. Bloqueio de rede/firewall no navegador';
+      }
+      setStatus('erro: ' + msg, 'err');
+      codeView.textContent = '❌ Erro: ' + msg + hint;
       codeView.classList.add('on');
     }
   } finally {
