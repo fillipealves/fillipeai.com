@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>Fillipe AI | Soluções Tecnológicas</title>
   <meta name="description" content="Fillipe AI — Sistemas, automações e soluções tecnológicas personalizadas para empresas que precisam crescer." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -28,12 +28,12 @@
       --font:    'Inter', sans-serif;
       --mono:    'JetBrains Mono', monospace;
     }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; overflow-x: clip; }
     body {
       font-family: var(--font);
       background: var(--bg);
       color: var(--text);
-      overflow-x: hidden;
+      overflow-x: clip;
       line-height: 1.6;
     }
     ::selection { background: rgba(0,255,65,0.25); color: #fff; }
