@@ -196,6 +196,7 @@
       <button class="btn-main btn-generate" id="btn-generate">✦ Gerar Ebook</button>
       <button class="btn-main btn-stop" id="btn-stop" style="display:none">⏹ Parar</button>
       <button class="btn-main btn-open-pdf" id="btn-pdf" disabled>🖨 Abrir para PDF</button>
+      <button class="btn-main" id="btn-test" style="background:#111;border:1px solid #252525;color:#666;font-size:.78rem">🔌 Testar conexão com API</button>
       <div class="meta-row">
         <span id="token-info">—</span>
         <span id="status-label">aguardando</span>
@@ -551,6 +552,68 @@ O HTML deve:
 }
 
 btnStop.onclick = () => { if (abort) abort.abort(); };
+
+// ── Testar conexão ────────────────────────────────────────────────────────
+document.getElementById('btn-test').addEventListener('click', async () => {
+  const key = apiKeyEl.value.trim() || localStorage.getItem(K) || '';
+  if (!key) { alert('Insira sua API Key primeiro.'); return; }
+
+  const btn = document.getElementById('btn-test');
+  btn.textContent = '⏳ Testando...';
+  btn.disabled = true;
+
+  emptyState.style.display = 'none';
+  codeView.classList.add('on');
+  codeView.textContent = '⏳ Testando conexão com a API Anthropic...\n';
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': key,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-allow-browser': 'true',
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 10,
+        messages: [{ role: 'user', content: 'Responda apenas: OK' }],
+      }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      codeView.textContent = '✅ Conexão OK!\n\n' +
+        'Modelo: claude-haiku-4-5-20251001\n' +
+        'Status: ' + res.status + '\n' +
+        'Resposta: ' + (data.content?.[0]?.text || JSON.stringify(data)) + '\n\n' +
+        '→ Sua API Key está funcionando. Pode gerar o ebook.';
+      setStatus('API conectada', 'ok');
+    } else {
+      codeView.textContent = '❌ Erro HTTP ' + res.status + '\n\n' +
+        JSON.stringify(data, null, 2) + '\n\n' +
+        (res.status === 401 ? '→ API Key inválida ou expirada.\n   Verifique em console.anthropic.com → API Keys' :
+         res.status === 403 ? '→ Sem permissão. Verifique se a key tem créditos.' :
+         res.status === 429 ? '→ Rate limit atingido. Aguarde alguns segundos.' :
+         '→ Verifique sua conta em console.anthropic.com');
+      setStatus('erro ' + res.status, 'err');
+    }
+  } catch (err) {
+    codeView.textContent = '❌ ' + err.message + '\n\n' +
+      '→ O navegador bloqueou a requisição antes de chegar na API.\n\n' +
+      'Verifique:\n' +
+      '• F12 → Console → erro vermelho com mais detalhes\n' +
+      '• Se há extensão de bloqueio de anúncios/VPN ativa — desative temporariamente\n' +
+      '• Se o site está sendo acessado por HTTP (não HTTPS)\n' +
+      '• Tente em uma aba anônima';
+    setStatus('sem conexão', 'err');
+  }
+
+  btn.textContent = '🔌 Testar conexão com API';
+  btn.disabled = false;
+});
 
 // ── PDF helper ────────────────────────────────────────────────────────────
 function openPdf() {
