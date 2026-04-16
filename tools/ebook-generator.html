@@ -6,94 +6,114 @@
 <title>Ebook Generator — Tools</title>
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
-  body{background:#0f0f0f;color:#e5e5e5;font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;display:flex;flex-direction:column}
-  header{padding:1rem 2rem;border-bottom:1px solid #222;display:flex;align-items:center;gap:1rem;flex-shrink:0}
-  header a{color:#888;text-decoration:none;font-size:.85rem}
-  header a:hover{color:#fff}
-  header span.sep{color:#444}
-  header h1{font-size:1.1rem;font-weight:600;color:#fff}
-  .badge{background:#1a1a1a;border:1px solid #333;border-radius:4px;padding:2px 8px;font-size:.75rem;color:#888}
-  .badge.ai{border-color:#6366f1;color:#a5b4fc}
+  body{background:#0f0f0f;color:#e5e5e5;font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;display:flex;flex-direction:column;overflow:hidden}
 
-  main{flex:1;display:grid;grid-template-columns:400px 1fr;overflow:hidden;height:calc(100vh - 57px)}
+  /* HEADER */
+  header{padding:.85rem 1.5rem;border-bottom:1px solid #1e1e1e;display:flex;align-items:center;gap:.75rem;flex-shrink:0;height:50px}
+  header a{color:#555;text-decoration:none;font-size:.82rem;transition:color .15s}
+  header a:hover{color:#ccc}
+  header .sep{color:#2a2a2a}
+  header h1{font-size:.95rem;font-weight:600;color:#e5e5e5}
+  .badge{padding:2px 8px;border-radius:4px;font-size:.7rem;font-weight:600;letter-spacing:.05em;border:1px solid #2a2a2a;color:#555}
 
-  /* LEFT SIDEBAR */
-  .sidebar{border-right:1px solid #222;display:flex;flex-direction:column;overflow:hidden}
-  .sidebar-section{padding:1rem 1.25rem;border-bottom:1px solid #1a1a1a}
-  .sidebar-section label{display:block;font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#555;margin-bottom:.4rem}
-  .sidebar-section small{font-size:.72rem;color:#444;margin-top:.3rem;display:block}
+  /* LAYOUT */
+  main{flex:1;display:grid;grid-template-columns:380px 1fr;overflow:hidden;height:calc(100vh - 50px)}
 
-  input[type=text],input[type=password],select,textarea{width:100%;background:#141414;border:1px solid #252525;border-radius:6px;color:#e5e5e5;font-family:inherit;font-size:.85rem;padding:.55rem .75rem;outline:none;transition:border-color .2s}
-  input[type=text]:focus,input[type=password]:focus,select:focus,textarea:focus{border-color:#444}
-  select option{background:#141414}
-  textarea{resize:vertical;line-height:1.5}
+  /* SIDEBAR */
+  .sidebar{border-right:1px solid #1e1e1e;display:flex;flex-direction:column;overflow:hidden;background:#0c0c0c}
 
-  .key-row{display:flex;gap:.4rem}
+  /* Mode switcher */
+  .mode-switch{display:grid;grid-template-columns:1fr 1fr;gap:0;border-bottom:1px solid #1e1e1e;flex-shrink:0}
+  .mode-btn{padding:.7rem;font-size:.8rem;font-weight:500;color:#444;background:none;border:none;cursor:pointer;border-bottom:2px solid transparent;transition:color .15s;display:flex;align-items:center;justify-content:center;gap:.4rem}
+  .mode-btn:hover{color:#888}
+  .mode-btn.active{color:#e5e5e5;border-bottom-color:#6366f1}
+  .mode-btn:first-child{border-right:1px solid #1e1e1e}
+
+  /* Panels */
+  .mode-panel{display:none;flex:1;flex-direction:column;overflow:hidden}
+  .mode-panel.active{display:flex}
+
+  /* Upload mode */
+  .dropzone{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.85rem;padding:2rem;cursor:pointer;transition:background .15s;position:relative}
+  .dropzone:hover,.dropzone.over{background:#111}
+  .dropzone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+  .drop-icon{width:56px;height:56px;border:2px dashed #252525;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.75rem;color:#333;transition:border-color .15s,color .15s}
+  .dropzone:hover .drop-icon,.dropzone.over .drop-icon{border-color:#444;color:#666}
+  .drop-title{font-size:.9rem;color:#555;font-weight:500}
+  .drop-sub{font-size:.75rem;color:#333}
+
+  .file-loaded{display:none;flex:1;flex-direction:column;align-items:center;justify-content:center;gap:.85rem;padding:1.5rem}
+  .file-card{background:#141414;border:1px solid #1e1e1e;border-radius:8px;padding:.85rem 1rem;display:flex;align-items:center;gap:.7rem;width:100%;max-width:320px}
+  .file-card-icon{width:32px;height:32px;background:#1a1a1a;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+  .file-card-name{font-size:.82rem;color:#ccc;font-weight:500;word-break:break-all;flex:1}
+  .file-card-size{font-size:.72rem;color:#444;margin-top:2px}
+  .btn-clear{background:none;border:none;color:#3a3a3a;cursor:pointer;padding:4px;border-radius:4px;font-size:.85rem;flex-shrink:0;transition:color .15s}
+  .btn-clear:hover{color:#888}
+
+  /* AI mode */
+  .ai-panel{flex:1;display:flex;flex-direction:column;overflow:hidden}
+  .ai-settings{padding:.85rem 1rem;border-bottom:1px solid #1a1a1a;display:flex;flex-direction:column;gap:.6rem;flex-shrink:0}
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+  .field{display:flex;flex-direction:column;gap:.3rem}
+  .field.full{grid-column:1/-1}
+  .field label{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#3a3a3a}
+  .key-row{display:flex;gap:.35rem}
   .key-row input{flex:1}
-  .btn-icon{background:#1a1a1a;border:1px solid #252525;border-radius:6px;color:#666;cursor:pointer;padding:.55rem .65rem;font-size:.85rem;flex-shrink:0;transition:all .2s}
-  .btn-icon:hover{background:#222;color:#aaa}
+  input,select,textarea{background:#111;border:1px solid #1e1e1e;border-radius:6px;color:#e5e5e5;font-family:inherit;font-size:.82rem;padding:.5rem .65rem;outline:none;transition:border-color .15s;width:100%}
+  input:focus,select:focus,textarea:focus{border-color:#333}
+  select option{background:#111}
+  .btn-icon{background:#111;border:1px solid #1e1e1e;border-radius:6px;color:#444;cursor:pointer;padding:.5rem .6rem;font-size:.8rem;flex-shrink:0;transition:all .15s}
+  .btn-icon:hover{background:#1a1a1a;color:#888}
 
-  .prompt-area{flex:1;overflow:hidden;display:flex;flex-direction:column;padding:1rem 1.25rem;gap:.5rem}
-  .prompt-area label{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#555;flex-shrink:0}
-  .prompt-area textarea{flex:1;min-height:80px;font-size:.8rem}
+  .prompt-wrap{flex:1;overflow:hidden;display:flex;flex-direction:column;padding:.85rem 1rem;gap:.4rem}
+  .prompt-wrap label{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#3a3a3a;flex-shrink:0}
+  .prompt-wrap textarea{flex:1;min-height:60px;font-size:.78rem;line-height:1.55;resize:none}
 
-  .generate-footer{padding:1rem 1.25rem;border-top:1px solid #1a1a1a;display:flex;flex-direction:column;gap:.5rem}
-  .btn{width:100%;padding:.7rem 1.25rem;border-radius:8px;border:none;cursor:pointer;font-size:.88rem;font-weight:600;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:.45rem}
+  /* Shared footer */
+  .sidebar-footer{padding:.85rem 1rem;border-top:1px solid #1a1a1a;display:flex;flex-direction:column;gap:.45rem;flex-shrink:0}
+  .btn-main{width:100%;padding:.65rem;border-radius:7px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:.4rem}
   .btn-generate{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff}
-  .btn-generate:hover:not(:disabled){background:linear-gradient(135deg,#4f52d6,#7c3aed);transform:translateY(-1px)}
-  .btn-generate:disabled{opacity:.4;cursor:not-allowed;transform:none}
-  .btn-stop{background:#3f1a1a;border:1px solid #7f2a2a;color:#f87171}
-  .btn-stop:hover{background:#4f2020}
+  .btn-generate:hover:not(:disabled){filter:brightness(1.1);transform:translateY(-1px)}
+  .btn-generate:disabled{opacity:.35;cursor:not-allowed;transform:none}
+  .btn-stop{background:#1e0f0f;border:1px solid #5a1a1a;color:#f87171}
+  .btn-stop:hover{background:#2a1212}
+  .btn-open-pdf{background:#111;border:1px solid #1e1e1e;color:#888}
+  .btn-open-pdf:hover:not(:disabled){background:#1a1a1a;color:#ccc}
+  .btn-open-pdf:disabled{opacity:.3;cursor:not-allowed}
+  .meta-row{display:flex;align-items:center;justify-content:space-between;font-size:.7rem;color:#2e2e2e}
 
-  .token-counter{font-size:.72rem;color:#444;text-align:center}
-  .token-counter span{color:#666}
-
-  /* RIGHT CONTENT */
-  .content-panel{display:flex;flex-direction:column;overflow:hidden}
-  .content-tabs{display:flex;border-bottom:1px solid #222;flex-shrink:0}
-  .tab{padding:.75rem 1.25rem;font-size:.82rem;color:#555;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .2s}
-  .tab:hover{color:#aaa}
-  .tab.active{color:#e5e5e5;border-bottom-color:#6366f1}
-  .tab-actions{margin-left:auto;display:flex;align-items:center;gap:.5rem;padding:.5rem .75rem}
-  .btn-sm{padding:.35rem .75rem;border-radius:6px;border:none;cursor:pointer;font-size:.78rem;font-weight:500;transition:all .2s;display:flex;align-items:center;gap:.35rem}
-  .btn-dl{background:#1a1a1a;border:1px solid #252525;color:#aaa}
-  .btn-dl:hover{background:#222;color:#fff}
+  /* CONTENT PANEL */
+  .content{display:flex;flex-direction:column;overflow:hidden}
+  .content-tabs{display:flex;align-items:stretch;border-bottom:1px solid #1e1e1e;flex-shrink:0;height:40px}
+  .ctab{padding:0 1rem;font-size:.78rem;color:#3a3a3a;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s;display:flex;align-items:center;gap:.35rem}
+  .ctab:hover{color:#888}
+  .ctab.active{color:#e5e5e5;border-bottom-color:#6366f1}
+  .ctab-actions{margin-left:auto;display:flex;align-items:center;gap:.4rem;padding:0 .75rem}
+  .btn-sm{padding:.3rem .7rem;border-radius:5px;border:none;cursor:pointer;font-size:.75rem;font-weight:500;transition:all .15s;display:flex;align-items:center;gap:.3rem;white-space:nowrap}
+  .btn-dl{background:#141414;border:1px solid #1e1e1e;color:#666}
+  .btn-dl:hover:not(:disabled){background:#1a1a1a;color:#ccc}
   .btn-dl:disabled{opacity:.3;cursor:not-allowed}
-  .btn-pdf{background:#1a2a1a;border:1px solid #2a4a2a;color:#86efac}
-  .btn-pdf:hover{background:#1e341e;color:#bbf7d0}
-  .btn-pdf:disabled{opacity:.3;cursor:not-allowed}
 
   .panel-body{flex:1;overflow:auto;position:relative}
+  .empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:.5rem}
+  .empty-icon{font-size:3.5rem;opacity:.15}
+  .empty-text{font-size:.82rem;color:#2a2a2a}
 
-  /* Code view */
-  #code-view{display:none;background:#0a0a0a;padding:1.25rem;font-family:'Cascadia Code','Fira Code',monospace;font-size:.78rem;line-height:1.6;color:#a3be8c;white-space:pre-wrap;word-break:break-word;min-height:100%;cursor:text}
-  #code-view.visible{display:block}
-  .cursor-blink{display:inline-block;width:2px;height:1em;background:#a3be8c;margin-left:1px;vertical-align:text-bottom;animation:blink 1s step-end infinite}
-  @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+  #code-view{display:none;background:#080808;padding:1.25rem;font-family:'Cascadia Code','Fira Code','Courier New',monospace;font-size:.75rem;line-height:1.65;color:#7c9e6e;white-space:pre-wrap;word-break:break-word;min-height:100%}
+  #code-view.on{display:block}
+  .blink{display:inline-block;width:2px;height:.9em;background:#7c9e6e;margin-left:1px;vertical-align:text-bottom;animation:bl 1s step-end infinite}
+  @keyframes bl{0%,100%{opacity:1}50%{opacity:0}}
 
-  /* Preview */
   #preview-frame{display:none;width:100%;height:100%;border:none;background:#fff}
-  #preview-frame.visible{display:block}
+  #preview-frame.on{display:block}
 
-  /* Empty state */
-  .empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:.75rem;color:#2a2a2a}
-  .empty-state-icon{font-size:4rem;opacity:.4}
-  .empty-state-text{font-size:.9rem;color:#333}
-  .empty-state-sub{font-size:.78rem;color:#2a2a2a}
-
-  /* Status bar */
-  .status-bar{padding:.4rem 1.25rem;border-top:1px solid #1a1a1a;font-size:.72rem;color:#3a3a3a;display:flex;align-items:center;gap:.75rem;flex-shrink:0}
-  .status-dot{width:6px;height:6px;border-radius:50%;background:#3a3a3a;flex-shrink:0}
-  .status-dot.generating{background:#6366f1;animation:pulse 1.2s ease-in-out infinite}
-  .status-dot.done{background:#4ade80}
-  .status-dot.error{background:#f87171}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-
-  @media(max-width:900px){
-    main{grid-template-columns:1fr;grid-template-rows:auto 1fr}
-    .sidebar{border-right:none;border-bottom:1px solid #222;max-height:50vh}
-    .content-panel{min-height:300px}
-  }
+  /* STATUS */
+  .statusbar{padding:.35rem 1rem;border-top:1px solid #141414;font-size:.7rem;color:#2e2e2e;display:flex;align-items:center;gap:.6rem;flex-shrink:0}
+  .sdot{width:5px;height:5px;border-radius:50%;background:#222;flex-shrink:0}
+  .sdot.spin{background:#6366f1;animation:pulse 1.2s ease-in-out infinite}
+  .sdot.ok{background:#4ade80}
+  .sdot.err{background:#f87171}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.2}}
 </style>
 </head>
 <body>
@@ -105,238 +125,319 @@
   <span class="sep">/</span>
   <h1>ebook-generator</h1>
   <span style="flex:1"></span>
-  <span class="badge ai">Claude AI</span>
+  <span class="badge">v2</span>
 </header>
 
 <main>
-  <!-- SIDEBAR -->
   <div class="sidebar">
-    <div class="sidebar-section">
-      <label>API Key (Anthropic)</label>
-      <div class="key-row">
-        <input type="password" id="api-key" placeholder="sk-ant-..." autocomplete="off">
-        <button class="btn-icon" id="btn-save-key" title="Salvar chave">💾</button>
-        <button class="btn-icon" id="btn-toggle-key" title="Mostrar/ocultar">👁️</button>
+
+    <!-- MODE SWITCH -->
+    <div class="mode-switch">
+      <button class="mode-btn active" data-mode="ai">✦ Gerar com IA</button>
+      <button class="mode-btn" data-mode="upload">📤 Upload HTML</button>
+    </div>
+
+    <!-- AI MODE -->
+    <div class="mode-panel active" id="panel-ai">
+      <div class="ai-panel">
+        <div class="ai-settings">
+          <div class="field full">
+            <label>API Key (Anthropic)</label>
+            <div class="key-row">
+              <input type="password" id="api-key" placeholder="sk-ant-..." autocomplete="off">
+              <button class="btn-icon" id="btn-save-key" title="Salvar">💾</button>
+              <button class="btn-icon" id="btn-toggle-key" title="Mostrar">👁️</button>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Modelo</label>
+              <select id="model">
+                <option value="claude-haiku-4-5-20251001">Haiku — rápido</option>
+                <option value="claude-sonnet-4-6" selected>Sonnet — padrão</option>
+                <option value="claude-opus-4-6">Opus — máximo</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Nome do arquivo</label>
+              <input type="text" id="file-title" value="ebook" placeholder="meu-ebook">
+            </div>
+          </div>
+        </div>
+        <div class="prompt-wrap">
+          <label>Prompt <span style="color:#222;font-size:.65rem;text-transform:none;letter-spacing:0;margin-left:.4rem">Ctrl+Enter para gerar</span></label>
+          <textarea id="prompt"></textarea>
+        </div>
       </div>
-      <small>Salva no localStorage — nunca enviada a servidores externos</small>
     </div>
 
-    <div class="sidebar-section">
-      <label>Modelo</label>
-      <select id="model-select">
-        <option value="claude-haiku-4-5-20251001">claude-haiku-4-5 — Rápido</option>
-        <option value="claude-sonnet-4-6" selected>claude-sonnet-4-6 — Qualidade</option>
-        <option value="claude-opus-4-6">claude-opus-4-6 — Máximo</option>
-      </select>
+    <!-- UPLOAD MODE -->
+    <div class="mode-panel" id="panel-upload">
+      <div class="dropzone" id="dropzone">
+        <input type="file" accept=".html,.htm" id="file-input">
+        <div class="drop-icon">📄</div>
+        <div class="drop-title">Arraste um arquivo HTML</div>
+        <div class="drop-sub">ou clique para selecionar</div>
+      </div>
+      <div class="file-loaded" id="file-loaded">
+        <div class="file-card">
+          <div class="file-card-icon">🗒️</div>
+          <div style="flex:1;min-width:0">
+            <div class="file-card-name" id="fname">—</div>
+            <div class="file-card-size" id="fsize">—</div>
+          </div>
+          <button class="btn-clear" id="btn-clear" title="Remover">✕</button>
+        </div>
+      </div>
     </div>
 
-    <div class="sidebar-section">
-      <label>Título do arquivo (download)</label>
-      <input type="text" id="file-title" placeholder="meu-ebook" value="ebook">
-    </div>
-
-    <div class="prompt-area">
-      <label>Prompt</label>
-      <textarea id="prompt" placeholder="Descreva o ebook que deseja gerar...
-
-Ex: Crie um ebook completo em HTML sobre 'Como ganhar dinheiro com IA', com 5 capítulos, design profissional em dark mode, tipografia elegante, seções de dicas práticas, exemplos reais e CTAs para cada capítulo..."></textarea>
-    </div>
-
-    <div class="generate-footer">
-      <button class="btn btn-generate" id="btn-generate">
-        ✦ Gerar Ebook
-      </button>
-      <button class="btn btn-stop" id="btn-stop" style="display:none">
-        ⏹ Parar Geração
-      </button>
-      <div class="token-counter">
+    <!-- SHARED FOOTER -->
+    <div class="sidebar-footer">
+      <button class="btn-main btn-generate" id="btn-generate">✦ Gerar Ebook</button>
+      <button class="btn-main btn-stop" id="btn-stop" style="display:none">⏹ Parar</button>
+      <button class="btn-main btn-open-pdf" id="btn-pdf" disabled>🖨 Abrir para PDF</button>
+      <div class="meta-row">
         <span id="token-info">—</span>
+        <span id="status-label">aguardando</span>
       </div>
     </div>
   </div>
 
   <!-- CONTENT PANEL -->
-  <div class="content-panel">
+  <div class="content">
     <div class="content-tabs">
-      <div class="tab active" data-tab="preview">👁️ Prévia</div>
-      <div class="tab" data-tab="code">🗒️ HTML</div>
-      <div class="tab-actions">
+      <div class="ctab active" data-tab="preview">👁 Prévia</div>
+      <div class="ctab" data-tab="code">🗒 HTML</div>
+      <div class="ctab-actions">
         <button class="btn-sm btn-dl" id="btn-dl" disabled>⬇ Download HTML</button>
-        <button class="btn-sm btn-pdf" id="btn-pdf" disabled>🖨 Abrir PDF</button>
       </div>
     </div>
-
     <div class="panel-body">
       <div class="empty-state" id="empty-state">
-        <span class="empty-state-icon">✦</span>
-        <span class="empty-state-text">Nenhum ebook gerado ainda</span>
-        <span class="empty-state-sub">Configure sua API Key e escreva um prompt</span>
+        <span class="empty-icon">✦</span>
+        <span class="empty-text">Gere ou carregue um ebook para visualizar</span>
       </div>
       <div id="code-view"></div>
       <iframe id="preview-frame" sandbox="allow-same-origin allow-scripts"></iframe>
     </div>
-
-    <div class="status-bar">
-      <div class="status-dot" id="status-dot"></div>
-      <span id="status-text">aguardando</span>
+    <div class="statusbar">
+      <div class="sdot" id="sdot"></div>
+      <span id="stext">aguardando</span>
     </div>
   </div>
 </main>
 
 <script>
-// ── State ──────────────────────────────────────────────────────────────────
-let generatedHTML = '';
-let abortController = null;
-let activeTab = 'preview';
+// ── refs ─────────────────────────────────────────────────────────────────
+const apiKeyEl   = document.getElementById('api-key');
+const btnSaveKey = document.getElementById('btn-save-key');
+const btnTogKey  = document.getElementById('btn-toggle-key');
+const modelEl    = document.getElementById('model');
+const fileTitleEl= document.getElementById('file-title');
+const promptEl   = document.getElementById('prompt');
+const btnGenerate= document.getElementById('btn-generate');
+const btnStop    = document.getElementById('btn-stop');
+const btnPdf     = document.getElementById('btn-pdf');
+const btnDl      = document.getElementById('btn-dl');
+const tokenInfo  = document.getElementById('token-info');
+const statusLabel= document.getElementById('status-label');
+const sdot       = document.getElementById('sdot');
+const stext      = document.getElementById('stext');
+const emptyState = document.getElementById('empty-state');
+const codeView   = document.getElementById('code-view');
+const previewFr  = document.getElementById('preview-frame');
+const dropzone   = document.getElementById('dropzone');
+const fileInput  = document.getElementById('file-input');
+const fileLoaded = document.getElementById('file-loaded');
+const fnameEl    = document.getElementById('fname');
+const fsizeEl    = document.getElementById('fsize');
+const btnClear   = document.getElementById('btn-clear');
 
-// ── DOM refs ───────────────────────────────────────────────────────────────
-const apiKeyInput = document.getElementById('api-key');
-const btnSaveKey  = document.getElementById('btn-save-key');
-const btnToggleKey= document.getElementById('btn-toggle-key');
-const modelSelect = document.getElementById('model-select');
-const fileTitle   = document.getElementById('file-title');
-const promptTA    = document.getElementById('prompt');
-const btnGenerate = document.getElementById('btn-generate');
-const btnStop     = document.getElementById('btn-stop');
-const tokenInfo   = document.getElementById('token-info');
+// ── state ─────────────────────────────────────────────────────────────────
+let currentHTML  = '';
+let activeMode   = 'ai';   // 'ai' | 'upload'
+let activeTab    = 'preview';
+let abort        = null;
 
-const emptyState  = document.getElementById('empty-state');
-const codeView    = document.getElementById('code-view');
-const previewFrame= document.getElementById('preview-frame');
-const btnDl       = document.getElementById('btn-dl');
-const btnPdf      = document.getElementById('btn-pdf');
-const statusDot   = document.getElementById('status-dot');
-const statusText  = document.getElementById('status-text');
-
-// ── Persist key ───────────────────────────────────────────────────────────
-const STORAGE_KEY = 'anthropic_api_key';
-const saved = localStorage.getItem(STORAGE_KEY);
-if (saved) apiKeyInput.value = saved;
-
-btnSaveKey.addEventListener('click', () => {
-  const k = apiKeyInput.value.trim();
-  if (!k) { localStorage.removeItem(STORAGE_KEY); setStatus('Chave removida', ''); return; }
-  localStorage.setItem(STORAGE_KEY, k);
-  setStatus('Chave salva', 'done');
+// ── API key persistence ───────────────────────────────────────────────────
+const K = 'anthropic_api_key';
+if (localStorage.getItem(K)) apiKeyEl.value = localStorage.getItem(K);
+btnSaveKey.onclick = () => {
+  const v = apiKeyEl.value.trim();
+  v ? localStorage.setItem(K, v) : localStorage.removeItem(K);
+  setStatus(v ? 'chave salva' : 'chave removida', v ? 'ok' : '');
   setTimeout(() => setStatus('aguardando', ''), 2000);
+};
+btnTogKey.onclick = () => {
+  apiKeyEl.type = apiKeyEl.type === 'password' ? 'text' : 'password';
+  btnTogKey.textContent = apiKeyEl.type === 'password' ? '👁️' : '🙈';
+};
+
+// ── mode switch ───────────────────────────────────────────────────────────
+document.querySelectorAll('.mode-btn').forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.mode-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    activeMode = btn.dataset.mode;
+    document.getElementById('panel-' + activeMode).classList.add('active');
+    // Update generate button label
+    btnGenerate.textContent = activeMode === 'ai' ? '✦ Gerar Ebook' : '👁 Visualizar';
+    btnGenerate.disabled = activeMode === 'upload' && !currentHTML;
+  };
 });
 
-btnToggleKey.addEventListener('click', () => {
-  apiKeyInput.type = apiKeyInput.type === 'password' ? 'text' : 'password';
-  btnToggleKey.textContent = apiKeyInput.type === 'password' ? '👁️' : '🙈';
-});
-
-// ── Tabs ───────────────────────────────────────────────────────────────────
-document.querySelectorAll('.tab').forEach(t => {
-  t.addEventListener('click', () => {
-    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+// ── tabs ──────────────────────────────────────────────────────────────────
+document.querySelectorAll('.ctab').forEach(t => {
+  t.onclick = () => {
+    document.querySelectorAll('.ctab').forEach(x => x.classList.remove('active'));
     t.classList.add('active');
     activeTab = t.dataset.tab;
-    refreshViews();
-  });
+    refreshView();
+  };
 });
 
-function refreshViews() {
-  if (!generatedHTML) return;
+function refreshView() {
+  if (!currentHTML) return;
   if (activeTab === 'code') {
-    codeView.classList.add('visible');
-    previewFrame.classList.remove('visible');
-    previewFrame.style.display = 'none';
+    codeView.classList.add('on');
+    previewFr.classList.remove('on');
+    previewFr.style.display = 'none';
   } else {
-    codeView.classList.remove('visible');
-    previewFrame.classList.add('visible');
-    previewFrame.style.display = 'block';
+    codeView.classList.remove('on');
+    previewFr.classList.add('on');
+    previewFr.style.display = 'block';
   }
 }
 
-// ── Status helper ─────────────────────────────────────────────────────────
+// ── status helper ─────────────────────────────────────────────────────────
 function setStatus(text, type) {
-  statusText.textContent = text;
-  statusDot.className = 'status-dot' + (type ? ' ' + type : '');
+  stext.textContent = text;
+  statusLabel.textContent = text;
+  sdot.className = 'sdot' + (type ? ' ' + type : '');
 }
 
-// ── Extract HTML from Claude response ─────────────────────────────────────
+// ── preview helper ────────────────────────────────────────────────────────
+let prevBlobUrl = '';
+let previewTimer = null;
+function schedulePreview(html, immediate) {
+  clearTimeout(previewTimer);
+  previewTimer = setTimeout(() => {
+    if (!html) return;
+    const blob = new Blob([html], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    previewFr.src = url;
+    previewFr.style.display = 'block';
+    if (prevBlobUrl) URL.revokeObjectURL(prevBlobUrl);
+    prevBlobUrl = url;
+    emptyState.style.display = 'none';
+  }, immediate ? 0 : 600);
+}
+
+// ── extract HTML from Claude response ────────────────────────────────────
 function extractHTML(raw) {
-  // Prefer ```html ... ``` blocks
-  const match = raw.match(/```html\s*([\s\S]*?)```/i);
-  if (match) return match[1].trim();
-  // Fallback: find <!DOCTYPE or <html
-  const dtMatch = raw.match(/(<!DOCTYPE[\s\S]*)/i);
-  if (dtMatch) return dtMatch[1].trim();
-  // Last resort: return raw
+  const m = raw.match(/```html\s*([\s\S]*?)```/i);
+  if (m) return m[1].trim();
+  const d = raw.match(/(<!DOCTYPE[\s\S]*)/i);
+  if (d) return d[1].trim();
   return raw.trim();
 }
 
-// ── Live preview update (throttled) ───────────────────────────────────────
-let previewPending = false;
-function schedulePreviewUpdate() {
-  if (previewPending) return;
-  previewPending = true;
-  setTimeout(() => {
-    previewPending = false;
-    if (activeTab === 'preview' && generatedHTML) {
-      const blob = new Blob([generatedHTML], { type: 'text/html' });
-      const url = URL.createObjectURL(blob);
-      const prev = previewFrame.src;
-      previewFrame.src = url;
-      if (prev && prev.startsWith('blob:')) URL.revokeObjectURL(prev);
-    }
-  }, 600);
+// ── file size format ──────────────────────────────────────────────────────
+function fmtSize(b) {
+  return b < 1024 ? b + ' B' : b < 1048576 ? (b/1024).toFixed(1) + ' KB' : (b/1048576).toFixed(1) + ' MB';
 }
 
-// ── Generate ──────────────────────────────────────────────────────────────
-btnGenerate.addEventListener('click', generate);
-promptTA.addEventListener('keydown', e => {
+// ── upload mode ───────────────────────────────────────────────────────────
+function loadFile(file) {
+  if (!file?.name.match(/\.html?$/i)) { alert('Selecione um arquivo .html'); return; }
+  const reader = new FileReader();
+  reader.onload = e => {
+    currentHTML = e.target.result;
+    fnameEl.textContent = file.name;
+    fsizeEl.textContent = fmtSize(file.size);
+    dropzone.style.display = 'none';
+    fileLoaded.style.display = 'flex';
+    btnPdf.disabled = false;
+    btnDl.disabled = false;
+    btnGenerate.disabled = false;
+    schedulePreview(currentHTML, true);
+    if (activeTab === 'code') { codeView.textContent = currentHTML; codeView.classList.add('on'); }
+    setStatus('arquivo carregado', 'ok');
+  };
+  reader.readAsText(file);
+}
+
+fileInput.onchange = e => { if (e.target.files[0]) loadFile(e.target.files[0]); };
+
+btnClear.onclick = () => {
+  currentHTML = '';
+  fileInput.value = '';
+  dropzone.style.display = '';
+  fileLoaded.style.display = 'none';
+  btnPdf.disabled = true;
+  btnDl.disabled = true;
+  btnGenerate.disabled = true;
+  previewFr.classList.remove('on');
+  previewFr.style.display = 'none';
+  codeView.classList.remove('on');
+  emptyState.style.display = '';
+  setStatus('aguardando', '');
+};
+
+dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('over'); });
+dropzone.addEventListener('dragleave', () => dropzone.classList.remove('over'));
+dropzone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropzone.classList.remove('over');
+  if (e.dataTransfer.files[0]) loadFile(e.dataTransfer.files[0]);
+});
+
+// ── main action button ────────────────────────────────────────────────────
+btnGenerate.onclick = () => {
+  if (activeMode === 'upload') {
+    // Just show preview/code of uploaded file
+    refreshView();
+    return;
+  }
+  generate();
+};
+
+promptEl.addEventListener('keydown', e => {
   if (e.ctrlKey && e.key === 'Enter') generate();
 });
 
+// ── AI generate ───────────────────────────────────────────────────────────
 async function generate() {
-  const key = apiKeyInput.value.trim() || localStorage.getItem(STORAGE_KEY) || '';
-  if (!key) { alert('Insira sua API Key da Anthropic.'); apiKeyInput.focus(); return; }
-  const prompt = promptTA.value.trim();
-  if (!prompt) { alert('Escreva um prompt primeiro.'); promptTA.focus(); return; }
+  const key = apiKeyEl.value.trim() || localStorage.getItem(K) || '';
+  if (!key) { alert('Insira sua API Key da Anthropic.'); apiKeyEl.focus(); return; }
+  const prompt = promptEl.value.trim();
+  if (!prompt) { alert('Escreva um prompt.'); promptEl.focus(); return; }
 
   // Reset
-  generatedHTML = '';
+  currentHTML = '';
   codeView.textContent = '';
-  codeView.classList.remove('visible');
-  previewFrame.classList.remove('visible');
-  previewFrame.style.display = 'none';
+  codeView.classList.remove('on');
+  previewFr.classList.remove('on');
+  previewFr.style.display = 'none';
   emptyState.style.display = 'none';
   btnDl.disabled = true;
   btnPdf.disabled = true;
-
   btnGenerate.style.display = 'none';
   btnStop.style.display = 'flex';
-  setStatus('gerando...', 'generating');
+  tokenInfo.textContent = '—';
+  setStatus('gerando...', 'spin');
 
-  // Show code view as we stream
-  if (activeTab === 'code') {
-    codeView.classList.add('visible');
-  }
-  // Add blinking cursor
+  // Show code view streaming
   const cursor = document.createElement('span');
-  cursor.className = 'cursor-blink';
+  cursor.className = 'blink';
   codeView.appendChild(cursor);
   codeView.style.display = 'block';
 
-  abortController = new AbortController();
-  let rawBuffer = '';
-  let inputTokens = 0;
-  let outputTokens = 0;
+  abort = new AbortController();
+  let raw = '', inTok = 0, outTok = 0;
 
   try {
-    const systemPrompt = `Você é um designer e redator especializado em ebooks digitais.
-Gere SEMPRE um arquivo HTML completo e autocontido (sem dependências externas exceto Google Fonts CDN).
-O HTML deve:
-- Ser um ebook visual, profissional e bem diagramado
-- Usar design moderno com tipografia elegante
-- Incluir sumário clicável (âncoras internas)
-- Ter CSS embutido no <style> (dark mode ou light, conforme o tema)
-- Incluir @media print para impressão/PDF (sem URLs visíveis, margens adequadas)
-- Ter todos os capítulos completos e detalhados
-- Retornar SOMENTE o código HTML entre \`\`\`html e \`\`\` (sem explicações fora do bloco)`;
-
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -346,164 +447,141 @@ O HTML deve:
         'anthropic-dangerous-allow-browser': 'true',
       },
       body: JSON.stringify({
-        model: modelSelect.value,
+        model: modelEl.value,
         max_tokens: 8192,
         stream: true,
-        system: systemPrompt,
+        system: `Você é um designer e redator especializado em ebooks digitais.
+Gere SEMPRE um arquivo HTML completo e autocontido (sem dependências externas exceto Google Fonts CDN).
+O HTML deve:
+- Ser um ebook visual, profissional e bem diagramado
+- Usar design moderno com tipografia elegante
+- Incluir sumário clicável (âncoras internas)
+- Ter CSS embutido no <style> (dark mode ou light conforme o tema)
+- Incluir @media print (sem URLs visíveis, margens adequadas, page-break-inside: avoid em seções importantes)
+- Ter todos os capítulos completos e detalhados
+- Retornar SOMENTE o código HTML entre \`\`\`html e \`\`\` sem texto fora do bloco`,
         messages: [{ role: 'user', content: prompt }],
       }),
-      signal: abortController.signal,
+      signal: abort.signal,
     });
 
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      throw new Error(err?.error?.message || `HTTP ${res.status}`);
+      throw new Error(err?.error?.message || 'HTTP ' + res.status);
     }
 
     const reader = res.body.getReader();
-    const decoder = new TextDecoder();
-    let sseBuffer = '';
+    const dec = new TextDecoder();
+    let sseBuf = '';
 
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
-
-      sseBuffer += decoder.decode(value, { stream: true });
-      const lines = sseBuffer.split('\n');
-      sseBuffer = lines.pop(); // keep incomplete line
+      sseBuf += dec.decode(value, { stream: true });
+      const lines = sseBuf.split('\n');
+      sseBuf = lines.pop();
 
       for (const line of lines) {
         if (!line.startsWith('data: ')) continue;
-        const data = line.slice(6).trim();
-        if (data === '[DONE]') continue;
+        const d = line.slice(6).trim();
+        if (d === '[DONE]') continue;
         try {
-          const ev = JSON.parse(data);
-
+          const ev = JSON.parse(d);
           if (ev.type === 'content_block_delta' && ev.delta?.type === 'text_delta') {
-            rawBuffer += ev.delta.text;
-            // Update code view with raw response
+            raw += ev.delta.text;
             cursor.remove();
-            codeView.textContent = rawBuffer;
+            codeView.textContent = raw;
             codeView.appendChild(cursor);
             codeView.scrollTop = codeView.scrollHeight;
-
-            // Extract & update preview periodically
-            generatedHTML = extractHTML(rawBuffer);
-            schedulePreviewUpdate();
+            currentHTML = extractHTML(raw);
+            schedulePreview(currentHTML);
           }
-
-          if (ev.type === 'message_start' && ev.message?.usage) {
-            inputTokens = ev.message.usage.input_tokens || 0;
-          }
+          if (ev.type === 'message_start') inTok = ev.message?.usage?.input_tokens || 0;
           if (ev.type === 'message_delta' && ev.usage) {
-            outputTokens = ev.usage.output_tokens || 0;
-            tokenInfo.textContent = `↑ ${inputTokens} / ↓ ${outputTokens} tokens`;
+            outTok = ev.usage.output_tokens || 0;
+            tokenInfo.textContent = `↑${inTok} ↓${outTok} tokens`;
           }
         } catch {}
       }
     }
 
-    // Final extraction
-    generatedHTML = extractHTML(rawBuffer);
+    currentHTML = extractHTML(raw);
     cursor.remove();
+    schedulePreview(currentHTML, true);
 
-    // Final preview
-    if (generatedHTML) {
-      const blob = new Blob([generatedHTML], { type: 'text/html' });
-      const url = URL.createObjectURL(blob);
-      previewFrame.src = url;
-      previewFrame.style.display = 'block';
+    if (activeTab === 'preview') {
+      codeView.classList.remove('on');
+    } else {
+      codeView.classList.add('on');
+      codeView.textContent = raw;
+    }
 
-      if (activeTab === 'preview') {
-        codeView.classList.remove('visible');
-        previewFrame.classList.add('visible');
-      } else {
-        codeView.textContent = rawBuffer;
-      }
-
+    if (currentHTML) {
       btnDl.disabled = false;
       btnPdf.disabled = false;
-      setStatus(`concluído — ${outputTokens} tokens gerados`, 'done');
     }
+    setStatus(`concluído — ${outTok} tokens`, 'ok');
 
   } catch (err) {
     cursor.remove();
     if (err.name === 'AbortError') {
-      setStatus('geração cancelada', '');
-      // Still allow download if we have partial content
-      if (generatedHTML) { btnDl.disabled = false; btnPdf.disabled = false; }
+      setStatus('cancelado', '');
+      currentHTML = extractHTML(raw);
+      if (currentHTML) { btnDl.disabled = false; btnPdf.disabled = false; schedulePreview(currentHTML, true); }
     } else {
-      setStatus('erro: ' + err.message, 'error');
-      console.error(err);
-      codeView.textContent = '❌ Erro: ' + err.message + '\n\nResposta bruta:\n' + rawBuffer;
-      codeView.classList.add('visible');
+      setStatus('erro: ' + err.message, 'err');
+      codeView.textContent = '❌ ' + err.message + '\n\n' + raw;
+      codeView.classList.add('on');
     }
   } finally {
-    abortController = null;
+    abort = null;
     btnGenerate.style.display = 'flex';
     btnStop.style.display = 'none';
   }
 }
 
-btnStop.addEventListener('click', () => {
-  if (abortController) abortController.abort();
-});
+btnStop.onclick = () => { if (abort) abort.abort(); };
 
-// ── Download HTML ─────────────────────────────────────────────────────────
-btnDl.addEventListener('click', () => {
-  if (!generatedHTML) return;
-  const name = (fileTitle.value.trim() || 'ebook').replace(/[^a-z0-9_-]/gi, '-') + '.html';
-  const blob = new Blob([generatedHTML], { type: 'text/html' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = name;
-  a.click();
-  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-});
-
-// ── Open for PDF ──────────────────────────────────────────────────────────
-btnPdf.addEventListener('click', () => {
-  if (!generatedHTML) return;
-
-  const printPatch = `
-    <style>
-      @media print {
-        a[href]::after { content: none !important; }
-        .no-print, button { display: none !important; }
-        @page { margin: 1.5cm; }
-      }
-    </style>`;
-
-  let html = generatedHTML;
-  if (html.includes('</head>')) {
-    html = html.replace('</head>', printPatch + '</head>');
-  } else {
-    html = printPatch + html;
-  }
-
+// ── PDF helper ────────────────────────────────────────────────────────────
+function openPdf() {
+  if (!currentHTML) return;
+  const patch = `<style>@media print{a[href]::after{content:none!important}.no-print,button{display:none!important}@page{margin:1.5cm}}</style>`;
+  let html = currentHTML;
+  html = html.includes('</head>') ? html.replace('</head>', patch + '</head>') : patch + html;
   const win = window.open('', '_blank');
-  if (!win) { alert('Permita popups neste site e tente novamente.'); return; }
+  if (!win) { alert('Permita popups e tente novamente.'); return; }
   win.document.write(html);
   win.document.close();
-  setTimeout(() => win.print(), 900);
-});
+  setTimeout(() => win.print(), 800);
+}
+btnPdf.onclick = openPdf;
+
+// ── Download ──────────────────────────────────────────────────────────────
+btnDl.onclick = () => {
+  if (!currentHTML) return;
+  const name = (fileTitleEl.value.trim() || 'ebook').replace(/[^a-z0-9_-]/gi, '-') + '.html';
+  const a = Object.assign(document.createElement('a'), {
+    href: URL.createObjectURL(new Blob([currentHTML], { type: 'text/html' })),
+    download: name,
+  });
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+};
 
 // ── Default prompt ────────────────────────────────────────────────────────
-promptTA.value = `Crie um ebook completo em HTML com o tema "10 Formas de Ganhar Dinheiro com Inteligência Artificial".
+promptEl.value = `Crie um ebook completo em HTML com o tema "10 Formas de Ganhar Dinheiro com Inteligência Artificial".
 
 O ebook deve ter:
-- Capa visual impactante com título, subtítulo e nome do autor "Fillipe Alves"
+- Capa visual impactante com título, subtítulo e autor "Fillipe Alves"
 - Sumário com links internos para cada capítulo
-- 10 capítulos detalhados (mínimo 400 palavras cada) com exemplos práticos e reais
-- Boxes de destaque com dicas, avisos e exemplos
+- 10 capítulos detalhados (mínimo 400 palavras cada) com exemplos práticos
+- Boxes de destaque com dicas e exemplos reais
 - Seção "Primeiros Passos" em cada capítulo
-- Design profissional em dark mode (#0f0f0f background, fontes sans-serif modernas via Google Fonts)
+- Design profissional em dark mode (#0f0f0f background, Google Fonts)
 - Tipografia elegante com hierarquia visual clara
-- Rodapé em cada página com número e título do capítulo
 - @media print sem URLs visíveis nos links
 
-Público-alvo: brasileiros que querem renda extra ou transição de carreira usando IA.
-Tom: didático, motivador e prático. Sem jargão técnico excessivo.`;
+Público: brasileiros querendo renda extra com IA. Tom: didático e motivador.`;
 </script>
 </body>
 </html>

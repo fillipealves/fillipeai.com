@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Piloto Automático — FillipeAI</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root {
+    --green:   #00c936;
+    --green-lt:#e8fef0;
+    --dark:    #0d0d0d;
+    --gray:    #4a4a4a;
+    --gray-lt: #888;
+    --border:  #e0e0e0;
+    --bg:      #fafafa;
+    --white:   #ffffff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    font-size: 11pt;
+    line-height: 1.75;
+    color: var(--dark);
+    background: var(--white);
+  }
+
+  /* ─── PRINT ─── */
+  @media print {
+    .no-print { display: none !important; }
+    .page-break { page-break-before: always; }
+    body { font-size: 10.5pt; }
+    a { color: inherit; text-decoration: none; }
+  }
+
+  /* ─── CAPA ─── */
+  .cover {
+    width: 100%; min-height: 100vh;
+    background: #050505;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    page-break-after: always;
+    position: relative; overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,201,54,.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,201,54,.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .cover-inner { position: relative; z-index: 1; }
+  .cover-badge {
+    display: inline-block;
+    border: 1px solid rgba(0,201,54,.5);
+    color: var(--green);
+    font-size: 9pt; letter-spacing: 3px; text-transform: uppercase;
+    padding: .3rem 1rem; margin-bottom: 2.5rem;
+  }
+  .cover-icon { font-size: 4rem; margin-bottom: 1.5rem; }
+  .cover h1 {
+    font-size: 3.2rem; font-weight: 800; color: #fff;
+    line-height: 1.1; margin-bottom: 1rem;
+  }
+  .cover h1 span { color: var(--green); }
+  .cover-sub {
+    font-size: 1.1rem; color: #aaa; max-width: 480px;
+    margin: 0 auto 3rem; line-height: 1.7;
+  }
+  .cover-line {
+    width: 60px; height: 3px; background: var(--green);
+    margin: 0 auto 3rem;
+  }
+  .cover-author { color: #666; font-size: .9rem; letter-spacing: 1px; }
+  .cover-author strong { color: var(--green); }
+  .cover-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--green); margin: 2rem auto 0;
+  }
+
+  /* ─── CONTRATAPA / SOBRE ─── */
+  .back-cover {
+    padding: 5rem 4rem;
+    background: var(--bg);
+    border-left: 4px solid var(--green);
+    page-break-after: always;
+  }
+  .back-cover h2 { font-size: 1.4rem; margin-bottom: 1rem; }
+  .back-cover p  { color: var(--gray); margin-bottom: 1rem; line-height: 1.8; }
+
+  /* ─── SUMÁRIO ─── */
+  .toc {
+    padding: 4rem;
+    page-break-after: always;
+  }
+  .toc-title {
+    font-size: .7rem; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--green); margin-bottom: 2rem;
+  }
+  .toc h2 { font-size: 2rem; font-weight: 700; margin-bottom: 2.5rem; }
+  .toc-item {
+    display: flex; align-items: baseline; gap: .8rem;
+    padding: .8rem 0; border-bottom: 1px dashed var(--border);
+  }
+  .toc-num { font-size: .75rem; color: var(--green); font-weight: 600; min-width: 32px; }
+  .toc-name { flex: 1; font-weight: 500; }
+  .toc-sub  { font-size: .82rem; color: var(--gray-lt); margin-top: .15rem; }
+  .toc-bonus {
+    margin-top: 1.5rem; padding: 1rem 1.2rem;
+    background: var(--green-lt); border-left: 3px solid var(--green);
+  }
+  .toc-bonus p { font-size: .85rem; color: var(--gray); margin: 0; }
+  .toc-bonus strong { color: var(--dark); }
+
+  /* ─── CHAPTER COVER ─── */
+  .chapter-cover {
+    min-height: 60vh;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 4rem;
+    background: var(--dark);
+    page-break-before: always; page-break-after: always;
+  }
+  .chapter-cover .ch-num {
+    font-size: .7rem; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--green); margin-bottom: 1rem;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .chapter-cover h2 {
+    font-size: 2.4rem; font-weight: 800; color: #fff;
+    line-height: 1.15; margin-bottom: 1rem;
+  }
+  .chapter-cover h2 em { color: var(--green); font-style: normal; }
+  .chapter-cover .ch-sub { color: #888; font-size: .95rem; max-width: 460px; line-height: 1.7; }
+  .chapter-cover .ch-line { width: 40px; height: 3px; background: var(--green); margin-bottom: 1.5rem; }
+
+  /* ─── CONTENT ─── */
+  .content {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+  }
+
+  h3 {
+    font-size: 1.25rem; font-weight: 700;
+    margin: 2.5rem 0 .8rem;
+    color: var(--dark);
+  }
+  h3::before {
+    content: '▸ ';
+    color: var(--green);
+  }
+
+  h4 {
+    font-size: 1rem; font-weight: 600;
+    margin: 1.8rem 0 .5rem;
+    color: var(--dark);
+  }
+
+  p { margin-bottom: 1rem; color: var(--gray); }
+
+  strong { color: var(--dark); }
+
+  ul, ol { padding-left: 1.4rem; margin-bottom: 1.2rem; }
+  li { margin-bottom: .4rem; color: var(--gray); }
+  li strong { color: var(--dark); }
+
+  /* ─── CALLOUTS ─── */
+  .callout {
+    padding: 1.2rem 1.5rem;
+    border-left: 4px solid var(--green);
+    background: var(--green-lt);
+    margin: 1.8rem 0;
+  }
+  .callout-label {
+    font-size: .65rem; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--green); font-weight: 600; margin-bottom: .4rem;
+  }
+  .callout p { color: var(--dark); margin: 0; font-size: .95rem; line-height: 1.7; }
+
+  .tip {
+    padding: 1.2rem 1.5rem;
+    border-left: 4px solid #f59e0b;
+    background: #fffbeb;
+    margin: 1.8rem 0;
+  }
+  .tip .callout-label { color: #d97706; }
+  .tip p { color: var(--dark); margin: 0; }
+
+  .warning {
+    padding: 1.2rem 1.5rem;
+    border-left: 4px solid #ef4444;
+    background: #fff5f5;
+    margin: 1.8rem 0;
+  }
+  .warning .callout-label { color: #dc2626; }
+  .warning p { color: var(--dark); margin: 0; }
+
+  /* ─── CODE BLOCK ─── */
+  .code-block {
+    background: #0d0d0d;
+    padding: 1.2rem 1.5rem;
+    margin: 1.5rem 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .82rem;
+    color: #a3e635;
+    line-height: 1.8;
+    overflow-x: auto;
+  }
+  .code-block .prompt { color: #00c936; }
+  .code-block .comment { color: #555; }
+
+  /* ─── CHECKLIST ─── */
+  .checklist { list-style: none; padding: 0; margin: 1.5rem 0; }
+  .checklist li {
+    display: flex; gap: .8rem; align-items: flex-start;
+    padding: .6rem .8rem; margin-bottom: .3rem;
+    background: var(--bg); border: 1px solid var(--border);
+  }
+  .checklist li::before { content: '☐'; color: var(--green); flex-shrink: 0; font-size: 1rem; }
+
+  /* ─── TABLE ─── */
+  .table-wrap { overflow-x: auto; margin: 1.5rem 0; }
+  table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+  th {
+    background: var(--dark); color: #fff;
+    padding: .7rem 1rem; text-align: left;
+    font-size: .72rem; letter-spacing: 1px; text-transform: uppercase;
+  }
+  td { padding: .65rem 1rem; border-bottom: 1px solid var(--border); color: var(--gray); }
+  tr:nth-child(even) td { background: var(--bg); }
+  td strong { color: var(--dark); }
+  .tag-yes { color: #16a34a; font-weight: 600; }
+  .tag-no  { color: #dc2626; }
+
+  /* ─── QUOTE ─── */
+  blockquote {
+    border-left: 3px solid var(--green);
+    padding: 1rem 1.5rem;
+    margin: 1.8rem 0;
+    font-size: 1.05rem;
+    font-style: italic;
+    color: var(--dark);
+  }
+  blockquote footer { font-size: .78rem; color: var(--gray-lt); font-style: normal; margin-top: .5rem; }
+
+  /* ─── HIGHLIGHT BOX ─── */
+  .highlight-box {
+    padding: 2rem;
+    background: var(--dark);
+    color: #fff;
+    margin: 2rem 0;
+  }
+  .highlight-box h4 { color: var(--green); margin-top: 0; }
+  .highlight-box p, .highlight-box li { color: #aaa; }
+  .highlight-box strong { color: #fff; }
+
+  /* ─── STEP ─── */
+  .steps-list { list-style: none; padding: 0; counter-reset: step; }
+  .steps-list li {
+    counter-increment: step;
+    padding: 1rem 1rem 1rem 3.5rem;
+    border: 1px solid var(--border);
+    margin-bottom: .8rem;
+    position: relative;
+  }
+  .steps-list li::before {
+    content: counter(step);
+    position: absolute; left: 1rem; top: 1rem;
+    width: 1.6rem; height: 1.6rem;
+    background: var(--green); color: #fff;
+    font-size: .72rem; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+  }
+
+  /* ─── DIVIDER ─── */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+
+  /* ─── PRINT BUTTON ─── */
+  .no-print {
+    position: fixed; bottom: 2rem; right: 2rem; z-index: 999;
+    display: flex; gap: .8rem; flex-direction: column; align-items: flex-end;
+  }
+  .print-btn {
+    background: var(--green); color: #fff;
+    border: none; cursor: pointer;
+    padding: .8rem 1.5rem;
+    font-family: 'Inter', sans-serif;
+    font-size: .85rem; font-weight: 600;
+    letter-spacing: .5px;
+    box-shadow: 0 4px 16px rgba(0,201,54,.4);
+  }
+  .print-hint { font-size: .72rem; color: var(--gray-lt); text-align: right; }
+</style>
+</head>
+<body>
+
+<!-- ═══ BOTÃO IMPRIMIR ══════════════════════════════════════ -->
+<div class="no-print">
+  <button class="print-btn" onclick="window.print()">⬇ Salvar como PDF</button>
+  <p class="print-hint">Ctrl+P → Salvar como PDF</p>
+</div>
+
+<!-- ═══ CAPA ════════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-inner">
+    <div class="cover-badge">E-book · FillipeAI</div>
+    <div class="cover-icon">⚡</div>
+    <h1>PILOTO<br><span>AUTOMÁTICO</span></h1>
+    <p class="cover-sub">
+      O guia prático para empresários que querem parar de trabalhar
+      no braço e começar a crescer com inteligência.
+    </p>
+    <div class="cover-line"></div>
+    <p class="cover-author">por <strong>Fillipe Alves</strong> · fillipeai.com</p>
+    <div class="cover-dot"></div>
+  </div>
+</div>
+
+<!-- ═══ SOBRE O AUTOR ═══════════════════════════════════════ -->
+<div class="back-cover">
+  <h2>Sobre o autor</h2>
+  <p>
+    <strong>Fillipe Alves</strong> é desenvolvedor full-stack especializado em criar sistemas
+    personalizados para pequenas e médias empresas. Ao longo dos anos trabalhando com empresários
+    de diferentes segmentos, percebeu um padrão: a maioria não precisa de tecnologia complexa —
+    precisa de organização e automação simples que funcione.
+  </p>
+  <p>
+    Este e-book é um resumo prático do que ele viu funcionar — e do que não funciona — em dezenas
+    de negócios reais. Sem teoria. Sem academicismo. Só o que é aplicável a partir de hoje.
+  </p>
+  <p>
+    📧 fillipealves13@gmail.com &nbsp;·&nbsp; 🌐 fillipeai.com
+  </p>
+
+  <hr class="divider"/>
+
+  <h2>Antes de começar</h2>
+  <p>
+    Este guia foi escrito para <strong>donos e gestores de pequenos negócios</strong> que
+    não são da área de tecnologia. Você não precisa saber programar, não precisa entender
+    de servidores e não precisa de nenhuma ferramenta paga para aplicar o que está aqui.
+  </p>
+  <p>
+    Cada capítulo termina com uma <strong>ação concreta</strong>. Não pule. A diferença entre
+    quem lê e quem muda o negócio está nessas ações.
+  </p>
+
+  <div class="callout">
+    <div class="callout-label">Como usar este livro</div>
+    <p>
+      Leia um capítulo por dia e execute a ação ao final antes de passar para o próximo.
+      Aplicado dessa forma, em 5 dias você terá transformado pelo menos uma parte do seu negócio.
+    </p>
+  </div>
+</div>
+
+<!-- ═══ SUMÁRIO ════════════════════════════════════════════ -->
+<div class="toc">
+  <p class="toc-title">// sumário</p>
+  <h2>O que você vai encontrar aqui</h2>
+
+  <div class="toc-item">
+    <span class="toc-num">CAP 01</span>
+    <div>
+      <div class="toc-name">Por que seu negócio está travado</div>
+      <div class="toc-sub">Os 3 gargalos que sugam tempo de todo empresário</div>
+    </div>
+  </div>
+  <div class="toc-item">
+    <span class="toc-num">CAP 02</span>
+    <div>
+      <div class="toc-name">O mapa da automação</div>
+      <div class="toc-sub">O que automatizar primeiro — e o que não vale a pena</div>
+    </div>
+  </div>
+  <div class="toc-item">
+    <span class="toc-num">CAP 03</span>
+    <div>
+      <div class="toc-name">Ferramentas que você já tem</div>
+      <div class="toc-sub">WhatsApp, Planilha e Forms usados de forma inteligente</div>
+    </div>
+  </div>
+  <div class="toc-item">
+    <span class="toc-num">CAP 04</span>
+    <div>
+      <div class="toc-name">Quando investir num sistema personalizado</div>
+      <div class="toc-sub">Como avaliar, contratar e acompanhar sem ser enganado</div>
+    </div>
+  </div>
+  <div class="toc-item">
+    <span class="toc-num">CAP 05</span>
+    <div>
+      <div class="toc-name">Colocando em prática</div>
+      <div class="toc-sub">Checklist completo para começar esta semana</div>
+    </div>
+  </div>
+
+  <div class="toc-bonus">
+    <p><strong>+ Bônus:</strong> Templates prontos de planilha, checklist de diagnóstico e roteiro de automação para WhatsApp</p>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     CAPÍTULO 1
+══════════════════════════════════════════════════════════ -->
+<div class="chapter-cover">
+  <div class="ch-line"></div>
+  <p class="ch-num">// capítulo 01</p>
+  <h2>Por que seu negócio<br>está <em>travado</em></h2>
+  <p class="ch-sub">
+    Você trabalha mais do que nunca, mas o negócio não cresce na mesma proporção.
+    Entenda os 3 gargalos que ninguém te conta.
+  </p>
+</div>
+
+<div class="content">
+  <p>
+    Se você chegou até este e-book, provavelmente está nessa situação: o negócio existe,
+    tem clientes, gera receita — mas você sente que está sempre apagando incêndio.
+    Toda hora aparece algo urgente. Todo dia você responde as mesmas perguntas.
+    Todo mês você não sabe exatamente quanto entrou e quanto saiu.
+  </p>
+  <p>
+    Isso não é falta de esforço. É falta de sistema.
+  </p>
+  <p>
+    Em anos trabalhando com donos de negócio, percebi que o travamento quase sempre vem
+    dos mesmos três lugares. Quando você entende esses gargalos, tudo fica mais claro.
+  </p>
+
+  <h3>Gargalo 1 — O funil invisível</h3>
+  <p>
+    A maioria dos negócios pequenos não tem um processo de vendas definido. O cliente entra
+    em contato, a resposta depende do humor do dia, do volume de mensagens e de quem está
+    disponível. Às vezes o lead some porque demorou a resposta. Às vezes o orçamento foi
+    enviado mas nunca teve follow-up.
+  </p>
+  <p>
+    <strong>O problema:</strong> cada venda depende de esforço humano do zero. Não existe
+    um caminho padrão que o cliente percorre. Isso faz a receita oscilar sem razão aparente.
+  </p>
+
+  <div class="callout">
+    <div class="callout-label">Pergunta de diagnóstico</div>
+    <p>
+      Se você sair de férias por 2 semanas e ninguém responder os clientes, quantos leads
+      potenciais você perde? Se a resposta for "muitos", você tem funil invisível.
+    </p>
+  </div>
+
+  <h3>Gargalo 2 — O tempo do gestor</h3>
+  <p>
+    Você, como dono ou gestor, provavelmente faz coisas que não deveriam depender de você:
+    confirmar agendamento, enviar o mesmo e-mail de boas-vindas toda semana, lançar nota
+    fiscal manualmente, cobrar cliente inadimplente no WhatsApp.
+  </p>
+  <p>
+    Essas tarefas parecem pequenas. Mas some 30 minutos de confirmação de agendamento,
+    20 minutos de e-mail padrão, 40 minutos de lançamento manual — você acaba de perder
+    1h30 do seu dia com tarefas que um sistema faria em segundos.
+  </p>
+  <p>
+    Multiplique por 22 dias úteis: <strong>33 horas por mês</strong> do seu tempo, que
+    poderia ser dedicado a estratégia, vendas ou simplesmente descanso.
+  </p>
+
+  <div class="tip">
+    <div class="callout-label">💡 Perspectiva</div>
+    <p>
+      33 horas mensais × 12 meses = <strong>396 horas por ano</strong>.
+      São quase 50 dias de trabalho que você está gastando com tarefas automatizáveis.
+    </p>
+  </div>
+
+  <h3>Gargalo 3 — O financeiro no escuro</h3>
+  <p>
+    Pergunte a qualquer dono de negócio pequeno: "Quanto você faturou no mês passado?".
+    A maioria sabe. Agora pergunte: "Qual foi sua margem líquida?". Silêncio.
+  </p>
+  <p>
+    Sem clareza financeira, você toma decisões no escuro. Contrata quando não devia.
+    Deixa de investir quando tinha dinheiro. Não sabe quais serviços dão lucro e quais
+    dão prejuízo.
+  </p>
+  <p>
+    O resultado: o negócio cresce em faturamento mas não em lucratividade. Você trabalha
+    mais, mas não fica mais rico.
+  </p>
+
+  <hr class="divider"/>
+
+  <h3>Os 3 gargalos em resumo</h3>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Gargalo</th>
+          <th>Sintoma</th>
+          <th>Consequência</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Funil invisível</strong></td>
+          <td>Vendas inconsistentes</td>
+          <td>Receita oscilante sem razão clara</td>
+        </tr>
+        <tr>
+          <td><strong>Tempo do gestor</strong></td>
+          <td>Sempre ocupado com urgências</td>
+          <td>Sem tempo para crescer</td>
+        </tr>
+        <tr>
+          <td><strong>Financeiro no escuro</strong></td>
+          <td>Não sabe a margem real</td>
+          <td>Decisões erradas, lucro baixo</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <blockquote>
+    "Você não pode gerenciar o que não mede. E não pode melhorar o que não gerencia."
+    <footer>— Peter Drucker</footer>
+  </blockquote>
+
+  <h3>A boa notícia</h3>
+  <p>
+    Os três gargalos acima têm solução. E a solução não exige contratar mais gente,
+    comprar software caro ou aprender a programar. Exige <strong>processo</strong> —
+    e processo pode ser automatizado com ferramentas simples que você provavelmente
+    já usa ou tem acesso gratuito.
+  </p>
+  <p>
+    No próximo capítulo, vamos mapear exatamente o que é automatizável no seu negócio
+    e criar um plano de ação prioritário.
+  </p>
+
+  <div class="highlight-box">
+    <h4>✅ Ação do Capítulo 1</h4>
+    <p>Antes de virar a página, responda por escrito:</p>
+    <ul>
+      <li>Qual dos 3 gargalos está mais presente no seu negócio hoje?</li>
+      <li>Quanto tempo você gasta por semana com tarefas repetitivas?</li>
+      <li>Você saberia dizer sua margem líquida do mês passado?</li>
+    </ul>
+    <p style="margin-top:1rem">Guarde essas respostas. Elas vão orientar o que você vai priorizar nos próximos capítulos.</p>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     CAPÍTULO 2
+══════════════════════════════════════════════════════════ -->
+<div class="chapter-cover page-break">
+  <div class="ch-line"></div>
+  <p class="ch-num">// capítulo 02</p>
+  <h2>O mapa da<br><em>automação</em></h2>
+  <p class="ch-sub">
+    Nem tudo deve ser automatizado. Saber onde focar é o que separa quem economiza
+    tempo de quem desperdiça energia tentando automatizar o que não vale a pena.
+  </p>
+</div>
+
+<div class="content">
+  <p>
+    O maior erro que vejo donos de negócio cometendo com automação é tentar fazer tudo
+    de uma vez. Compram vários softwares, tentam integrar tudo, ficam sobrecarregados
+    com a complexidade e abandonam no meio. Resultado: gastaram dinheiro e perderam tempo.
+  </p>
+  <p>
+    A abordagem certa é diferente: <strong>automatize uma coisa de cada vez, começando
+    pelo que rouba mais do seu tempo</strong>.
+  </p>
+
+  <h3>A matriz de automação</h3>
+  <p>
+    Para decidir o que automatizar, use dois critérios: <strong>frequência</strong>
+    (quantas vezes você faz aquilo por semana) e <strong>complexidade</strong>
+    (o quanto precisa de julgamento humano para ser feito).
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Frequência</th><th>Complexidade</th><th>Decisão</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Alta</strong></td>
+          <td>Baixa (mecânico)</td>
+          <td><span class="tag-yes">✓ Automatizar agora</span></td>
+        </tr>
+        <tr>
+          <td><strong>Alta</strong></td>
+          <td>Alta (julgamento)</td>
+          <td>Criar processo/checklist</td>
+        </tr>
+        <tr>
+          <td><strong>Baixa</strong></td>
+          <td>Baixa</td>
+          <td>Automatizar depois</td>
+        </tr>
+        <tr>
+          <td><strong>Baixa</strong></td>
+          <td>Alta</td>
+          <td><span class="tag-no">Manter manual</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>
+    A coluna de ouro é a primeira: tarefas <strong>frequentes e mecânicas</strong>.
+    São essas que, automatizadas, liberam mais tempo com menos risco.
+  </p>
+
+  <h3>Exemplos práticos por segmento</h3>
+
+  <h4>Clínicas e consultórios</h4>
+  <ul>
+    <li><strong>Confirmação de consulta</strong> — mensagem automática 24h antes via WhatsApp</li>
+    <li><strong>Lembrete de retorno</strong> — mensagem automática após X dias do último atendimento</li>
+    <li><strong>Boas-vindas ao novo paciente</strong> — e-mail ou mensagem automática com instruções</li>
+    <li><strong>Coleta de avaliação</strong> — formulário enviado automaticamente após o atendimento</li>
+  </ul>
+
+  <h4>Lojas e comércio</h4>
+  <ul>
+    <li><strong>Confirmação de pedido</strong> — mensagem automática assim que o pedido é registrado</li>
+    <li><strong>Atualização de status</strong> — notificação automática de "saiu para entrega"</li>
+    <li><strong>Recuperação de carrinho</strong> — lembrete para cliente que consultou e não comprou</li>
+    <li><strong>Aniversário do cliente</strong> — mensagem automática com desconto no mês de aniversário</li>
+  </ul>
+
+  <h4>Prestadores de serviço</h4>
+  <ul>
+    <li><strong>Proposta padronizada</strong> — template pronto para envio em segundos</li>
+    <li><strong>Follow-up de orçamento</strong> — lembrete automático após 3 dias sem resposta</li>
+    <li><strong>Cobrança de inadimplente</strong> — mensagem automática após vencimento</li>
+    <li><strong>Pesquisa de satisfação</strong> — formulário enviado automaticamente após entrega</li>
+  </ul>
+
+  <div class="callout">
+    <div class="callout-label">Regra prática</div>
+    <p>
+      Se você faz algo mais de 3 vezes por semana e o processo é sempre igual,
+      ele pode ser automatizado. Se alguém novo poderia fazer seguindo um roteiro,
+      ele pode ser automatizado.
+    </p>
+  </div>
+
+  <h3>O que NÃO automatizar</h3>
+  <p>
+    Automação tem limites. Existem partes do seu negócio que perdem valor quando
+    são automatizadas porque o cliente percebe a frieza do processo.
+  </p>
+  <ul>
+    <li><strong>Negociações complexas</strong> — preço, escopo, condições especiais precisam de humano</li>
+    <li><strong>Situações de crise</strong> — cliente insatisfeito, problema grave nunca deve receber resposta de bot</li>
+    <li><strong>Relacionamento estratégico</strong> — clientes VIP merecem atenção personalizada</li>
+    <li><strong>Decisões com impacto financeiro alto</strong> — aprovação de crédito, contrato grande</li>
+  </ul>
+
+  <div class="warning">
+    <div class="callout-label">⚠ Cuidado</div>
+    <p>
+      Automatizar mal é pior do que não automatizar. Um cliente que recebe uma mensagem
+      genérica quando está com problema urgente fica mais insatisfeito do que se não
+      recebesse nada. Sempre mantenha uma saída humana fácil para situações críticas.
+    </p>
+  </div>
+
+  <h3>Por onde começar: o exercício das 5 tarefas</h3>
+  <p>
+    Faça isso agora: liste as <strong>5 tarefas que você mais repete</strong> durante a semana.
+    Não pense muito — só o que vier primeiro na cabeça.
+  </p>
+  <p>
+    Para cada uma, responda:
+  </p>
+  <ol>
+    <li>Com que frequência faço isso? (diário / semanal / mensal)</li>
+    <li>O processo é sempre igual ou depende de julgamento?</li>
+    <li>Quanto tempo leva cada vez que faço?</li>
+  </ol>
+  <p>
+    Multiplique frequência × tempo. A tarefa com maior resultado é a primeira que você
+    deve automatizar. Simples assim.
+  </p>
+
+  <div class="highlight-box">
+    <h4>✅ Ação do Capítulo 2</h4>
+    <p>Liste agora as 5 tarefas que você mais repete no seu negócio. Para cada uma, anote a frequência e o tempo médio gasto. Identifique a número 1 — essa é a que vamos resolver no próximo capítulo.</p>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     CAPÍTULO 3
+══════════════════════════════════════════════════════════ -->
+<div class="chapter-cover page-break">
+  <div class="ch-line"></div>
+  <p class="ch-num">// capítulo 03</p>
+  <h2>Ferramentas que<br><em>você já tem</em></h2>
+  <p class="ch-sub">
+    Antes de comprar qualquer coisa, use o que está na sua mão. WhatsApp, Planilha
+    e Forms resolvem mais do que a maioria imagina.
+  </p>
+</div>
+
+<div class="content">
+  <p>
+    A maioria das pessoas associa automação a softwares caros, dashboards complexos
+    e integrações técnicas. Na prática, para 80% dos negócios pequenos,
+    <strong>três ferramentas gratuitas resolvem os problemas principais</strong>:
+    WhatsApp Business, Google Planilhas e Google Forms.
+  </p>
+  <p>
+    Neste capítulo você vai aprender a usar cada uma de forma inteligente —
+    com configurações específicas que a maioria não usa.
+  </p>
+
+  <h3>WhatsApp Business — além das mensagens</h3>
+  <p>
+    O WhatsApp Business tem recursos nativos que pouquíssimas empresas configuram
+    corretamente. Se você usa o WhatsApp Business e não configurou o que está abaixo,
+    está deixando dinheiro na mesa.
+  </p>
+
+  <h4>1. Mensagem de saudação</h4>
+  <p>
+    Ativada em <em>Configurações → Ferramentas Comerciais → Mensagem de Saudação</em>,
+    ela é enviada automaticamente para qualquer pessoa que entrar em contato pela
+    primeira vez (ou após 14 dias sem interação).
+  </p>
+
+  <div class="code-block">
+    <span class="comment">// Exemplo de mensagem de saudação eficiente</span><br><br>
+    Olá! 👋 Aqui é a [Nome da Empresa].<br>
+    Recebemos sua mensagem e vamos te responder<br>
+    em breve.<br><br>
+    Enquanto isso, nos conte:<br>
+    👉 O que você precisa?<br>
+    👉 Qual o melhor horário para falarmos?<br><br>
+    Nosso horário de atendimento:<br>
+    Seg-Sex: 8h às 18h | Sáb: 9h às 13h
+  </div>
+
+  <p>
+    Isso resolve dois problemas de uma vez: o cliente sabe que foi recebido
+    (não fica no vácuo) e você já coleta as informações que precisa para
+    quando for responder.
+  </p>
+
+  <h4>2. Mensagem de ausência</h4>
+  <p>
+    Configure para disparar automaticamente fora do horário comercial.
+    Inclua uma previsão de quando você vai responder — isso reduz
+    a ansiedade do cliente e evita que ele saia para buscar concorrente.
+  </p>
+
+  <h4>3. Respostas rápidas</h4>
+  <p>
+    Em <em>Ferramentas Comerciais → Respostas Rápidas</em>, você pode criar
+    atalhos para as mensagens que mais envia. Digite "/" no chat e aparece
+    a lista. Por exemplo:
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Atalho</th><th>Mensagem</th></tr></thead>
+      <tbody>
+        <tr><td><strong>/orcamento</strong></td><td>Olá! Para enviar o orçamento preciso de: [lista de informações necessárias]</td></tr>
+        <tr><td><strong>/horarios</strong></td><td>Nossos horários disponíveis esta semana são: [lista]. Qual prefere?</td></tr>
+        <tr><td><strong>/pix</strong></td><td>Nossa chave Pix: [chave]. Após o pagamento, me envie o comprovante!</td></tr>
+        <tr><td><strong>/obrigado</strong></td><td>Muito obrigado pela confiança! Foi um prazer atender você. 😊</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>4. Catálogo de produtos</h4>
+  <p>
+    Se você vende produtos ou serviços com preço fixo, configure o catálogo
+    do WhatsApp Business. Em vez de descrever preços a cada cliente,
+    você envia o link do catálogo em segundos.
+  </p>
+
+  <hr class="divider"/>
+
+  <h3>Google Planilhas — seu mini-sistema gratuito</h3>
+  <p>
+    Uma planilha bem estruturada resolve o que muitas empresas pagam caro em
+    software para ter. O segredo é usá-la com <strong>estrutura de banco de dados</strong>,
+    não como bloco de anotações.
+  </p>
+
+  <h4>Planilha de clientes e atendimentos</h4>
+  <p>
+    Crie uma planilha com as seguintes colunas e mantenha cada linha como
+    um registro único de cliente:
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Coluna</th><th>O que registrar</th><th>Para que serve</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Nome</strong></td><td>Nome completo</td><td>Personalizar comunicação</td></tr>
+        <tr><td><strong>WhatsApp</strong></td><td>Com código do país</td><td>Contato rápido</td></tr>
+        <tr><td><strong>Origem</strong></td><td>Como te encontrou</td><td>Saber qual canal traz mais cliente</td></tr>
+        <tr><td><strong>Status</strong></td><td>Lead / Ativo / Inativo</td><td>Filtrar e priorizar</td></tr>
+        <tr><td><strong>Último contato</strong></td><td>Data</td><td>Identificar quem reativar</td></tr>
+        <tr><td><strong>Valor total</strong></td><td>Soma de compras</td><td>Identificar clientes VIP</td></tr>
+        <tr><td><strong>Observações</strong></td><td>Preferências, histórico</td><td>Personalizar próximo contato</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">Dica de ouro</div>
+    <p>
+      Use <strong>formatação condicional</strong> para colorir automaticamente
+      clientes inativos há mais de 60 dias. Toda semana você olha para a planilha
+      e já sabe quem precisa de reativação — sem precisar ler linha por linha.
+    </p>
+  </div>
+
+  <h4>Planilha financeira simples</h4>
+  <p>
+    Uma planilha financeira não precisa ser complexa para ser útil.
+    O mínimo necessário é:
+  </p>
+  <ul>
+    <li><strong>Aba de entradas</strong> — data, cliente, valor, categoria, forma de pagamento</li>
+    <li><strong>Aba de saídas</strong> — data, fornecedor, valor, categoria, vencimento</li>
+    <li><strong>Aba de resumo</strong> — com fórmulas SUMIF calculando totais por categoria e mês</li>
+  </ul>
+  <p>
+    Com isso você sabe exatamente quanto entra e sai, por categoria,
+    a qualquer momento do mês.
+  </p>
+
+  <hr class="divider"/>
+
+  <h3>Google Forms — coletando informações no piloto automático</h3>
+  <p>
+    O Google Forms é talvez a ferramenta mais subutilizada pelos pequenos negócios.
+    Você pode usá-lo para automatizar a coleta de informações que hoje provavelmente
+    faz por mensagem um a um.
+  </p>
+
+  <h4>Formulário de orçamento</h4>
+  <p>
+    Em vez de perguntar as informações do cliente por mensagem (e às vezes esquecer
+    alguma), crie um formulário com tudo que você precisa saber antes de montar
+    um orçamento. Quando alguém pedir proposta, você envia o link do formulário.
+  </p>
+  <p>
+    As respostas vão automaticamente para uma planilha no Google Sheets.
+  </p>
+
+  <h4>Formulário de satisfação</h4>
+  <p>
+    Após cada entrega ou atendimento, envie um formulário rápido com 3 perguntas:
+  </p>
+  <ol>
+    <li>De 0 a 10, quanto você indica a [empresa] para um amigo?</li>
+    <li>O que foi melhor na sua experiência?</li>
+    <li>O que poderia ter sido melhor?</li>
+  </ol>
+  <p>
+    Isso gera dois resultados: você mede o NPS do negócio e coleta depoimentos
+    reais que pode usar no marketing.
+  </p>
+
+  <div class="tip">
+    <div class="callout-label">💡 Integração poderosa</div>
+    <p>
+      Forms + Sheets juntos formam um mini-CRM gratuito.
+      Cada resposta do formulário cria uma linha nova na planilha automaticamente.
+      Você pode filtrar, ordenar e acompanhar todos os leads sem digitar nada manualmente.
+    </p>
+  </div>
+
+  <div class="highlight-box">
+    <h4>✅ Ação do Capítulo 3</h4>
+    <p>Escolha UMA das três ferramentas acima e configure hoje:</p>
+    <ul>
+      <li>WhatsApp: configure a mensagem de saudação e pelo menos 3 respostas rápidas</li>
+      <li>Planilhas: crie a planilha de clientes com as colunas descritas acima</li>
+      <li>Forms: crie o formulário de orçamento com as informações que você mais precisa</li>
+    </ul>
+    <p style="margin-top:.8rem">Não tente fazer os três de uma vez. Faça um, use por 7 dias, depois avance para o próximo.</p>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     CAPÍTULO 4
+══════════════════════════════════════════════════════════ -->
+<div class="chapter-cover page-break">
+  <div class="ch-line"></div>
+  <p class="ch-num">// capítulo 04</p>
+  <h2>Quando investir num<br><em>sistema personalizado</em></h2>
+  <p class="ch-sub">
+    Chegará um momento em que as ferramentas gratuitas não bastam.
+    Como saber quando contratar, o que pedir e como não ser enganado.
+  </p>
+</div>
+
+<div class="content">
+  <p>
+    As ferramentas do capítulo anterior resolvem muito, mas têm limites.
+    Quando seu negócio cresce, quando os processos ficam mais complexos ou quando
+    você começa a perder tempo em integrações manuais entre ferramentas diferentes,
+    é hora de pensar num sistema personalizado.
+  </p>
+  <p>
+    Mas atenção: <strong>contratar um sistema antes da hora é jogar dinheiro fora</strong>.
+    E contratar errado é ainda pior.
+  </p>
+
+  <h3>Os sinais de que você precisa de um sistema</h3>
+
+  <ul>
+    <li>Você tem mais de um colaborador e as informações se perdem entre eles</li>
+    <li>Você usa 3 ou mais planilhas diferentes para gerenciar o mesmo processo</li>
+    <li>Você passa mais de 1h por dia transferindo informações de uma ferramenta para outra</li>
+    <li>Você não consegue saber em tempo real quantos pedidos estão em aberto</li>
+    <li>Você já perdeu dinheiro por falta de controle (pedido esquecido, cobrança duplicada, prazo perdido)</li>
+    <li>Sua equipe comete erros por falta de um processo padronizado</li>
+  </ul>
+
+  <p>
+    Se você marcou 3 ou mais itens acima, um sistema personalizado provavelmente vai
+    se pagar em menos de 6 meses só em horas economizadas.
+  </p>
+
+  <div class="callout">
+    <div class="callout-label">Regra dos R$ 200</div>
+    <p>
+      Some quantas horas por mês você perde com processos manuais. Multiplique pelo
+      valor que você cobra por hora do seu trabalho. Se esse número for maior que
+      R$ 200/mês, um sistema personalizado se paga rapidamente.
+    </p>
+  </div>
+
+  <h3>O que pedir antes de contratar</h3>
+  <p>
+    Antes de conversar com qualquer desenvolvedor, você precisa ter clareza sobre
+    o que quer. Quanto mais claro você for, melhor será o resultado — e menor a chance
+    de pagar por algo que não resolve.
+  </p>
+
+  <h4>Documente seu processo atual</h4>
+  <p>
+    Escreva passo a passo como cada processo funciona hoje. Por exemplo:
+  </p>
+
+  <div class="code-block">
+    <span class="comment">// Exemplo: processo de venda atual</span><br><br>
+    <span class="prompt">1.</span> Cliente entra em contato pelo WhatsApp<br>
+    <span class="prompt">2.</span> Atendente responde e pergunta o que precisa<br>
+    <span class="prompt">3.</span> Atendente consulta disponibilidade na planilha X<br>
+    <span class="prompt">4.</span> Atendente monta orçamento no Word e envia por e-mail<br>
+    <span class="prompt">5.</span> Cliente confirma (às vezes esquece de responder)<br>
+    <span class="prompt">6.</span> Atendente lança pedido manualmente na planilha Y<br>
+    <span class="prompt">7.</span> Atendente avisa a equipe de produção por WhatsApp<br>
+    <span class="prompt">8.</span> ...<br><br>
+    <span class="comment">// Problemas: etapas 3, 4, 6, 7 são manuais e erráticas</span>
+  </div>
+
+  <p>
+    Com esse documento em mãos, você consegue mostrar ao desenvolvedor exatamente
+    o que precisa ser automatizado e onde estão os pontos de dor.
+  </p>
+
+  <h4>As 5 perguntas que você deve fazer ao contratar</h4>
+
+  <ol class="steps-list">
+    <li>
+      <strong>Você tem exemplos de sistemas similares que já entregou?</strong><br>
+      <span style="color:#888;font-size:.88rem">Um desenvolvedor experiente tem portfólio. Peça ver e, se possível, falar com o cliente.</span>
+    </li>
+    <li>
+      <strong>O sistema vai funcionar no celular?</strong><br>
+      <span style="color:#888;font-size:.88rem">Todo sistema hoje precisa ser responsivo. Se a resposta for hesitante, desconfie.</span>
+    </li>
+    <li>
+      <strong>Como funciona o suporte após a entrega?</strong><br>
+      <span style="color:#888;font-size:.88rem">O sistema vai dar problema em algum momento. Saiba exatamente o que acontece quando isso ocorrer.</span>
+    </li>
+    <li>
+      <strong>Vou depender de você para fazer qualquer ajuste?</strong><br>
+      <span style="color:#888;font-size:.88rem">Pequenas mudanças (cadastro, relatório, campo novo) deveriam ser feitas por você ou pela sua equipe. Se tudo depender do dev, você está preso.</span>
+    </li>
+    <li>
+      <strong>Qual é o prazo realista e o que acontece se não for cumprido?</strong><br>
+      <span style="color:#888;font-size:.88rem">Prazo é estimativa. Um bom profissional deixa isso claro e define como vai lidar com imprevistos.</span>
+    </li>
+  </ol>
+
+  <h3>Red flags: quando desconfiar</h3>
+
+  <div class="warning">
+    <div class="callout-label">⚠ Sinais de alerta</div>
+    <p>
+      Fuja de qualquer desenvolvedor que:<br><br>
+      — Dá orçamento sem entender profundamente o seu processo<br>
+      — Não consegue explicar o que vai construir em linguagem simples<br>
+      — Pede 100% do pagamento adiantado<br>
+      — Não tem nenhum trabalho anterior para mostrar<br>
+      — Promete funcionalidades ilimitadas por preço muito baixo
+    </p>
+  </div>
+
+  <h3>Como acompanhar o desenvolvimento</h3>
+  <p>
+    Você não precisa entender de programação para acompanhar um projeto de sistema.
+    O que você precisa é de <strong>visibilidade sobre o progresso</strong>.
+  </p>
+  <p>
+    Peça que o desenvolvedor mostre versões funcionais a cada 1-2 semanas —
+    não código, mas o sistema rodando na tela. Teste cada funcionalidade com
+    cenários reais do seu negócio. Se algo não funciona como esperado,
+    corrija antes de avançar.
+  </p>
+
+  <div class="tip">
+    <div class="callout-label">💡 Dica de ouro</div>
+    <p>
+      Envolva quem vai usar o sistema no processo de desenvolvimento.
+      O atendente que vai trabalhar com o sistema todo dia percebe problemas
+      que você, como gestor, não vê. A adoção depois que o sistema é entregue
+      é muito maior quando a equipe participou da criação.
+    </p>
+  </div>
+
+  <div class="highlight-box">
+    <h4>✅ Ação do Capítulo 4</h4>
+    <p>Documente um processo crítico do seu negócio: escreva cada passo, do início ao fim, como ele acontece hoje. Não precisa ser perfeito — pode ser no bloco de notas ou WhatsApp mesmo. Esse documento vai ser a base para qualquer conversa com um desenvolvedor.</p>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     CAPÍTULO 5
+══════════════════════════════════════════════════════════ -->
+<div class="chapter-cover page-break">
+  <div class="ch-line"></div>
+  <p class="ch-num">// capítulo 05</p>
+  <h2>Colocando em<br><em>prática</em></h2>
+  <p class="ch-sub">
+    Tudo que você aprendeu, condensado num plano de ação para os próximos 30 dias.
+    Uma tarefa por vez.
+  </p>
+</div>
+
+<div class="content">
+  <p>
+    Chegamos ao capítulo mais importante. Tudo o que foi discutido antes tem valor
+    apenas se virar ação. Este capítulo é seu roteiro para os próximos 30 dias.
+  </p>
+  <p>
+    Não tente fazer tudo de uma vez. A metodologia aqui é: <strong>uma melhoria por semana</strong>.
+    No final de um mês, você terá transformado 4 partes do seu negócio.
+  </p>
+
+  <h3>Semana 1 — Atendimento no piloto automático</h3>
+
+  <ul class="checklist">
+    <li>Configurar mensagem de saudação no WhatsApp Business</li>
+    <li>Configurar mensagem de ausência com horário de retorno</li>
+    <li>Criar pelo menos 5 respostas rápidas para as perguntas mais frequentes</li>
+    <li>Criar formulário de orçamento/contato no Google Forms</li>
+    <li>Testar: entrar em contato com seu próprio WhatsApp de outro número</li>
+  </ul>
+
+  <h3>Semana 2 — Organização do cliente</h3>
+
+  <ul class="checklist">
+    <li>Criar planilha de clientes com as colunas do Capítulo 3</li>
+    <li>Importar ou digitar os clientes que você já tem</li>
+    <li>Classificar cada cliente como Lead, Ativo ou Inativo</li>
+    <li>Identificar clientes inativos há mais de 60 dias</li>
+    <li>Enviar mensagem de reativação para pelo menos 5 clientes inativos</li>
+  </ul>
+
+  <h3>Semana 3 — Controle financeiro básico</h3>
+
+  <ul class="checklist">
+    <li>Criar planilha financeira com abas de entradas e saídas</li>
+    <li>Lançar todas as entradas e saídas do mês atual</li>
+    <li>Calcular a margem do mês (receita menos custos)</li>
+    <li>Identificar a categoria de custo que mais pesa</li>
+    <li>Definir o dia fixo todo mês para fechar os números</li>
+  </ul>
+
+  <h3>Semana 4 — Processo de vendas</h3>
+
+  <ul class="checklist">
+    <li>Documentar o processo de venda atual (do contato ao fechamento)</li>
+    <li>Identificar onde mais leads são perdidos nesse processo</li>
+    <li>Criar template de proposta comercial padronizada</li>
+    <li>Criar um ritual de follow-up: X dias após envio de proposta, entrar em contato</li>
+    <li>Criar formulário de pesquisa de satisfação e enviar para os últimos 5 clientes</li>
+  </ul>
+
+  <hr class="divider"/>
+
+  <h3>Após os 30 dias</h3>
+  <p>
+    Depois de implementar o plano de 4 semanas, você terá:
+  </p>
+  <ul>
+    <li>Atendimento funcionando fora do horário comercial</li>
+    <li>Histórico de todos os clientes em um lugar só</li>
+    <li>Clareza financeira básica do negócio</li>
+    <li>Processo de vendas com acompanhamento</li>
+  </ul>
+  <p>
+    Esse é o alicerce. A partir daqui, você vai identificar naturalmente quais processos
+    ainda causam dor e poderá decidir — com dados — se vale a pena investir num sistema
+    personalizado.
+  </p>
+
+  <blockquote>
+    "A perfeição é inimiga do progresso. Não espere a solução perfeita.
+    Implemente o que é bom o suficiente hoje e melhore amanhã."
+    <footer>— Princípio lean de gestão</footer>
+  </blockquote>
+
+  <h3>Uma palavra final</h3>
+  <p>
+    Automação não é sobre tecnologia. É sobre <strong>liberdade</strong> — liberdade
+    para dedicar seu tempo às coisas que realmente importam: estratégia, relacionamentos,
+    crescimento.
+  </p>
+  <p>
+    Cada hora que você libera de uma tarefa mecânica é uma hora que pode investir
+    em algo que só você, como ser humano, pode fazer.
+  </p>
+  <p>
+    Comece pequeno. Seja consistente. Os resultados aparecem.
+  </p>
+
+  <div class="highlight-box">
+    <h4>Próximo passo</h4>
+    <p>
+      Se você chegou até aqui e quer ir além — seja implementar as ferramentas,
+      montar um sistema personalizado ou simplesmente tirar dúvidas sobre o que
+      faz sentido para o seu negócio — me chame no WhatsApp.
+    </p>
+    <p style="margin-top:.8rem;color:#00c936;font-weight:600">
+      📱 (85) 9 3618-3594 · fillipeai.com
+    </p>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     BÔNUS
+══════════════════════════════════════════════════════════ -->
+<div class="chapter-cover page-break">
+  <div class="ch-line"></div>
+  <p class="ch-num">// bônus</p>
+  <h2>Templates e<br><em>checklists prontos</em></h2>
+  <p class="ch-sub">
+    Copie, cole e use hoje mesmo. Esses templates são o ponto de partida
+    para as ações dos capítulos anteriores.
+  </p>
+</div>
+
+<div class="content">
+
+  <h3>Template 1 — Mensagem de saudação (WhatsApp)</h3>
+  <div class="code-block">
+Olá! 👋 Obrigado por entrar em contato com [Nome da Empresa].<br><br>
+Recebemos sua mensagem e um de nossos atendentes<br>
+vai responder em breve.<br><br>
+⏰ Horário de atendimento:<br>
+Seg a Sex: 8h às 18h<br>
+Sábado: 9h às 13h<br><br>
+Para agilizar, nos conte:<br>
+→ Qual seu nome?<br>
+→ O que você precisa?<br><br>
+Obrigado! 😊
+  </div>
+
+  <h3>Template 2 — Mensagem de ausência</h3>
+  <div class="code-block">
+Olá! No momento estamos fora do horário de atendimento.<br><br>
+Retornaremos sua mensagem às [HORA] do próximo<br>
+dia útil.<br><br>
+Se for urgente, deixe seu contato e o assunto<br>
+que respondemos assim que possível.<br><br>
+Obrigado pela compreensão! 🙏
+  </div>
+
+  <h3>Template 3 — Follow-up de orçamento (3 dias sem resposta)</h3>
+  <div class="code-block">
+Oi, [Nome]! Tudo bem? 😊<br><br>
+Vi que enviei o orçamento há alguns dias<br>
+e queria saber se ficou alguma dúvida.<br><br>
+Às vezes aparecem detalhes que a gente<br>
+não pensa na hora — pode me perguntar<br>
+à vontade!<br><br>
+Aguardo seu retorno. 👍
+  </div>
+
+  <h3>Template 4 — Mensagem de reativação de cliente</h3>
+  <div class="code-block">
+Oi, [Nome]! Aqui é [Seu Nome], da [Empresa]. 😊<br><br>
+Faz um tempinho que não nos falamos e fiquei<br>
+pensando em você.<br><br>
+Estamos com [novidade / promoção / melhoria]<br>
+e lembrei que isso pode te interessar.<br><br>
+Tudo bem por aí? Posso te contar mais?
+  </div>
+
+  <h3>Template 5 — Pesquisa de satisfação (mensagem)</h3>
+  <div class="code-block">
+Oi, [Nome]! Aqui é [Seu Nome], da [Empresa].<br><br>
+Fico feliz que concluímos [serviço/entrega]!<br>
+Gostaria de saber sua opinião:<br><br>
+De 0 a 10, o quanto você nos indicaria<br>
+para um amigo ou familiar?<br><br>
+Sua resposta me ajuda muito a melhorar. 🙏
+  </div>
+
+  <hr class="divider"/>
+
+  <h3>Checklist de diagnóstico do negócio</h3>
+  <p>Responda sim ou não para cada item. Toda resposta "não" é uma oportunidade de melhoria.</p>
+
+  <h4>Atendimento</h4>
+  <ul class="checklist">
+    <li>Tenho mensagem automática de saudação no WhatsApp</li>
+    <li>Clientes recebem resposta em até 2h durante horário comercial</li>
+    <li>Tenho um processo padrão para atender novos contatos</li>
+    <li>Coleto informações do cliente em formulário (não só por conversa)</li>
+    <li>Peço avaliação após cada atendimento</li>
+  </ul>
+
+  <h4>Vendas</h4>
+  <ul class="checklist">
+    <li>Tenho template de proposta comercial padronizada</li>
+    <li>Faço follow-up quando cliente não responde orçamento</li>
+    <li>Sei a taxa de conversão de leads em clientes</li>
+    <li>Tenho histórico de todos os contatos e em qual etapa estão</li>
+    <li>Sei qual canal de marketing traz mais clientes</li>
+  </ul>
+
+  <h4>Financeiro</h4>
+  <ul class="checklist">
+    <li>Lanço entradas e saídas mensalmente</li>
+    <li>Sei minha margem líquida do mês atual</li>
+    <li>Tenho previsão de caixa para os próximos 30 dias</li>
+    <li>Envio cobranças automáticas para inadimplentes</li>
+    <li>Sei quais produtos/serviços dão mais margem</li>
+  </ul>
+
+  <h4>Operação</h4>
+  <ul class="checklist">
+    <li>Tenho processo documentado para as principais tarefas</li>
+    <li>Um colaborador consegue executar minha função por 1 semana sem eu explicar nada</li>
+    <li>Não perco informações quando um colaborador sai da empresa</li>
+    <li>Minha equipe sabe exatamente o que fazer em cada situação</li>
+    <li>Tenho indicadores que acompanho semanalmente</li>
+  </ul>
+
+  <hr class="divider"/>
+
+  <div class="highlight-box">
+    <h4>🎯 Obrigado por ler até aqui.</h4>
+    <p>
+      Se este e-book foi útil e você quer dar o próximo passo —
+      seja automatizando processos, criando um sistema personalizado
+      ou apenas tirando dúvidas — estou à disposição.
+    </p>
+    <p style="margin-top:1rem">
+      <strong style="color:#fff">Fillipe Alves</strong><br>
+      <span style="color:#00c936">📱 (85) 9 3618-3594</span><br>
+      <span style="color:#888">fillipeai.com · fillipealves13@gmail.com</span>
+    </p>
+  </div>
+
+</div>
+
+</body>
+</html>
