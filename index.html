@@ -928,8 +928,17 @@
       .nav-links, .nav-cta { display: none; }
       .hamburger { display: flex; }
 
+      /* garante que TUDO respeite a largura da tela */
+      .section-inner, .terminal-window, .cta-big,
+      .contato-right, .contact-items, .contact-item,
+      .service-card, .project-card, .stack-item,
+      .sobre-text, .hero-stats, .hero-actions {
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+
       /* hero */
-      #hero { min-height: auto; padding: 5.5rem 5vw 3rem; }
+      #hero { min-height: auto; padding: 5.5rem 4vw 3rem; }
       .hero-stats {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -944,60 +953,61 @@
       .hero-scroll-hint { margin-top: 2rem; }
 
       /* sections */
-      .section-inner { padding: 4rem 5vw; }
+      .section-inner { padding: 3.5rem 4vw; }
 
       /* sobre */
       .sobre-grid { grid-template-columns: 1fr; gap: 2rem; }
-      .terminal-body { font-size: .72rem; padding: 1rem; }
-      .terminal-body pre { white-space: pre-wrap; word-break: break-word; }
+      .terminal-body { font-size: .7rem; padding: .9rem; line-height: 1.9; }
+      .terminal-body pre {
+        white-space: pre-wrap;
+        word-break: break-word;
+        overflow-wrap: break-word;
+      }
+      .terminal-window { overflow: hidden; }
 
       /* serviços / projetos */
       .servicos-grid { grid-template-columns: 1fr; }
       .projetos-grid { grid-template-columns: 1fr; }
 
-      /* contato — items não transbordam */
-      .contato-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-      .contact-items { width: 100%; }
+      /* contato */
+      .contato-grid { grid-template-columns: 1fr; gap: 2rem; }
       .contact-item {
-        width: 100%;
-        box-sizing: border-box;
-        transform: none !important; /* evita translateX causando overflow */
+        transform: none !important;
+        overflow: hidden;
       }
       .contact-value { font-size: .82rem; word-break: break-all; }
-      .contato-right { width: 100%; }
-      .cta-big { padding: 1.5rem; }
-      .cta-big h3 { font-size: 1.15rem; }
-      .btn-wa { width: 100%; justify-content: center; font-size: .9rem; padding: .9rem 1.5rem; box-sizing: border-box; }
+      .contato-right { width: 100%; overflow: hidden; }
+      .cta-big { padding: 1.4rem; overflow: hidden; }
+      .cta-big h3 { font-size: 1.1rem; }
+      .btn-wa {
+        width: 100%;
+        justify-content: center;
+        font-size: .9rem;
+        padding: .9rem 1rem;
+        box-sizing: border-box;
+      }
 
       /* stack */
       .stack-grid { grid-template-columns: repeat(3, 1fr); }
 
-      /* project mockup menor no mobile */
+      /* projetos mockup */
       .project-mockup { height: 180px; }
 
       /* footer */
-      footer { flex-direction: column; text-align: center; padding: 1.5rem 5vw; }
+      footer { flex-direction: column; text-align: center; padding: 1.5rem 4vw; }
       .footer-links { justify-content: center; }
 
-      /* wa float — badge acima sem sobrepor conteúdo */
-      .wa-float { bottom: 1.5rem; right: 1.5rem; width: 52px; height: 52px; font-size: 1.4rem; }
-      .wa-online-badge {
-        bottom: 120%;
-        right: 0;
-        font-size: .66rem;
-        padding: .22rem .55rem;
-        white-space: nowrap;
-      }
-      /* tooltip desativado no mobile (dedo não tem hover) */
+      /* badge disponível — esconde no mobile, só mostra o botão WA */
+      .wa-online-badge { display: none !important; }
       .wa-float-tooltip { display: none; }
+      .wa-float { bottom: 1.5rem; right: 1.5rem; width: 52px; height: 52px; font-size: 1.4rem; }
     }
     @media (max-width: 480px) {
       .stack-grid { grid-template-columns: repeat(2, 1fr); }
       .hero-actions { flex-direction: column; align-items: center; }
       .btn-primary, .btn-outline { width: 100%; justify-content: center; }
-      .section-inner { padding: 3.5rem 4vw; }
-      .section-title { font-size: 1.7rem; }
-      .service-card { padding: 1.5rem; }
+      .section-title { font-size: 1.6rem; }
+      .service-card { padding: 1.4rem; }
     }
   </style>
 </head>
