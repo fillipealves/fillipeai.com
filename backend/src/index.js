@@ -4,6 +4,7 @@ const cors      = require('cors');
 const rateLimit = require('express-rate-limit');
 const authRoutes= require('./routes/auth');
 const aiRoutes  = require('./routes/ai');
+const pdfRoutes = require('./routes/pdf');
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
@@ -33,7 +34,7 @@ app.use(cors({
 }));
 
 // ── Body parser ────────────────────────────────────────────────────────────
-app.use(express.json({ limit: '100kb' }));
+app.use(express.json({ limit: '500kb' }));
 
 // ── Rate limiting ──────────────────────────────────────────────────────────
 const loginLimiter = rateLimit({
@@ -47,6 +48,7 @@ const loginLimiter = rateLimit({
 // ── Routes ─────────────────────────────────────────────────────────────────
 app.use('/auth', loginLimiter, authRoutes);
 app.use('/ai', aiRoutes);
+app.use('/pdf', pdfRoutes);
 
 app.get('/health', (_, res) => res.json({ status: 'ok', ts: new Date().toISOString() }));
 

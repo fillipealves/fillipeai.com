@@ -6,7 +6,6 @@
 <title>Ebook Generator — Tools</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" defer></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -735,46 +734,41 @@ document.getElementById('btn-test').addEventListener('click', async () => {
   btn.disabled = false;
 });
 
-// ── PDF download (html2pdf.js) ────────────────────────────────────────────
+// ── PDF download (Puppeteer via backend) ─────────────────────────────────
 async function downloadPdf() {
   if (!currentHTML || btnPdf.disabled) return;
-  const filename = (fileTitleEl.value.trim() || 'ebook').replace(/[^a-z0-9_\-]/gi, '-') + '.pdf';
+  const filename = (fileTitleEl.value.trim() || 'ebook').replace(/[^a-z0-9_\-]/gi, '-');
 
   btnPdf.disabled = true;
   btnPdf.textContent = '⏳ Gerando PDF…';
   setStatus('gerando PDF...', 'spin');
 
-  // Inject minimal overrides to hide interactive elements in PDF
-  const pdfCss = `<style>
-    button,.no-print,nav,header>*:not(h1){display:none!important}
-    a[href]::after{content:none!important}
-    @page{margin:15mm}
-    body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  </style>`;
-  const html = currentHTML.includes('</head>')
-    ? currentHTML.replace('</head>', pdfCss + '</head>')
-    : pdfCss + currentHTML;
-
-  const wrap = document.createElement('div');
-  wrap.style.cssText = 'position:fixed;left:-9999px;top:0;width:794px;background:#fff;';
-  wrap.innerHTML = html;
-  document.body.appendChild(wrap);
-
   try {
-    await html2pdf().set({
-      margin: 0,
-      filename,
-      image: { type: 'jpeg', quality: 0.97 },
-      html2canvas: { scale: 2, useCORS: true, logging: false, backgroundColor: null },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-      pagebreak: { mode: ['css', 'legacy'] },
-    }).from(wrap).save();
+    const res = await fetch(`${BACKEND_URL}/pdf/generate`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${getJwt()}`,
+      },
+      body: JSON.stringify({ html: currentHTML, filename }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err?.error || 'HTTP ' + res.status);
+    }
+
+    const blob = await res.blob();
+    const url  = URL.createObjectURL(blob);
+    const a    = Object.assign(document.createElement('a'), { href: url, download: filename + '.pdf' });
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
     setStatus('PDF baixado', 'ok');
+
   } catch (err) {
     setStatus('erro: ' + err.message, 'err');
     console.error('PDF error:', err);
   } finally {
-    document.body.removeChild(wrap);
     btnPdf.disabled = false;
     btnPdf.textContent = '📄 Baixar PDF';
   }
