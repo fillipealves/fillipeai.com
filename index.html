@@ -923,21 +923,63 @@
       .servicos-grid { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 768px) {
+      /* nav */
       .nav-links, .nav-cta { display: none; }
       .hamburger { display: flex; }
-      .sobre-grid, .contato-grid { grid-template-columns: 1fr; }
-      .projetos-grid { grid-template-columns: 1fr; }
+
+      /* hero */
+      #hero { min-height: auto; padding: 5.5rem 5vw 3rem; }
+      .hero-stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: .75rem;
+        margin-top: 2.5rem;
+        width: 100%;
+      }
+      .stat { padding: .65rem .9rem; }
+      .stat-icon { width: 30px; height: 30px; font-size: .85rem; }
+      .stat-title { font-size: .82rem; }
+      .stat-sub { font-size: .65rem; }
+      .hero-scroll-hint { margin-top: 2rem; }
+
+      /* sections */
+      .section-inner { padding: 4rem 5vw; }
+
+      /* sobre */
+      .sobre-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .terminal-body { font-size: .72rem; padding: 1rem; }
+      .terminal-body pre { white-space: pre-wrap; word-break: break-word; }
+
+      /* serviços / projetos / contato */
       .servicos-grid { grid-template-columns: 1fr; }
+      .projetos-grid { grid-template-columns: 1fr; }
+      .contato-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+
+      /* stack */
       .stack-grid { grid-template-columns: repeat(3, 1fr); }
-      .hero-stats { gap: 1.5rem; }
-      footer { flex-direction: column; text-align: center; }
+
+      /* project mockup menor no mobile */
+      .project-mockup { height: 180px; }
+
+      /* footer */
+      footer { flex-direction: column; text-align: center; padding: 1.5rem 5vw; }
       .footer-links { justify-content: center; }
+
+      /* wa */
       .wa-float { bottom: 1.5rem; right: 1.5rem; width: 52px; height: 52px; font-size: 1.4rem; }
+      .wa-online-badge { font-size: .68rem; padding: .25rem .6rem; }
     }
     @media (max-width: 480px) {
       .stack-grid { grid-template-columns: repeat(2, 1fr); }
       .hero-actions { flex-direction: column; align-items: center; }
       .btn-primary, .btn-outline { width: 100%; justify-content: center; }
+      .section-inner { padding: 3.5rem 4vw; }
+      .section-title { font-size: 1.7rem; }
+      .cta-big { padding: 1.5rem; }
+      .cta-big h3 { font-size: 1.15rem; }
+      .btn-wa { font-size: .9rem; padding: .85rem 1.8rem; }
+      .contact-item { padding: .85rem 1rem; }
+      .service-card { padding: 1.5rem; }
     }
   </style>
 </head>
