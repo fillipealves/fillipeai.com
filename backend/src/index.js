@@ -8,6 +8,9 @@ const aiRoutes  = require('./routes/ai');
 const app  = express();
 const PORT = process.env.PORT || 3000;
 
+// Railway (e qualquer proxy reverso) envia X-Forwarded-For
+app.set('trust proxy', 1);
+
 // ── CORS ───────────────────────────────────────────────────────────────────
 const allowedOrigins = [
   process.env.CORS_ORIGIN,
@@ -30,7 +33,7 @@ app.use(cors({
 }));
 
 // ── Body parser ────────────────────────────────────────────────────────────
-app.use(express.json({ limit: '10kb' }));
+app.use(express.json({ limit: '100kb' }));
 
 // ── Rate limiting ──────────────────────────────────────────────────────────
 const loginLimiter = rateLimit({
