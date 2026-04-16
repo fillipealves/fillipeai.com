@@ -4,121 +4,340 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard — fillipeai.com</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script>
-  // URL da sua API no Railway — atualize após o deploy
   const API_URL   = 'https://fillipeaicom-production.up.railway.app';
   const TOKEN_KEY = 'da_token';
 </script>
 <style>
-  *{margin:0;padding:0;box-sizing:border-box}
-  :root{
-    --bg:#0a0a0a;--surface:#111;--border:#1e1e1e;--border2:#252525;
-    --text:#e5e5e5;--muted:#555;--dim:#2a2a2a;
-    --accent:#6366f1;--accent2:#8b5cf6;
-    --green:#4ade80;--amber:#f59e0b;--red:#f87171;--cyan:#22d3ee;
-  }
-  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#06060a;
+  --surface:rgba(255,255,255,.03);
+  --surface2:rgba(255,255,255,.06);
+  --border:rgba(255,255,255,.07);
+  --border2:rgba(255,255,255,.12);
+  --text:#f1f0ff;
+  --muted:#6b6a80;
+  --dim:#2a2940;
+  --purple:#7c6aff;
+  --purple2:#a78bfa;
+  --green:#34d399;
+  --amber:#fbbf24;
+  --red:#f87171;
+  --cyan:#22d3ee;
+  --pink:#f472b6;
+}
 
-  /* ── LOGIN ── */
-  #login-screen{display:none;min-height:100vh;align-items:center;justify-content:center;flex-direction:column;gap:2rem}
-  #login-screen.show{display:flex}
-  .login-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:2.5rem 2rem;width:100%;max-width:360px;display:flex;flex-direction:column;gap:1.25rem}
-  .login-logo{font-size:1.1rem;font-weight:700;color:var(--text);display:flex;align-items:center;gap:.5rem}
-  .login-logo span{color:var(--muted);font-weight:400;font-size:.9rem}
-  .login-title{font-size:1.4rem;font-weight:700}
-  .login-sub{font-size:.82rem;color:var(--muted);margin-top:-.5rem}
-  .field{display:flex;flex-direction:column;gap:.4rem}
-  .field label{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
-  .pass-wrap{position:relative}
-  .pass-wrap input{width:100%;padding-right:2.5rem}
-  .pass-wrap button{position:absolute;right:.5rem;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;font-size:.9rem;padding:4px}
-  input[type=password],input[type=text]{width:100%;background:#0d0d0d;border:1px solid var(--border2);border-radius:7px;color:var(--text);font-family:inherit;font-size:.9rem;padding:.65rem .85rem;outline:none;transition:border-color .15s}
-  input:focus{border-color:#444}
-  .btn-login{width:100%;padding:.7rem;border-radius:8px;border:none;cursor:pointer;font-size:.9rem;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;transition:filter .2s,transform .2s}
-  .btn-login:hover{filter:brightness(1.1);transform:translateY(-1px)}
-  .btn-login:active{transform:translateY(0)}
-  .login-error{font-size:.8rem;color:var(--red);text-align:center;min-height:1rem}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Plus Jakarta Sans',system-ui,sans-serif;
+  min-height:100vh;
+  overflow-x:hidden;
+}
 
-  /* ── DASHBOARD ── */
-  #dashboard{display:none}
-  #dashboard.show{display:block}
+/* ── AMBIENT BG ──────────────────────────────────────────────────── */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% -10%, rgba(124,106,255,.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 110%, rgba(34,211,238,.07) 0%, transparent 60%);
+  pointer-events:none;z-index:0;
+}
 
-  header{padding:.85rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.85rem;position:sticky;top:0;background:var(--bg);z-index:100}
-  .logo{font-size:.95rem;font-weight:700;color:var(--text)}
-  .logo em{color:var(--muted);font-style:normal;font-weight:400}
-  header nav{display:flex;align-items:center;gap:.25rem;margin-left:.5rem}
-  header nav a{color:var(--muted);text-decoration:none;font-size:.82rem;padding:.3rem .6rem;border-radius:5px;transition:color .15s,background .15s}
-  header nav a:hover{color:var(--text);background:var(--surface)}
-  .spacer{flex:1}
-  .user-badge{display:flex;align-items:center;gap:.5rem;font-size:.8rem;color:var(--muted)}
-  .user-dot{width:7px;height:7px;border-radius:50%;background:var(--green)}
-  .btn-logout{background:none;border:1px solid var(--border2);border-radius:6px;color:var(--muted);cursor:pointer;font-size:.78rem;padding:.3rem .7rem;transition:all .15s}
-  .btn-logout:hover{border-color:#444;color:var(--text)}
+/* ── LOGIN ───────────────────────────────────────────────────────── */
+#login-screen{
+  display:none;position:relative;z-index:10;
+  min-height:100vh;align-items:center;justify-content:center;flex-direction:column;gap:2rem;
+  padding:2rem;
+}
+#login-screen.show{display:flex}
 
-  main{max-width:1100px;margin:0 auto;padding:2.5rem 1.5rem;display:flex;flex-direction:column;gap:2.5rem}
+.login-glow{
+  position:absolute;
+  width:400px;height:400px;
+  background:radial-gradient(circle, rgba(124,106,255,.15) 0%, transparent 70%);
+  border-radius:50%;
+  pointer-events:none;
+  animation:float 6s ease-in-out infinite;
+}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
 
-  /* Section */
-  .section-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--dim);margin-bottom:1rem;display:flex;align-items:center;gap:.6rem}
-  .section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.login-card{
+  position:relative;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:20px;
+  padding:2.5rem 2rem;
+  width:100%;max-width:380px;
+  backdrop-filter:blur(20px);
+  box-shadow:0 25px 60px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.08);
+}
 
-  /* Cards grid */
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:.85rem}
-  .card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.25rem;text-decoration:none;color:inherit;transition:border-color .15s,background .15s,transform .15s;display:flex;flex-direction:column;gap:.6rem;position:relative}
-  .card:hover{border-color:#333;background:#161616;transform:translateY(-2px)}
-  .card-top{display:flex;align-items:center;justify-content:space-between}
-  .card-icon{font-size:1.5rem;line-height:1}
-  .card-badge{font-size:.65rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:4px;border:1px solid}
-  .badge-purple{background:#1a1430;color:#a5b4fc;border-color:#2d1d5a}
-  .badge-green{background:#0d2018;color:#86efac;border-color:#1a4030}
-  .badge-amber{background:#1e1500;color:#fcd34d;border-color:#3a2800}
-  .badge-cyan{background:#081820;color:#67e8f9;border-color:#0d3040}
-  .badge-gray{background:#141414;color:var(--muted);border-color:var(--border2)}
-  .badge-red{background:#1e0a0a;color:#fca5a5;border-color:#3a1515}
-  .card-title{font-size:.92rem;font-weight:600}
-  .card-url{font-size:.72rem;color:#333;font-family:monospace}
-  .card-desc{font-size:.78rem;color:var(--muted);line-height:1.5;margin-top:.1rem}
-  .card-token{font-size:.7rem;color:#222;font-family:monospace;margin-top:auto;padding-top:.4rem;border-top:1px solid var(--border);display:flex;align-items:center;gap:.35rem}
-  .token-label{color:#2a2a2a}
-  .token-val{color:#333;cursor:pointer;transition:color .15s}
-  .token-val:hover{color:var(--muted)}
-  .copy-hint{font-size:.65rem;color:#222}
+.login-card::before{
+  content:'';
+  position:absolute;inset:-1px;
+  border-radius:20px;
+  background:linear-gradient(135deg, rgba(124,106,255,.3), transparent 40%, rgba(34,211,238,.2));
+  -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  padding:1px;
+  pointer-events:none;
+}
 
-  /* Stats row */
-  .stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.75rem}
-  .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem 1.25rem}
-  .stat-value{font-size:1.6rem;font-weight:700;line-height:1}
-  .stat-label{font-size:.72rem;color:var(--muted);margin-top:.35rem}
+.login-brand{
+  display:flex;align-items:center;gap:.5rem;margin-bottom:1.5rem;
+}
+.login-brand-icon{
+  width:36px;height:36px;
+  background:linear-gradient(135deg,var(--purple),var(--cyan));
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.9rem;font-weight:800;color:#fff;
+  box-shadow:0 4px 15px rgba(124,106,255,.4);
+}
+.login-brand-name{font-size:1rem;font-weight:700;color:var(--text)}
+.login-brand-name em{color:var(--muted);font-style:normal;font-weight:400}
 
-  /* Change password */
-  .settings-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.5rem;display:flex;flex-direction:column;gap:1rem;max-width:500px}
-  .settings-box h3{font-size:.88rem;font-weight:600}
-  .settings-box p{font-size:.78rem;color:var(--muted);line-height:1.55}
-  .hash-output{background:#0d0d0d;border:1px solid var(--border2);border-radius:6px;padding:.65rem .85rem;font-family:monospace;font-size:.75rem;color:#7c9e6e;word-break:break-all;display:none}
-  .hash-output.show{display:block}
-  .btn-row{display:flex;gap:.5rem;flex-wrap:wrap}
-  .btn-sm2{padding:.45rem .9rem;border-radius:6px;border:1px solid var(--border2);background:var(--surface);color:var(--muted);font-size:.8rem;cursor:pointer;transition:all .15s}
-  .btn-sm2:hover{background:#1a1a1a;color:var(--text)}
+.login-title{font-size:1.5rem;font-weight:800;margin-bottom:.3rem;
+  background:linear-gradient(135deg,var(--text),var(--purple2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.login-sub{font-size:.82rem;color:var(--muted);margin-bottom:1.75rem}
 
-  @media(max-width:600px){
-    main{padding:1.5rem 1rem}
-    .grid{grid-template-columns:1fr 1fr}
-    .stats{grid-template-columns:repeat(2,1fr)}
-  }
-  @media(max-width:400px){
-    .grid{grid-template-columns:1fr}
-  }
+.field{display:flex;flex-direction:column;gap:.45rem;margin-bottom:1rem}
+.field label{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.pass-wrap{position:relative}
+.pass-wrap input{width:100%;padding-right:2.75rem}
+.pass-wrap button{position:absolute;right:.6rem;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;font-size:.9rem;transition:color .15s}
+.pass-wrap button:hover{color:var(--text)}
+
+input[type=password],input[type=text]{
+  width:100%;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:10px;color:var(--text);
+  font-family:inherit;font-size:.9rem;
+  padding:.65rem .9rem;outline:none;
+  transition:border-color .2s, box-shadow .2s;
+}
+input:focus{
+  border-color:rgba(124,106,255,.6);
+  box-shadow:0 0 0 3px rgba(124,106,255,.15);
+}
+
+.btn-login{
+  width:100%;padding:.75rem;
+  border-radius:10px;border:none;cursor:pointer;
+  font-size:.9rem;font-weight:700;
+  font-family:inherit;
+  background:linear-gradient(135deg,var(--purple),#9d6fff);
+  color:#fff;
+  box-shadow:0 4px 20px rgba(124,106,255,.4);
+  transition:all .2s;
+  margin-top:.5rem;
+}
+.btn-login:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(124,106,255,.5)}
+.btn-login:active{transform:translateY(0)}
+.btn-login:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.login-error{font-size:.8rem;color:var(--red);text-align:center;min-height:1.2rem;margin-top:.25rem}
+
+/* ── DASHBOARD ───────────────────────────────────────────────────── */
+#dashboard{display:none;position:relative;z-index:1}
+#dashboard.show{display:block}
+
+/* Header */
+header{
+  padding:.9rem 2rem;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:1rem;
+  position:sticky;top:0;
+  background:rgba(6,6,10,.8);
+  backdrop-filter:blur(20px);
+  z-index:100;
+}
+.h-brand{display:flex;align-items:center;gap:.6rem}
+.h-brand-icon{
+  width:30px;height:30px;
+  background:linear-gradient(135deg,var(--purple),var(--cyan));
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.75rem;font-weight:800;color:#fff;
+  box-shadow:0 2px 10px rgba(124,106,255,.35);
+}
+.h-brand-name{font-size:.9rem;font-weight:700}
+.h-brand-name em{color:var(--muted);font-style:normal;font-weight:400}
+
+header nav{display:flex;gap:.25rem;margin-left:.75rem}
+header nav a{
+  color:var(--muted);text-decoration:none;font-size:.82rem;
+  padding:.3rem .65rem;border-radius:7px;
+  transition:all .15s;font-weight:500;
+}
+header nav a:hover{color:var(--text);background:var(--surface2)}
+
+.spacer{flex:1}
+
+.user-pill{
+  display:flex;align-items:center;gap:.5rem;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:20px;padding:.3rem .75rem .3rem .5rem;
+}
+.user-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green)}
+.user-name{font-size:.78rem;font-weight:600;color:var(--text)}
+
+.btn-logout{
+  background:none;border:1px solid var(--border);
+  border-radius:8px;color:var(--muted);cursor:pointer;
+  font-size:.78rem;padding:.35rem .8rem;
+  transition:all .15s;font-family:inherit;font-weight:500;
+}
+.btn-logout:hover{border-color:var(--red);color:var(--red)}
+
+/* Main */
+main{max-width:1120px;margin:0 auto;padding:2.5rem 2rem;display:flex;flex-direction:column;gap:3rem}
+
+/* Section header */
+.sec-head{display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem}
+.sec-label{
+  font-size:.7rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.12em;
+  color:var(--muted);white-space:nowrap;
+}
+.sec-line{flex:1;height:1px;background:linear-gradient(90deg,var(--border2),transparent)}
+
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1rem}
+.stat-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;padding:1.25rem 1.5rem;
+  position:relative;overflow:hidden;
+  transition:border-color .2s;
+}
+.stat-card:hover{border-color:var(--border2)}
+.stat-card::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(124,106,255,.06),transparent);
+  pointer-events:none;
+}
+.stat-num{
+  font-size:2rem;font-weight:800;line-height:1;
+  background:linear-gradient(135deg,var(--text),var(--purple2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.stat-lbl{font-size:.75rem;color:var(--muted);margin-top:.4rem;font-weight:500}
+
+/* Grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem}
+
+/* Cards */
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;padding:1.35rem;
+  text-decoration:none;color:inherit;
+  display:flex;flex-direction:column;gap:.6rem;
+  position:relative;overflow:hidden;
+  transition:all .2s;
+  cursor:pointer;
+}
+.card::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(124,106,255,.05),transparent);
+  opacity:0;transition:opacity .2s;pointer-events:none;
+}
+.card:hover{
+  border-color:rgba(124,106,255,.35);
+  transform:translateY(-3px);
+  box-shadow:0 12px 40px rgba(0,0,0,.3), 0 0 0 1px rgba(124,106,255,.15);
+}
+.card:hover::after{opacity:1}
+
+.card-top{display:flex;align-items:center;justify-content:space-between}
+.card-icon{font-size:1.6rem;line-height:1;filter:drop-shadow(0 2px 8px rgba(0,0,0,.4))}
+.chip{
+  font-size:.65rem;font-weight:700;letter-spacing:.05em;
+  text-transform:uppercase;padding:3px 8px;border-radius:6px;border:1px solid;
+}
+.chip-purple{background:rgba(124,106,255,.15);color:#a78bfa;border-color:rgba(124,106,255,.3)}
+.chip-green{background:rgba(52,211,153,.12);color:#6ee7b7;border-color:rgba(52,211,153,.25)}
+.chip-amber{background:rgba(251,191,36,.12);color:#fcd34d;border-color:rgba(251,191,36,.25)}
+.chip-cyan{background:rgba(34,211,238,.12);color:#67e8f9;border-color:rgba(34,211,238,.25)}
+.chip-gray{background:rgba(255,255,255,.05);color:var(--muted);border-color:var(--border)}
+
+.card-title{font-size:.93rem;font-weight:700;color:var(--text)}
+.card-url{font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-top:-.1rem}
+.card-desc{font-size:.78rem;color:var(--muted);line-height:1.55;flex:1}
+
+.card-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-top:.6rem;border-top:1px solid var(--border);
+  margin-top:.2rem;
+}
+.token-wrap{display:flex;align-items:center;gap:.4rem}
+.token-lbl{font-size:.65rem;color:var(--dim);font-family:'JetBrains Mono',monospace}
+.token-val{
+  font-size:.72rem;color:var(--muted);
+  font-family:'JetBrains Mono',monospace;
+  cursor:pointer;transition:color .15s;
+  padding:2px 6px;border-radius:4px;
+  border:1px solid transparent;
+}
+.token-val:hover{color:var(--purple2);border-color:rgba(124,106,255,.3);background:rgba(124,106,255,.08)}
+
+.copy-btn{
+  font-size:.65rem;color:var(--muted);
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:5px;padding:2px 7px;cursor:pointer;
+  transition:all .15s;font-family:inherit;
+}
+.copy-btn:hover{color:var(--text);border-color:var(--border2)}
+
+/* Settings */
+.settings-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;padding:1.5rem;
+  max-width:520px;display:flex;flex-direction:column;gap:.85rem;
+}
+.settings-card h3{font-size:.9rem;font-weight:700;display:flex;align-items:center;gap:.5rem}
+.settings-card p{font-size:.8rem;color:var(--muted);line-height:1.55}
+.api-url-box{
+  background:rgba(0,0,0,.3);border:1px solid var(--border);
+  border-radius:8px;padding:.6rem .85rem;
+  font-family:'JetBrains Mono',monospace;font-size:.75rem;
+  color:var(--green);word-break:break-all;
+}
+
+@media(max-width:768px){
+  header{padding:.75rem 1rem}
+  main{padding:1.5rem 1rem;gap:2rem}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:480px){
+  .grid{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr 1fr}
+}
 </style>
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
+<!-- LOGIN -->
 <div id="login-screen">
-  <div class="login-box">
-    <div class="login-logo">fillipeai<em>.com</em></div>
-    <div>
-      <div class="login-title">Acesso restrito</div>
-      <div class="login-sub">Painel privado — apenas você pode entrar</div>
+  <div class="login-glow"></div>
+  <div class="login-card">
+    <div class="login-brand">
+      <div class="login-brand-icon">F</div>
+      <div class="login-brand-name">fillipeai<em>.com</em></div>
     </div>
+    <div class="login-title">Bem-vindo de volta</div>
+    <div class="login-sub">Painel privado — acesso restrito</div>
     <div class="field">
       <label>Usuário</label>
       <input type="text" id="user-input" value="fillipe" autocomplete="username">
@@ -130,7 +349,7 @@
         <button id="pass-toggle" tabindex="-1">👁️</button>
       </div>
     </div>
-    <button class="btn-login" id="btn-login">Entrar</button>
+    <button class="btn-login" id="btn-login">Entrar no dashboard</button>
     <div class="login-error" id="login-error"></div>
   </div>
 </div>
@@ -138,15 +357,18 @@
 <!-- DASHBOARD -->
 <div id="dashboard">
   <header>
-    <div class="logo">fillipeai<em>.com</em></div>
+    <div class="h-brand">
+      <div class="h-brand-icon">F</div>
+      <div class="h-brand-name">fillipeai<em>.com</em></div>
+    </div>
     <nav>
       <a href="/">Site</a>
       <a href="/tools">Tools</a>
     </nav>
     <div class="spacer"></div>
-    <div class="user-badge">
+    <div class="user-pill">
       <div class="user-dot"></div>
-      <span>fillipealves</span>
+      <span class="user-name">fillipealves</span>
     </div>
     <button class="btn-logout" id="btn-logout">Sair</button>
   </header>
@@ -155,139 +377,129 @@
 
     <!-- Stats -->
     <section>
-      <div class="section-title">Visão geral</div>
+      <div class="sec-head"><span class="sec-label">Visão geral</span><div class="sec-line"></div></div>
       <div class="stats">
         <div class="stat-card">
-          <div class="stat-value">4</div>
-          <div class="stat-label">Landing pages de venda</div>
+          <div class="stat-num">4</div>
+          <div class="stat-lbl">Sales pages ativas</div>
         </div>
         <div class="stat-card">
-          <div class="stat-value">2</div>
-          <div class="stat-label">Ferramentas</div>
+          <div class="stat-num">1</div>
+          <div class="stat-lbl">Ferramentas</div>
         </div>
         <div class="stat-card">
-          <div class="stat-value" id="stat-date">—</div>
-          <div class="stat-label">Hoje</div>
+          <div class="stat-num" id="stat-date">—</div>
+          <div class="stat-lbl">Hoje</div>
         </div>
       </div>
     </section>
 
     <!-- Tools -->
     <section>
-      <div class="section-title">Tools</div>
+      <div class="sec-head"><span class="sec-label">Tools</span><div class="sec-line"></div></div>
       <div class="grid">
         <a class="card" href="/tools/ebook-generator" target="_blank">
           <div class="card-top">
             <span class="card-icon">✦</span>
-            <span class="card-badge badge-purple">Claude AI</span>
+            <span class="chip chip-purple">Claude AI</span>
           </div>
           <div class="card-title">Ebook Generator</div>
           <div class="card-url">/tools/ebook-generator</div>
-          <div class="card-desc">Gera ebooks com Claude AI ou converte HTML para PDF.</div>
+          <div class="card-desc">Gera ebooks com Claude AI ou converte HTML para PDF com preview ao vivo.</div>
         </a>
       </div>
     </section>
 
     <!-- Sales pages -->
     <section>
-      <div class="section-title">Sales Pages</div>
+      <div class="sec-head"><span class="sec-label">Sales Pages</span><div class="sec-line"></div></div>
       <div class="grid">
 
         <a class="card" href="/sales/ebook#Eb3k7X" target="_blank">
-          <div class="card-top">
-            <span class="card-icon">📗</span>
-            <span class="card-badge badge-green">R$27</span>
-          </div>
+          <div class="card-top"><span class="card-icon">📗</span><span class="chip chip-green">R$27</span></div>
           <div class="card-title">Ebook — Dinheiro com IA</div>
           <div class="card-url">/sales/ebook</div>
-          <div class="card-desc">10 formas de ganhar dinheiro com IA. Público: CLT, estudantes, donas de casa.</div>
-          <div class="card-token">
-            <span class="token-label">token:</span>
-            <span class="token-val" title="Clique para copiar o link" onclick="copyLink('/sales/ebook#Eb3k7X', this)">Eb3k7X</span>
-            <span class="copy-hint" id="copy-ebook"></span>
+          <div class="card-desc">10 formas de ganhar dinheiro com IA. Público CLT, estudantes, donas de casa.</div>
+          <div class="card-footer">
+            <div class="token-wrap">
+              <span class="token-lbl">token</span>
+              <span class="token-val" onclick="copyLink('/sales/ebook#Eb3k7X', this)">Eb3k7X</span>
+            </div>
+            <button class="copy-btn" onclick="copyLink('/sales/ebook#Eb3k7X', this);event.preventDefault()">Copiar link</button>
           </div>
         </a>
 
         <a class="card" href="/sales/curso#Cs9mP2" target="_blank">
-          <div class="card-top">
-            <span class="card-icon">🎓</span>
-            <span class="card-badge badge-cyan">R$297</span>
-          </div>
+          <div class="card-top"><span class="card-icon">🎓</span><span class="chip chip-cyan">R$297</span></div>
           <div class="card-title">Curso de IA</div>
           <div class="card-url">/sales/curso</div>
           <div class="card-desc">Curso completo de IA aplicada. Módulos, bônus, garantia 7 dias.</div>
-          <div class="card-token">
-            <span class="token-label">token:</span>
-            <span class="token-val" title="Clique para copiar o link" onclick="copyLink('/sales/curso#Cs9mP2', this)">Cs9mP2</span>
-            <span class="copy-hint" id="copy-curso"></span>
+          <div class="card-footer">
+            <div class="token-wrap">
+              <span class="token-lbl">token</span>
+              <span class="token-val" onclick="copyLink('/sales/curso#Cs9mP2', this)">Cs9mP2</span>
+            </div>
+            <button class="copy-btn" onclick="copyLink('/sales/curso#Cs9mP2', this);event.preventDefault()">Copiar link</button>
           </div>
         </a>
 
         <a class="card" href="/sales/prompts#Pm6nQ4" target="_blank">
-          <div class="card-top">
-            <span class="card-icon">💬</span>
-            <span class="card-badge badge-purple">R$27</span>
-          </div>
+          <div class="card-top"><span class="card-icon">💬</span><span class="chip chip-purple">R$27</span></div>
           <div class="card-title">Pack de Prompts IA</div>
           <div class="card-url">/sales/prompts</div>
           <div class="card-desc">500+ prompts organizados por categoria. ChatGPT, Claude, Gemini.</div>
-          <div class="card-token">
-            <span class="token-label">token:</span>
-            <span class="token-val" title="Clique para copiar o link" onclick="copyLink('/sales/prompts#Pm6nQ4', this)">Pm6nQ4</span>
-            <span class="copy-hint" id="copy-prompts"></span>
+          <div class="card-footer">
+            <div class="token-wrap">
+              <span class="token-lbl">token</span>
+              <span class="token-val" onclick="copyLink('/sales/prompts#Pm6nQ4', this)">Pm6nQ4</span>
+            </div>
+            <button class="copy-btn" onclick="copyLink('/sales/prompts#Pm6nQ4', this);event.preventDefault()">Copiar link</button>
           </div>
         </a>
 
         <a class="card" href="/sales/presets#Pr4vW8" target="_blank">
-          <div class="card-top">
-            <span class="card-icon">🎨</span>
-            <span class="card-badge badge-amber">R$47</span>
-          </div>
+          <div class="card-top"><span class="card-icon">🎨</span><span class="chip chip-amber">R$47</span></div>
           <div class="card-title">Presets Dark</div>
           <div class="card-url">/sales/presets</div>
           <div class="card-desc">Presets e arquivos para canal dark. Instalação em 3 passos.</div>
-          <div class="card-token">
-            <span class="token-label">token:</span>
-            <span class="token-val" title="Clique para copiar o link" onclick="copyLink('/sales/presets#Pr4vW8', this)">Pr4vW8</span>
-            <span class="copy-hint" id="copy-presets"></span>
+          <div class="card-footer">
+            <div class="token-wrap">
+              <span class="token-lbl">token</span>
+              <span class="token-val" onclick="copyLink('/sales/presets#Pr4vW8', this)">Pr4vW8</span>
+            </div>
+            <button class="copy-btn" onclick="copyLink('/sales/presets#Pr4vW8', this);event.preventDefault()">Copiar link</button>
           </div>
         </a>
 
       </div>
     </section>
 
-    <!-- Other pages -->
+    <!-- Páginas públicas -->
     <section>
-      <div class="section-title">Páginas públicas</div>
+      <div class="sec-head"><span class="sec-label">Páginas públicas</span><div class="sec-line"></div></div>
       <div class="grid">
         <a class="card" href="/" target="_blank">
-          <div class="card-top">
-            <span class="card-icon">🏠</span>
-            <span class="card-badge badge-gray">público</span>
-          </div>
+          <div class="card-top"><span class="card-icon">🏠</span><span class="chip chip-gray">público</span></div>
           <div class="card-title">Portfólio</div>
           <div class="card-url">fillipeai.com</div>
           <div class="card-desc">Landing page principal com projetos, serviços e contato.</div>
         </a>
         <a class="card" href="/tools" target="_blank">
-          <div class="card-top">
-            <span class="card-icon">🛠️</span>
-            <span class="card-badge badge-gray">público</span>
-          </div>
-          <div class="card-title">Tools Index</div>
+          <div class="card-top"><span class="card-icon">🛠️</span><span class="chip chip-gray">público</span></div>
+          <div class="card-title">Tools</div>
           <div class="card-url">/tools</div>
-          <div class="card-desc">Lista de ferramentas disponíveis.</div>
+          <div class="card-desc">Índice público das ferramentas disponíveis.</div>
         </a>
       </div>
     </section>
 
     <!-- Settings -->
     <section>
-      <div class="section-title">Configurações</div>
-      <div class="settings-box">
-        <h3>🔌 API</h3>
-        <p>URL da API no Railway conectada a este dashboard.</p>
-        <div class="hash-output show" id="api-url-display" style="margin-top:.25rem"></div>
+      <div class="sec-head"><span class="sec-label">Configurações</span><div class="sec-line"></div></div>
+      <div class="settings-card">
+        <h3>🔌 API Backend</h3>
+        <p>Endpoint Railway conectado ao dashboard e às ferramentas.</p>
+        <div class="api-url-box" id="api-url-display"></div>
       </div>
     </section>
 
@@ -295,7 +507,6 @@
 </div>
 
 <script>
-// ── Refs ──────────────────────────────────────────────────────────────────
 const loginScreen = document.getElementById('login-screen');
 const dashboardEl = document.getElementById('dashboard');
 const passInput   = document.getElementById('pass-input');
@@ -304,112 +515,72 @@ const btnLogin    = document.getElementById('btn-login');
 const loginError  = document.getElementById('login-error');
 const btnLogout   = document.getElementById('btn-logout');
 
-// Mostra a URL da API na seção de configurações
 document.getElementById('api-url-display').textContent = API_URL;
 
-// ── Token helpers ─────────────────────────────────────────────────────────
-function getToken()       { return localStorage.getItem(TOKEN_KEY); }
-function saveToken(t)     { localStorage.setItem(TOKEN_KEY, t); }
-function clearToken()     { localStorage.removeItem(TOKEN_KEY); }
+function getToken()   { return localStorage.getItem(TOKEN_KEY); }
+function saveToken(t) { localStorage.setItem(TOKEN_KEY, t); }
+function clearToken() { localStorage.removeItem(TOKEN_KEY); }
 
-// ── Views ─────────────────────────────────────────────────────────────────
-function showDashboard(username) {
+function showDashboard() {
   loginScreen.classList.remove('show');
   dashboardEl.classList.add('show');
   document.getElementById('stat-date').textContent =
     new Date().toLocaleDateString('pt-BR', { day:'2-digit', month:'short' });
 }
-
 function showLogin(msg) {
   dashboardEl.classList.remove('show');
   loginScreen.classList.add('show');
   if (msg) loginError.textContent = msg;
-  passInput.focus();
+  setTimeout(() => passInput.focus(), 100);
 }
 
-// ── Verify token on load ──────────────────────────────────────────────────
 async function init() {
   const token = getToken();
   if (!token) { showLogin(); return; }
-
   try {
-    const res = await fetch(`${API_URL}/auth/verify`, {
-      headers: { 'Authorization': `Bearer ${token}` },
-    });
-    if (res.ok) {
-      const data = await res.json();
-      showDashboard(data.username);
-    } else {
-      clearToken();
-      showLogin();
-    }
-  } catch {
-    // API indisponível — mostra login mesmo assim
-    showLogin('Não foi possível conectar à API.');
-  }
+    const res = await fetch(`${API_URL}/auth/verify`, { headers:{ Authorization:`Bearer ${token}` }});
+    if (res.ok) showDashboard();
+    else { clearToken(); showLogin(); }
+  } catch { showLogin('Não foi possível conectar à API.'); }
 }
-
 init();
 
-// ── Login ─────────────────────────────────────────────────────────────────
 const userInput = document.getElementById('user-input');
-
 async function tryLogin() {
   const username = userInput?.value?.trim() || 'fillipe';
   const password = passInput.value;
   if (!password) { loginError.textContent = 'Digite a senha.'; return; }
-
-  btnLogin.textContent = '...';
+  btnLogin.textContent = 'Entrando...';
   btnLogin.disabled = true;
   loginError.textContent = '';
-
   try {
     const res = await fetch(`${API_URL}/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ username, password }),
     });
-
     const data = await res.json();
-
-    if (res.ok && data.token) {
-      saveToken(data.token);
-      showDashboard(data.username);
-    } else {
-      loginError.textContent = data.error || 'Usuário ou senha incorretos.';
-      passInput.value = '';
-      passInput.focus();
-    }
-  } catch {
-    loginError.textContent = 'Erro ao conectar com a API. Verifique se o Railway está online.';
-  }
-
-  btnLogin.textContent = 'Entrar';
+    if (res.ok && data.token) { saveToken(data.token); showDashboard(); }
+    else { loginError.textContent = data.error || 'Usuário ou senha incorretos.'; passInput.value=''; passInput.focus(); }
+  } catch { loginError.textContent = 'Erro ao conectar com a API.'; }
+  btnLogin.textContent = 'Entrar no dashboard';
   btnLogin.disabled = false;
 }
 
 btnLogin.addEventListener('click', tryLogin);
-passInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
+passInput.addEventListener('keydown', e => { if(e.key==='Enter') tryLogin(); });
 passToggle.addEventListener('click', () => {
-  passInput.type = passInput.type === 'password' ? 'text' : 'password';
-  passToggle.textContent = passInput.type === 'password' ? '👁️' : '🙈';
+  passInput.type = passInput.type==='password' ? 'text' : 'password';
+  passToggle.textContent = passInput.type==='password' ? '👁️' : '🙈';
 });
+btnLogout.addEventListener('click', () => { clearToken(); passInput.value=''; showLogin(); });
 
-// ── Logout ────────────────────────────────────────────────────────────────
-btnLogout.addEventListener('click', () => {
-  clearToken();
-  passInput.value = '';
-  showLogin();
-});
-
-// ── Copy link helper ──────────────────────────────────────────────────────
 function copyLink(path, el) {
   const url = 'https://fillipeai.com' + path;
   navigator.clipboard.writeText(url).then(() => {
     const orig = el.textContent;
-    el.textContent = '✓ copiado';
-    el.style.color = '#4ade80';
-    setTimeout(() => { el.textContent = orig; el.style.color = ''; }, 1500);
+    el.textContent = '✓ copiado!';
+    el.style.color = 'var(--green)';
+    setTimeout(() => { el.textContent = orig; el.style.color = ''; }, 1800);
   });
 }
 </script>

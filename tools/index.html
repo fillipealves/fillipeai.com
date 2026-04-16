@@ -4,43 +4,131 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tools — fillipeai.com</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{background:#0f0f0f;color:#e5e5e5;font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;display:flex;flex-direction:column}
-  header{padding:1.25rem 2rem;border-bottom:1px solid #1a1a1a;display:flex;align-items:center;gap:1rem}
-  header a{color:#888;text-decoration:none;font-size:.85rem}
-  header a:hover{color:#fff}
-  header span{color:#444}
-  header h1{font-size:1.1rem;font-weight:600}
-  main{flex:1;max-width:860px;width:100%;margin:0 auto;padding:3rem 2rem}
-  .page-title{font-size:1.75rem;font-weight:700;margin-bottom:.5rem}
-  .page-sub{color:#555;font-size:.9rem;margin-bottom:2.5rem}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem}
-  .card{background:#141414;border:1px solid #1e1e1e;border-radius:10px;padding:1.5rem;text-decoration:none;color:inherit;transition:border-color .2s,background .2s;display:flex;flex-direction:column;gap:.75rem}
-  .card:hover{border-color:#333;background:#181818}
-  .card-icon{font-size:2rem}
-  .card-title{font-size:1rem;font-weight:600;color:#e5e5e5}
-  .card-desc{font-size:.82rem;color:#555;line-height:1.55}
-  .card-badge{font-size:.7rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:4px;width:fit-content;margin-top:auto}
-  .badge-gray{background:#1e1e1e;color:#555;border:1px solid #252525}
-  .badge-purple{background:#1e1430;color:#a5b4fc;border:1px solid #2d1d5a}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background:#06060a;color:#f1f0ff;
+  font-family:'Plus Jakarta Sans',system-ui,sans-serif;
+  min-height:100vh;
+}
+body::before{
+  content:'';position:fixed;inset:0;
+  background:radial-gradient(ellipse 70% 50% at 15% -5%, rgba(124,106,255,.1) 0%,transparent 60%),
+             radial-gradient(ellipse 50% 40% at 85% 105%, rgba(34,211,238,.07) 0%,transparent 60%);
+  pointer-events:none;
+}
+header{
+  padding:.9rem 2rem;
+  border-bottom:1px solid rgba(255,255,255,.07);
+  display:flex;align-items:center;gap:.75rem;
+  background:rgba(6,6,10,.8);backdrop-filter:blur(20px);
+  position:sticky;top:0;z-index:10;
+}
+.h-icon{
+  width:28px;height:28px;
+  background:linear-gradient(135deg,#7c6aff,#22d3ee);
+  border-radius:7px;display:flex;align-items:center;justify-content:center;
+  font-size:.7rem;font-weight:800;color:#fff;
+}
+header a{color:rgba(255,255,255,.4);text-decoration:none;font-size:.82rem;font-weight:500;transition:color .15s}
+header a:hover{color:#f1f0ff}
+header .sep{color:rgba(255,255,255,.15)}
+header h1{font-size:.9rem;font-weight:700;color:#f1f0ff}
+
+main{
+  max-width:900px;margin:0 auto;
+  padding:4rem 2rem;
+  position:relative;z-index:1;
+}
+.hero{margin-bottom:3rem}
+.hero-label{
+  display:inline-flex;align-items:center;gap:.4rem;
+  font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+  color:#7c6aff;margin-bottom:1rem;
+  background:rgba(124,106,255,.1);border:1px solid rgba(124,106,255,.2);
+  padding:4px 12px;border-radius:20px;
+}
+.hero-title{
+  font-size:2.2rem;font-weight:800;line-height:1.15;margin-bottom:.75rem;
+  background:linear-gradient(135deg,#f1f0ff 30%,#a78bfa);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.hero-sub{font-size:.95rem;color:rgba(255,255,255,.4);max-width:480px;line-height:1.6}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.25rem}
+
+.tool-card{
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:18px;padding:1.75rem;
+  text-decoration:none;color:inherit;
+  display:flex;flex-direction:column;gap:1rem;
+  position:relative;overflow:hidden;
+  transition:all .25s;
+}
+.tool-card::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(124,106,255,.06) 0%,transparent 60%);
+  opacity:0;transition:opacity .25s;
+}
+.tool-card:hover{
+  border-color:rgba(124,106,255,.35);
+  transform:translateY(-4px);
+  box-shadow:0 20px 50px rgba(0,0,0,.35), 0 0 0 1px rgba(124,106,255,.12);
+}
+.tool-card:hover::before{opacity:1}
+
+.card-icon-wrap{
+  width:48px;height:48px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;
+  background:rgba(124,106,255,.12);border:1px solid rgba(124,106,255,.2);
+}
+.card-body{flex:1}
+.card-name{font-size:1rem;font-weight:700;margin-bottom:.35rem}
+.card-desc{font-size:.82rem;color:rgba(255,255,255,.4);line-height:1.55}
+.card-foot{display:flex;align-items:center;justify-content:space-between}
+.chip{
+  font-size:.65rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+  padding:3px 9px;border-radius:6px;border:1px solid;
+}
+.chip-ai{background:rgba(124,106,255,.15);color:#a78bfa;border-color:rgba(124,106,255,.3)}
+.chip-free{background:rgba(52,211,153,.1);color:#6ee7b7;border-color:rgba(52,211,153,.2)}
+.arrow{color:rgba(255,255,255,.2);font-size:1.1rem;transition:transform .2s,color .2s}
+.tool-card:hover .arrow{transform:translateX(4px);color:rgba(124,106,255,.8)}
+
+@media(max-width:600px){
+  main{padding:2.5rem 1rem}
+  .hero-title{font-size:1.6rem}
+}
 </style>
 </head>
 <body>
 <header>
+  <div class="h-icon">F</div>
   <a href="/">fillipeai.com</a>
-  <span>/</span>
+  <span class="sep">/</span>
   <h1>tools</h1>
 </header>
 <main>
-  <div class="page-title">Tools</div>
-  <div class="page-sub">Ferramentas de automação para o meu workflow</div>
+  <div class="hero">
+    <div class="hero-label">⚡ Workspace</div>
+    <div class="hero-title">Ferramentas de<br>automação</div>
+    <div class="hero-sub">Soluções que aceleram o meu trabalho — geração de conteúdo, conversão de arquivos e mais.</div>
+  </div>
   <div class="grid">
-    <a class="card" href="/tools/ebook-generator">
-      <div class="card-icon">✦</div>
-      <div class="card-title">ebook-generator</div>
-      <div class="card-desc">Gere ebooks com Claude AI ou carregue um HTML pronto. Prévia em tempo real, download e impressão para PDF.</div>
-      <span class="card-badge badge-purple">Claude AI + PDF</span>
+    <a class="tool-card" href="/tools/ebook-generator">
+      <div class="card-icon-wrap">✦</div>
+      <div class="card-body">
+        <div class="card-name">Ebook Generator</div>
+        <div class="card-desc">Gere ebooks completos com Claude AI ou converta um HTML existente para PDF. Preview em tempo real.</div>
+      </div>
+      <div class="card-foot">
+        <span class="chip chip-ai">Claude AI</span>
+        <span class="arrow">→</span>
+      </div>
     </a>
   </div>
 </main>
