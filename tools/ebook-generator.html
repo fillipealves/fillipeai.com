@@ -6,6 +6,7 @@
 <title>Ebook Generator — Tools</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" defer></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -315,7 +316,7 @@ select option{background:#0f0f18}
     <div class="sidebar-footer">
       <button class="btn-main btn-generate" id="btn-generate">✦ Gerar Ebook</button>
       <button class="btn-main btn-stop" id="btn-stop" style="display:none">⏹ Parar geração</button>
-      <button class="btn-main btn-secondary" id="btn-pdf" disabled>🖨 Abrir para PDF</button>
+      <button class="btn-main btn-secondary" id="btn-pdf" disabled>📄 Baixar PDF</button>
       <button class="btn-main btn-ghost" id="btn-test">🔌 Testar conexão</button>
       <div class="meta-row">
         <span id="token-info">—</span>
@@ -734,19 +735,51 @@ document.getElementById('btn-test').addEventListener('click', async () => {
   btn.disabled = false;
 });
 
-// ── PDF helper ────────────────────────────────────────────────────────────
-function openPdf() {
-  if (!currentHTML) return;
-  const patch = `<style>@media print{a[href]::after{content:none!important}.no-print,button{display:none!important}@page{margin:1.5cm}}</style>`;
-  let html = currentHTML;
-  html = html.includes('</head>') ? html.replace('</head>', patch + '</head>') : patch + html;
-  const win = window.open('', '_blank');
-  if (!win) { alert('Permita popups e tente novamente.'); return; }
-  win.document.write(html);
-  win.document.close();
-  setTimeout(() => win.print(), 800);
+// ── PDF download (html2pdf.js) ────────────────────────────────────────────
+async function downloadPdf() {
+  if (!currentHTML || btnPdf.disabled) return;
+  const filename = (fileTitleEl.value.trim() || 'ebook').replace(/[^a-z0-9_\-]/gi, '-') + '.pdf';
+
+  btnPdf.disabled = true;
+  btnPdf.textContent = '⏳ Gerando PDF…';
+  setStatus('gerando PDF...', 'spin');
+
+  // Inject minimal overrides to hide interactive elements in PDF
+  const pdfCss = `<style>
+    button,.no-print,nav,header>*:not(h1){display:none!important}
+    a[href]::after{content:none!important}
+    @page{margin:15mm}
+    body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  </style>`;
+  const html = currentHTML.includes('</head>')
+    ? currentHTML.replace('</head>', pdfCss + '</head>')
+    : pdfCss + currentHTML;
+
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'position:fixed;left:-9999px;top:0;width:794px;background:#fff;';
+  wrap.innerHTML = html;
+  document.body.appendChild(wrap);
+
+  try {
+    await html2pdf().set({
+      margin: 0,
+      filename,
+      image: { type: 'jpeg', quality: 0.97 },
+      html2canvas: { scale: 2, useCORS: true, logging: false, backgroundColor: null },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: ['css', 'legacy'] },
+    }).from(wrap).save();
+    setStatus('PDF baixado', 'ok');
+  } catch (err) {
+    setStatus('erro: ' + err.message, 'err');
+    console.error('PDF error:', err);
+  } finally {
+    document.body.removeChild(wrap);
+    btnPdf.disabled = false;
+    btnPdf.textContent = '📄 Baixar PDF';
+  }
 }
-btnPdf.onclick = openPdf;
+btnPdf.onclick = downloadPdf;
 
 // ── Download ──────────────────────────────────────────────────────────────
 btnDl.onclick = () => {
