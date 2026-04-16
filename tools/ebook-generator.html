@@ -195,8 +195,36 @@ select option{background:#0f0f18}
   color:#7c9e6e;white-space:pre-wrap;word-break:break-word;min-height:100%;
 }
 #code-view.on{display:block}
-.blink{display:inline-block;width:2px;height:.9em;background:#7c9e6e;margin-left:1px;vertical-align:text-bottom;animation:bl 1s step-end infinite}
-@keyframes bl{0%,100%{opacity:1}50%{opacity:0}}
+
+/* GENERATING STATE */
+.generating-state{
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  height:100%;gap:1.5rem;
+}
+.generating-state.on{display:flex}
+.gen-icon{
+  width:72px;height:72px;
+  background:linear-gradient(135deg,rgba(124,106,255,.12),rgba(34,211,238,.07));
+  border:1px solid rgba(124,106,255,.2);border-radius:18px;
+  display:flex;align-items:center;justify-content:center;font-size:2rem;
+  animation:genGlow 2.4s ease-in-out infinite;
+}
+@keyframes genGlow{
+  0%,100%{box-shadow:0 0 0 0 rgba(124,106,255,0);border-color:rgba(124,106,255,.2)}
+  50%{box-shadow:0 0 32px rgba(124,106,255,.3);border-color:rgba(124,106,255,.5)}
+}
+.gen-title{font-size:1.05rem;font-weight:700;color:var(--text)}
+.gen-sub{font-size:.8rem;color:var(--muted);min-height:1.1em}
+.progress-track{
+  width:300px;height:3px;
+  background:rgba(255,255,255,.05);border-radius:4px;overflow:hidden;
+}
+.progress-fill{
+  height:100%;width:0%;
+  background:linear-gradient(90deg,var(--purple),var(--cyan));
+  border-radius:4px;transition:width .4s ease;
+}
+.gen-tokens{font-size:.7rem;color:rgba(255,255,255,.18);letter-spacing:.02em}
 
 #preview-frame{display:none;width:100%;height:100%;border:none;background:#fff}
 #preview-frame.on{display:block}
@@ -311,6 +339,15 @@ select option{background:#0f0f18}
         <span class="empty-text">Nenhum ebook gerado ainda</span>
         <span class="empty-sub">Configure o prompt e clique em Gerar</span>
       </div>
+      <div class="generating-state" id="generating-state">
+        <div class="gen-icon">✦</div>
+        <div class="gen-title">Gerando ebook…</div>
+        <div class="gen-sub" id="gen-sub">Conectando com Claude AI</div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="gen-tokens" id="gen-tokens">aguardando tokens</div>
+      </div>
       <div id="code-view"></div>
       <iframe id="preview-frame" sandbox="allow-same-origin allow-scripts"></iframe>
     </div>
@@ -337,9 +374,13 @@ const tokenInfo  = document.getElementById('token-info');
 const statusLabel= document.getElementById('status-label');
 const sdot       = document.getElementById('sdot');
 const stext      = document.getElementById('stext');
-const emptyState = document.getElementById('empty-state');
-const codeView   = document.getElementById('code-view');
-const previewFr  = document.getElementById('preview-frame');
+const emptyState   = document.getElementById('empty-state');
+const genState     = document.getElementById('generating-state');
+const genSub       = document.getElementById('gen-sub');
+const progressFill = document.getElementById('progress-fill');
+const genTokens    = document.getElementById('gen-tokens');
+const codeView     = document.getElementById('code-view');
+const previewFr    = document.getElementById('preview-frame');
 const dropzone   = document.getElementById('dropzone');
 const fileInput  = document.getElementById('file-input');
 const fileLoaded = document.getElementById('file-loaded');
@@ -556,6 +597,10 @@ async function generate() {
   previewFr.classList.remove('on');
   previewFr.style.display = 'none';
   emptyState.style.display = 'none';
+  genState.classList.add('on');
+  genSub.textContent = 'Conectando com Claude AI…';
+  progressFill.style.width = '0%';
+  genTokens.textContent = 'aguardando tokens';
   btnDl.disabled = true;
   btnPdf.disabled = true;
   btnGenerate.style.display = 'none';
@@ -563,13 +608,9 @@ async function generate() {
   tokenInfo.textContent = '—';
   setStatus('gerando...', 'spin');
 
-  const cursor = document.createElement('span');
-  cursor.className = 'blink';
-  codeView.appendChild(cursor);
-  codeView.style.display = 'block';
-
+  const MAX_TOK = 8192;
   abort = new AbortController();
-  let raw = '', outTok = 0;
+  let raw = '', outTok = 0, charCount = 0;
 
   try {
     await streamGenerate({
@@ -588,39 +629,52 @@ O HTML deve:
       signal: abort.signal,
       onChunk: (text) => {
         raw += text;
-        cursor.remove();
-        codeView.textContent = raw;
-        codeView.appendChild(cursor);
-        codeView.scrollTop = codeView.scrollHeight;
-        currentHTML = extractHTML(raw);
-        schedulePreview(currentHTML);
+        charCount += text.length;
+        // 1 token ≈ 4 chars; cap progress at 95% until done
+        const estimated = Math.round(charCount / 4);
+        const pct = Math.min(95, Math.round((estimated / MAX_TOK) * 100));
+        progressFill.style.width = pct + '%';
+        genTokens.textContent = `~${estimated.toLocaleString()} tokens estimados`;
+        if (pct > 15) genSub.textContent = 'Escrevendo conteúdo…';
+        if (pct > 50) genSub.textContent = 'Desenvolvendo capítulos…';
+        if (pct > 80) genSub.textContent = 'Finalizando estrutura…';
       },
       onUsage: (tokens) => {
         outTok = tokens;
         tokenInfo.textContent = `↓${tokens} tokens`;
+        genTokens.textContent = `${tokens.toLocaleString()} tokens`;
       },
     });
 
     currentHTML = extractHTML(raw);
-    cursor.remove();
-    schedulePreview(currentHTML, true);
+
+    // Finaliza a barra e mostra resultado
+    progressFill.style.width = '100%';
+    genSub.textContent = 'Concluído!';
+    await new Promise(r => setTimeout(r, 350));
+    genState.classList.remove('on');
 
     if (activeTab === 'preview') {
-      codeView.classList.remove('on');
+      schedulePreview(currentHTML, true);
     } else {
-      codeView.classList.add('on');
       codeView.textContent = raw;
+      codeView.classList.add('on');
     }
 
     if (currentHTML) { btnDl.disabled = false; btnPdf.disabled = false; }
     setStatus(`concluído — ${outTok} tokens`, 'ok');
 
   } catch (err) {
-    cursor.remove();
+    genState.classList.remove('on');
     if (err.name === 'AbortError') {
       setStatus('cancelado', '');
       currentHTML = extractHTML(raw);
-      if (currentHTML) { btnDl.disabled = false; btnPdf.disabled = false; schedulePreview(currentHTML, true); }
+      if (currentHTML) {
+        btnDl.disabled = false; btnPdf.disabled = false;
+        schedulePreview(currentHTML, true);
+      } else {
+        emptyState.style.display = '';
+      }
     } else {
       setStatus('erro: ' + err.message, 'err');
       codeView.textContent = '❌ ' + err.message;
