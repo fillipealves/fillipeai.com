@@ -3,6 +3,7 @@ const express   = require('express');
 const cors      = require('cors');
 const rateLimit = require('express-rate-limit');
 const authRoutes= require('./routes/auth');
+const aiRoutes  = require('./routes/ai');
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
@@ -42,6 +43,7 @@ const loginLimiter = rateLimit({
 
 // ── Routes ─────────────────────────────────────────────────────────────────
 app.use('/auth', loginLimiter, authRoutes);
+app.use('/ai', aiRoutes);
 
 app.get('/health', (_, res) => res.json({ status: 'ok', ts: new Date().toISOString() }));
 

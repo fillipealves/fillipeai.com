@@ -141,14 +141,6 @@
     <div class="mode-panel active" id="panel-ai">
       <div class="ai-panel">
         <div class="ai-settings">
-          <div class="field full">
-            <label>API Key (Anthropic)</label>
-            <div class="key-row">
-              <input type="password" id="api-key" placeholder="sk-ant-..." autocomplete="off">
-              <button class="btn-icon" id="btn-save-key" title="Salvar">💾</button>
-              <button class="btn-icon" id="btn-toggle-key" title="Mostrar">👁️</button>
-            </div>
-          </div>
           <div class="field-row">
             <div class="field">
               <label>Modelo</label>
@@ -229,6 +221,9 @@
 </main>
 
 <script>
+// ── Config ────────────────────────────────────────────────────────────────
+const BACKEND_URL = 'https://fillipeaicom-production.up.railway.app';
+
 // ── refs ─────────────────────────────────────────────────────────────────
 const apiKeyEl   = document.getElementById('api-key');
 const btnSaveKey = document.getElementById('btn-save-key');
@@ -408,14 +403,69 @@ promptEl.addEventListener('keydown', e => {
   if (e.ctrlKey && e.key === 'Enter') generate();
 });
 
+// ── Auth token helper ─────────────────────────────────────────────────────
+function getJwt() { return localStorage.getItem('da_token') || ''; }
+
+// ── SSE stream helper (via backend proxy) ─────────────────────────────────
+async function streamGenerate({ model, prompt, system, onChunk, onUsage, signal }) {
+  const jwt = getJwt();
+  if (!jwt) throw new Error('Você precisa estar logado no dashboard para usar o gerador.');
+
+  const res = await fetch(`${BACKEND_URL}/ai/generate`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${jwt}`,
+    },
+    body: JSON.stringify({ model, prompt, system }),
+    signal,
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err?.error || 'HTTP ' + res.status);
+  }
+
+  const reader = res.body.getReader();
+  const dec = new TextDecoder();
+  let buf = '';
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buf += dec.decode(value, { stream: true });
+    const lines = buf.split('\n');
+    buf = lines.pop();
+
+    for (const line of lines) {
+      if (!line.startsWith('data: ')) continue;
+      const d = line.slice(6).trim();
+      if (d === '[DONE]') continue;
+      try {
+        const ev = JSON.parse(d);
+        if (ev.type === 'error') throw new Error(ev.error);
+        if (ev.type === 'content_block_delta' && ev.delta?.type === 'text_delta') {
+          onChunk(ev.delta.text);
+        }
+        if (ev.type === 'message_delta' && ev.usage) {
+          onUsage(ev.usage.output_tokens || 0);
+        }
+      } catch (e) { if (e.message !== 'Unexpected end of JSON input') throw e; }
+    }
+  }
+}
+
 // ── AI generate ───────────────────────────────────────────────────────────
 async function generate() {
-  const key = apiKeyEl.value.trim() || localStorage.getItem(K) || '';
-  if (!key) { alert('Insira sua API Key da Anthropic.'); apiKeyEl.focus(); return; }
   const prompt = promptEl.value.trim();
   if (!prompt) { alert('Escreva um prompt.'); promptEl.focus(); return; }
 
-  // Reset
+  if (!getJwt()) {
+    alert('Você precisa estar logado no dashboard.\nAcesse fillipeai.com/dashboard primeiro.');
+    return;
+  }
+
+  // Reset UI
   currentHTML = '';
   codeView.textContent = '';
   codeView.classList.remove('on');
@@ -429,29 +479,19 @@ async function generate() {
   tokenInfo.textContent = '—';
   setStatus('gerando...', 'spin');
 
-  // Show code view streaming
   const cursor = document.createElement('span');
   cursor.className = 'blink';
   codeView.appendChild(cursor);
   codeView.style.display = 'block';
 
   abort = new AbortController();
-  let raw = '', inTok = 0, outTok = 0;
+  let raw = '', outTok = 0;
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': key,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-allow-browser': 'true',
-      },
-      body: JSON.stringify({
-        model: modelEl.value,
-        max_tokens: 8192,
-        stream: true,
-        system: `Você é um designer e redator especializado em ebooks digitais.
+    await streamGenerate({
+      model: modelEl.value,
+      prompt,
+      system: `Você é um designer e redator especializado em ebooks digitais.
 Gere SEMPRE um arquivo HTML completo e autocontido (sem dependências externas exceto Google Fonts CDN).
 O HTML deve:
 - Ser um ebook visual, profissional e bem diagramado
@@ -461,50 +501,21 @@ O HTML deve:
 - Incluir @media print (sem URLs visíveis, margens adequadas, page-break-inside: avoid em seções importantes)
 - Ter todos os capítulos completos e detalhados
 - Retornar SOMENTE o código HTML entre \`\`\`html e \`\`\` sem texto fora do bloco`,
-        messages: [{ role: 'user', content: prompt }],
-      }),
       signal: abort.signal,
+      onChunk: (text) => {
+        raw += text;
+        cursor.remove();
+        codeView.textContent = raw;
+        codeView.appendChild(cursor);
+        codeView.scrollTop = codeView.scrollHeight;
+        currentHTML = extractHTML(raw);
+        schedulePreview(currentHTML);
+      },
+      onUsage: (tokens) => {
+        outTok = tokens;
+        tokenInfo.textContent = `↓${tokens} tokens`;
+      },
     });
-
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err?.error?.message || 'HTTP ' + res.status);
-    }
-
-    const reader = res.body.getReader();
-    const dec = new TextDecoder();
-    let sseBuf = '';
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      sseBuf += dec.decode(value, { stream: true });
-      const lines = sseBuf.split('\n');
-      sseBuf = lines.pop();
-
-      for (const line of lines) {
-        if (!line.startsWith('data: ')) continue;
-        const d = line.slice(6).trim();
-        if (d === '[DONE]') continue;
-        try {
-          const ev = JSON.parse(d);
-          if (ev.type === 'content_block_delta' && ev.delta?.type === 'text_delta') {
-            raw += ev.delta.text;
-            cursor.remove();
-            codeView.textContent = raw;
-            codeView.appendChild(cursor);
-            codeView.scrollTop = codeView.scrollHeight;
-            currentHTML = extractHTML(raw);
-            schedulePreview(currentHTML);
-          }
-          if (ev.type === 'message_start') inTok = ev.message?.usage?.input_tokens || 0;
-          if (ev.type === 'message_delta' && ev.usage) {
-            outTok = ev.usage.output_tokens || 0;
-            tokenInfo.textContent = `↑${inTok} ↓${outTok} tokens`;
-          }
-        } catch {}
-      }
-    }
 
     currentHTML = extractHTML(raw);
     cursor.remove();
@@ -517,10 +528,7 @@ O HTML deve:
       codeView.textContent = raw;
     }
 
-    if (currentHTML) {
-      btnDl.disabled = false;
-      btnPdf.disabled = false;
-    }
+    if (currentHTML) { btnDl.disabled = false; btnPdf.disabled = false; }
     setStatus(`concluído — ${outTok} tokens`, 'ok');
 
   } catch (err) {
@@ -530,18 +538,8 @@ O HTML deve:
       currentHTML = extractHTML(raw);
       if (currentHTML) { btnDl.disabled = false; btnPdf.disabled = false; schedulePreview(currentHTML, true); }
     } else {
-      // Diagnóstico detalhado
-      let msg = err.message;
-      let hint = '';
-      if (msg === 'Failed to fetch' || msg.includes('fetch')) {
-        hint = '\n\n💡 Possíveis causas:\n' +
-          '1. API Key inválida ou expirada — verifique em console.anthropic.com\n' +
-          '2. Modelo indisponível no seu plano — tente trocar para Sonnet\n' +
-          '3. Sem créditos na conta Anthropic\n' +
-          '4. Bloqueio de rede/firewall no navegador';
-      }
-      setStatus('erro: ' + msg, 'err');
-      codeView.textContent = '❌ Erro: ' + msg + hint;
+      setStatus('erro: ' + err.message, 'err');
+      codeView.textContent = '❌ ' + err.message;
       codeView.classList.add('on');
     }
   } finally {
@@ -555,60 +553,43 @@ btnStop.onclick = () => { if (abort) abort.abort(); };
 
 // ── Testar conexão ────────────────────────────────────────────────────────
 document.getElementById('btn-test').addEventListener('click', async () => {
-  const key = apiKeyEl.value.trim() || localStorage.getItem(K) || '';
-  if (!key) { alert('Insira sua API Key primeiro.'); return; }
-
   const btn = document.getElementById('btn-test');
   btn.textContent = '⏳ Testando...';
   btn.disabled = true;
-
   emptyState.style.display = 'none';
   codeView.classList.add('on');
-  codeView.textContent = '⏳ Testando conexão com a API Anthropic...\n';
+  codeView.textContent = '⏳ Testando conexão com o backend...\n';
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': key,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-allow-browser': 'true',
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 10,
-        messages: [{ role: 'user', content: 'Responda apenas: OK' }],
-      }),
+    // 1. Testa health do backend
+    const health = await fetch(`${BACKEND_URL}/health`);
+    const hData = await health.json();
+    codeView.textContent += `✅ Backend OK — ${hData.ts}\n`;
+
+    // 2. Testa autenticação
+    const jwt = getJwt();
+    if (!jwt) {
+      codeView.textContent += '\n⚠️  Sem token JWT.\n→ Faça login em fillipeai.com/dashboard primeiro.';
+      setStatus('sem login', 'err');
+      return;
+    }
+
+    const verify = await fetch(`${BACKEND_URL}/auth/verify`, {
+      headers: { 'Authorization': `Bearer ${jwt}` },
     });
+    const vData = await verify.json();
 
-    const data = await res.json();
-
-    if (res.ok) {
-      codeView.textContent = '✅ Conexão OK!\n\n' +
-        'Modelo: claude-haiku-4-5-20251001\n' +
-        'Status: ' + res.status + '\n' +
-        'Resposta: ' + (data.content?.[0]?.text || JSON.stringify(data)) + '\n\n' +
-        '→ Sua API Key está funcionando. Pode gerar o ebook.';
-      setStatus('API conectada', 'ok');
+    if (verify.ok) {
+      codeView.textContent += `✅ Login OK — usuário: ${vData.username}\n`;
+      codeView.textContent += '\n✅ Tudo pronto! Pode clicar em Gerar Ebook.';
+      setStatus('pronto', 'ok');
     } else {
-      codeView.textContent = '❌ Erro HTTP ' + res.status + '\n\n' +
-        JSON.stringify(data, null, 2) + '\n\n' +
-        (res.status === 401 ? '→ API Key inválida ou expirada.\n   Verifique em console.anthropic.com → API Keys' :
-         res.status === 403 ? '→ Sem permissão. Verifique se a key tem créditos.' :
-         res.status === 429 ? '→ Rate limit atingido. Aguarde alguns segundos.' :
-         '→ Verifique sua conta em console.anthropic.com');
-      setStatus('erro ' + res.status, 'err');
+      codeView.textContent += `\n❌ Token expirado ou inválido.\n→ Faça login novamente em fillipeai.com/dashboard`;
+      setStatus('token expirado', 'err');
     }
   } catch (err) {
-    codeView.textContent = '❌ ' + err.message + '\n\n' +
-      '→ O navegador bloqueou a requisição antes de chegar na API.\n\n' +
-      'Verifique:\n' +
-      '• F12 → Console → erro vermelho com mais detalhes\n' +
-      '• Se há extensão de bloqueio de anúncios/VPN ativa — desative temporariamente\n' +
-      '• Se o site está sendo acessado por HTTP (não HTTPS)\n' +
-      '• Tente em uma aba anônima';
-    setStatus('sem conexão', 'err');
+    codeView.textContent += `\n❌ ${err.message}\n→ Backend offline ou inacessível.`;
+    setStatus('erro', 'err');
   }
 
   btn.textContent = '🔌 Testar conexão com API';
