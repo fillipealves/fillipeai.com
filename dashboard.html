@@ -4,13 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard — fillipeai.com</title>
-<!-- Security: redirect immediately if not authenticated -->
 <script>
-  // Change PASSWORD_HASH to update the password.
-  // To generate a new hash, run in terminal:
-  // node -e "require('crypto').createHash('sha256').update('suasenha').digest('hex')" | xargs echo
-  const PASSWORD_HASH = '5f757a725de57bfd38905151d84fc9f782a3b50be19bdd1a567a173cce3038f5';
-  const SESSION_KEY   = 'da_auth';
+  // URL da sua API no Railway — atualize após o deploy
+  const API_URL   = 'https://SEU-PROJETO.up.railway.app';
+  const TOKEN_KEY = 'da_token';
 </script>
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
@@ -121,6 +118,10 @@
     <div>
       <div class="login-title">Acesso restrito</div>
       <div class="login-sub">Painel privado — apenas você pode entrar</div>
+    </div>
+    <div class="field">
+      <label>Usuário</label>
+      <input type="text" id="user-input" value="fillipe" autocomplete="username">
     </div>
     <div class="field">
       <label>Senha</label>
@@ -284,21 +285,9 @@
     <section>
       <div class="section-title">Configurações</div>
       <div class="settings-box">
-        <h3>🔒 Alterar senha do dashboard</h3>
-        <p>
-          Digite a nova senha, copie o hash gerado e substitua o valor de
-          <code style="background:#0d0d0d;padding:1px 5px;border-radius:3px;font-size:.75rem;color:#7c9e6e">PASSWORD_HASH</code>
-          no início do arquivo <code style="background:#0d0d0d;padding:1px 5px;border-radius:3px;font-size:.75rem;color:#7c9e6e">dashboard.html</code>.
-        </p>
-        <div class="field">
-          <label>Nova senha</label>
-          <input type="password" id="new-pass" placeholder="mínimo 6 caracteres">
-        </div>
-        <div class="btn-row">
-          <button class="btn-sm2" id="btn-gen-hash">Gerar hash</button>
-          <button class="btn-sm2" id="btn-copy-hash" style="display:none">Copiar hash</button>
-        </div>
-        <div class="hash-output" id="hash-output"></div>
+        <h3>🔌 API</h3>
+        <p>URL da API no Railway conectada a este dashboard.</p>
+        <div class="hash-output show" id="api-url-display" style="margin-top:.25rem"></div>
       </div>
     </section>
 
@@ -306,60 +295,95 @@
 </div>
 
 <script>
-// ── Auth ──────────────────────────────────────────────────────────────────
+// ── Refs ──────────────────────────────────────────────────────────────────
 const loginScreen = document.getElementById('login-screen');
-const dashboard   = document.getElementById('dashboard');
+const dashboardEl = document.getElementById('dashboard');
 const passInput   = document.getElementById('pass-input');
 const passToggle  = document.getElementById('pass-toggle');
 const btnLogin    = document.getElementById('btn-login');
 const loginError  = document.getElementById('login-error');
 const btnLogout   = document.getElementById('btn-logout');
 
-async function sha256(str) {
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-  return [...new Uint8Array(buf)].map(x => x.toString(16).padStart(2,'0')).join('');
-}
+// Mostra a URL da API na seção de configurações
+document.getElementById('api-url-display').textContent = API_URL;
 
-function isAuthenticated() {
-  return sessionStorage.getItem(SESSION_KEY) === 'ok';
-}
+// ── Token helpers ─────────────────────────────────────────────────────────
+function getToken()       { return localStorage.getItem(TOKEN_KEY); }
+function saveToken(t)     { localStorage.setItem(TOKEN_KEY, t); }
+function clearToken()     { localStorage.removeItem(TOKEN_KEY); }
 
-function showDashboard() {
+// ── Views ─────────────────────────────────────────────────────────────────
+function showDashboard(username) {
   loginScreen.classList.remove('show');
-  dashboard.classList.add('show');
+  dashboardEl.classList.add('show');
   document.getElementById('stat-date').textContent =
     new Date().toLocaleDateString('pt-BR', { day:'2-digit', month:'short' });
 }
 
-function showLogin() {
-  dashboard.classList.remove('show');
+function showLogin(msg) {
+  dashboardEl.classList.remove('show');
   loginScreen.classList.add('show');
+  if (msg) loginError.textContent = msg;
   passInput.focus();
 }
 
-// Init
-if (isAuthenticated()) {
-  showDashboard();
-} else {
-  showLogin();
+// ── Verify token on load ──────────────────────────────────────────────────
+async function init() {
+  const token = getToken();
+  if (!token) { showLogin(); return; }
+
+  try {
+    const res = await fetch(`${API_URL}/auth/verify`, {
+      headers: { 'Authorization': `Bearer ${token}` },
+    });
+    if (res.ok) {
+      const data = await res.json();
+      showDashboard(data.username);
+    } else {
+      clearToken();
+      showLogin();
+    }
+  } catch {
+    // API indisponível — mostra login mesmo assim
+    showLogin('Não foi possível conectar à API.');
+  }
 }
 
-// Login
+init();
+
+// ── Login ─────────────────────────────────────────────────────────────────
+const userInput = document.getElementById('user-input');
+
 async function tryLogin() {
-  const val = passInput.value;
-  if (!val) { loginError.textContent = 'Digite a senha.'; return; }
+  const username = userInput?.value?.trim() || 'fillipe';
+  const password = passInput.value;
+  if (!password) { loginError.textContent = 'Digite a senha.'; return; }
+
   btnLogin.textContent = '...';
   btnLogin.disabled = true;
-  const hash = await sha256(val);
-  if (hash === PASSWORD_HASH) {
-    sessionStorage.setItem(SESSION_KEY, 'ok');
-    loginError.textContent = '';
-    showDashboard();
-  } else {
-    loginError.textContent = 'Senha incorreta.';
-    passInput.value = '';
-    passInput.focus();
+  loginError.textContent = '';
+
+  try {
+    const res = await fetch(`${API_URL}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok && data.token) {
+      saveToken(data.token);
+      showDashboard(data.username);
+    } else {
+      loginError.textContent = data.error || 'Usuário ou senha incorretos.';
+      passInput.value = '';
+      passInput.focus();
+    }
+  } catch {
+    loginError.textContent = 'Erro ao conectar com a API. Verifique se o Railway está online.';
   }
+
   btnLogin.textContent = 'Entrar';
   btnLogin.disabled = false;
 }
@@ -371,9 +395,9 @@ passToggle.addEventListener('click', () => {
   passToggle.textContent = passInput.type === 'password' ? '👁️' : '🙈';
 });
 
-// Logout
+// ── Logout ────────────────────────────────────────────────────────────────
 btnLogout.addEventListener('click', () => {
-  sessionStorage.removeItem(SESSION_KEY);
+  clearToken();
   passInput.value = '';
   showLogin();
 });
@@ -388,28 +412,6 @@ function copyLink(path, el) {
     setTimeout(() => { el.textContent = orig; el.style.color = ''; }, 1500);
   });
 }
-
-// ── Hash generator ────────────────────────────────────────────────────────
-const newPass    = document.getElementById('new-pass');
-const btnGenHash = document.getElementById('btn-gen-hash');
-const btnCopyHash= document.getElementById('btn-copy-hash');
-const hashOutput = document.getElementById('hash-output');
-
-btnGenHash.addEventListener('click', async () => {
-  const p = newPass.value.trim();
-  if (p.length < 6) { newPass.focus(); return; }
-  const h = await sha256(p);
-  hashOutput.textContent = h;
-  hashOutput.classList.add('show');
-  btnCopyHash.style.display = 'inline-flex';
-});
-
-btnCopyHash.addEventListener('click', () => {
-  navigator.clipboard.writeText(hashOutput.textContent).then(() => {
-    btnCopyHash.textContent = '✓ Copiado!';
-    setTimeout(() => { btnCopyHash.textContent = 'Copiar hash'; }, 2000);
-  });
-});
 </script>
 </body>
 </html>
