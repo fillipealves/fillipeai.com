@@ -52,8 +52,8 @@ router.post('/login', async (req, res) => {
       message: 'Login realizado com sucesso.',
     });
   } catch (err) {
-    console.error('Login error:', err.message, err.stack);
-    return res.status(500).json({ error: 'Erro interno. Tente novamente.', detail: err.message });
+    console.error('Login error:', err.message);
+    return res.status(500).json({ error: 'Erro interno. Tente novamente.' });
   }
 });
 
