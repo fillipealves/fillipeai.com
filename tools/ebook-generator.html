@@ -616,16 +616,13 @@ async function generate() {
     await streamGenerate({
       model: modelEl.value,
       prompt,
-      system: `Você é um designer e redator especializado em ebooks digitais de alta qualidade.
+      system: `Você é um designer e redator especializado em ebooks digitais.
 Gere SEMPRE um arquivo HTML completo e autocontido (sem dependências externas exceto Google Fonts CDN).
 O HTML deve:
 - Ser um ebook visual, profissional e bem diagramado
-- Usar fundo BRANCO ou tons muito claros (off-white, creme) — NUNCA fundo escuro ou preto
-- Texto em cores escuras (#111, #222, #333) com excelente legibilidade
-- Destaques, headings e elementos de design podem usar a cor principal do tema
-- Usar tipografia elegante (ex: Playfair Display, Lora ou similar para títulos; Inter, DM Sans para corpo)
+- Usar design moderno com tipografia elegante
 - Incluir sumário clicável (âncoras internas)
-- Ter CSS embutido no <style> — SEM dark mode
+- Ter CSS embutido no <style> (dark mode ou light conforme o tema)
 - Incluir @media print (sem URLs visíveis, margens adequadas, page-break-inside: avoid em seções importantes)
 - Ter todos os capítulos completos e detalhados
 - Retornar SOMENTE o código HTML entre \`\`\`html e \`\`\` sem texto fora do bloco`,
@@ -791,19 +788,71 @@ btnDl.onclick = () => {
 };
 
 // ── Default prompt ────────────────────────────────────────────────────────
-promptEl.value = `Crie um ebook completo em HTML com o tema "10 Formas de Ganhar Dinheiro com Inteligência Artificial".
+promptEl.value = `Crie um ebook completo em HTML com o tema "Corpo Novo com IA: O Guia Definitivo de Emagrecimento Inteligente".
 
-O ebook deve ter:
-- Capa visual impactante com título, subtítulo e autor "Fillipe Alves"
-- Sumário com links internos para cada capítulo
-- 10 capítulos detalhados (mínimo 400 palavras cada) com exemplos práticos
-- Boxes de destaque com dicas e exemplos reais
-- Seção "Primeiros Passos" em cada capítulo
-- Design profissional em dark mode (#0f0f0f background, Google Fonts)
-- Tipografia elegante com hierarquia visual clara
-- @media print sem URLs visíveis nos links
+AUTOR: Fillipe Alves
+EDIÇÃO: 2025
 
-Público: brasileiros querendo renda extra com IA. Tom: didático e motivador.`;
+——————————————————————
+DESIGN E CORES
+——————————————————————
+- Fundo BRANCO (#ffffff) ou off-white suave (#f9f8f5)
+- Cores de destaque: verde-salvia (#4a7c59), verde-menta claro (#a8d5b5), dourado suave (#c9a84c)
+- Texto principal: #1a1a1a (quase preto, alta legibilidade)
+- Tipografia: Lora (títulos e citações — elegante, saúde), Inter (corpo de texto — limpo e moderno)
+- Elementos visuais leves: bordas sutis, ícones simples, separadores com gradiente verde
+- SEM dark mode — aparência de guia de saúde profissional, imprimível
+
+——————————————————————
+ESTRUTURA DO EBOOK
+——————————————————————
+- Capa impactante: título em destaque, subtítulo, badge "EDIÇÃO 2025", autor, tagline persuasiva
+- Carta do autor (1 página — conexão emocional com o leitor)
+- Sumário clicável com links internos para cada capítulo
+- 8 capítulos completos (mínimo 600 palavras cada)
+- Conclusão + CTA final para continuar a jornada
+- Página de recursos e ferramentas recomendadas
+
+——————————————————————
+CAPÍTULOS
+——————————————————————
+1. Por Que as Dietas Tradicionais Falham — A Ciência por Trás do Reganho de Peso
+2. Como a IA Está Revolucionando o Emagrecimento — Do Diagnóstico ao Plano Personalizado
+3. GLP-1 e Medicamentos de Nova Geração — O Que a Ciência Realmente Diz (uso informativo, sem prescrição)
+4. Montando Seu Plano Alimentar com IA — Ferramentas, Apps e Prompts Práticos
+5. Exercício Inteligente — Como Treinar Menos e Queimar Mais com o Suporte da IA
+6. O Papel do Sono, Estresse e Hormônios no Emagrecimento
+7. Hábitos que Sustentam o Resultado — Psicologia + IA para Mudança Definitiva
+8. Seu Próximo Passo — Montando Sua Rotina Completa de Emagrecimento Inteligente
+
+——————————————————————
+ELEMENTOS DE COPYWRITING E VENDAS
+——————————————————————
+- Cada capítulo abre com uma história real ou cenário de identificação do leitor
+- Boxes "Você Sabia?" com dados científicos que surpreendem
+- Boxes "Ação Imediata" — 1 passo prático no final de cada capítulo
+- Citações de especialistas em destaque visual
+- Checklist visual ao final de cada capítulo
+- CTAs naturais ao longo do texto (sem ser agressivo)
+- CTA final forte: urgência, benefício claro, próximo passo
+
+——————————————————————
+PÚBLICO-ALVO
+——————————————————————
+Pessoas entre 28 e 55 anos, brasileiros/as, que já tentaram de tudo e não conseguiram resultado duradouro. Querem uma solução baseada em ciência e tecnologia, não mais dietas milagrosas.
+
+——————————————————————
+TOM DE VOZ
+——————————————————————
+Empático, direto, baseado em evidências. Como um amigo especialista que explica sem julgamento.
+
+——————————————————————
+TAMANHO ESPERADO
+——————————————————————
+Mínimo 8.000 palavras de conteúdo real (sem contar HTML/CSS).
+Cada capítulo deve ser substancial — o leitor deve sentir que recebeu mais do que esperava.
+
+Retorne SOMENTE o código HTML entre \`\`\`html e \`\`\``;
 </script>
 </body>
 </html>
