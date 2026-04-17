@@ -42,6 +42,10 @@ router.post('/generate', requireAuth, async (req, res) => {
     const page = await browser.newPage();
     await page.setViewport({ width: 1200, height: 900 });
 
+    // Renderiza como 'screen' para preservar o visual original (dark theme, gradientes)
+    // O padrão seria 'print', que remove backgrounds e cores
+    await page.emulateMediaType('screen');
+
     // Carrega o HTML e aguarda recursos externos (fonts, imagens)
     await page.setContent(html, { waitUntil: 'networkidle0', timeout: 30000 });
 
