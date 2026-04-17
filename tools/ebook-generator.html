@@ -616,13 +616,16 @@ async function generate() {
     await streamGenerate({
       model: modelEl.value,
       prompt,
-      system: `Você é um designer e redator especializado em ebooks digitais.
+      system: `Você é um designer e redator especializado em ebooks digitais de alta qualidade.
 Gere SEMPRE um arquivo HTML completo e autocontido (sem dependências externas exceto Google Fonts CDN).
 O HTML deve:
 - Ser um ebook visual, profissional e bem diagramado
-- Usar design moderno com tipografia elegante
+- Usar fundo BRANCO ou tons muito claros (off-white, creme) — NUNCA fundo escuro ou preto
+- Texto em cores escuras (#111, #222, #333) com excelente legibilidade
+- Destaques, headings e elementos de design podem usar a cor principal do tema
+- Usar tipografia elegante (ex: Playfair Display, Lora ou similar para títulos; Inter, DM Sans para corpo)
 - Incluir sumário clicável (âncoras internas)
-- Ter CSS embutido no <style> (dark mode ou light conforme o tema)
+- Ter CSS embutido no <style> — SEM dark mode
 - Incluir @media print (sem URLs visíveis, margens adequadas, page-break-inside: avoid em seções importantes)
 - Ter todos os capítulos completos e detalhados
 - Retornar SOMENTE o código HTML entre \`\`\`html e \`\`\` sem texto fora do bloco`,
