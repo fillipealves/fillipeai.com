@@ -1,5 +1,6 @@
-const express = require('express');
-const jwt     = require('jsonwebtoken');
+const express       = require('express');
+const jwt           = require('jsonwebtoken');
+const { execSync }  = require('child_process');
 
 const router = express.Router();
 
@@ -14,21 +15,37 @@ function requireAuth(req, res, next) {
   }
 }
 
+// Localiza o executável do Chromium no container
+function findChromium() {
+  if (process.env.CHROMIUM_PATH) return process.env.CHROMIUM_PATH;
+  const candidates = [
+    '/usr/bin/chromium',
+    '/usr/bin/chromium-browser',
+    '/usr/bin/google-chrome',
+    '/usr/bin/google-chrome-stable',
+  ];
+  for (const p of candidates) {
+    try { execSync(`test -f "${p}"`); return p; } catch {}
+  }
+  try { return execSync('which chromium 2>/dev/null || which chromium-browser 2>/dev/null').toString().trim(); } catch {}
+  return null;
+}
+
 // POST /pdf/generate — converte HTML em PDF via Puppeteer (Chrome headless)
 router.post('/generate', requireAuth, async (req, res) => {
   const { html, filename = 'ebook' } = req.body;
   if (!html) return res.status(400).json({ error: 'html é obrigatório.' });
 
-  let puppeteer;
-  try {
-    puppeteer = require('puppeteer');
-  } catch {
-    return res.status(500).json({ error: 'Puppeteer não disponível no servidor.' });
+  const puppeteer = require('puppeteer-core');
+  const executablePath = findChromium();
+  if (!executablePath) {
+    return res.status(500).json({ error: 'Chromium não encontrado no servidor.' });
   }
 
   let browser;
   try {
     browser = await puppeteer.launch({
+      executablePath,
       args: [
         '--no-sandbox',
         '--disable-setuid-sandbox',
