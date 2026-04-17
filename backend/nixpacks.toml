@@ -1,5 +1,2 @@
 [phases.setup]
-nixPkgs = ['chromium', 'nss', 'cups', 'libdrm', 'mesa', 'glib', 'expat', 'xorg.libX11', 'xorg.libxcb', 'xorg.libXcomposite', 'xorg.libXcursor', 'xorg.libXdamage', 'xorg.libXext', 'xorg.libXfixes', 'xorg.libXi', 'xorg.libXrandr', 'xorg.libXrender', 'xorg.libXtst', 'alsa-lib', 'atk', 'gtk3', 'cairo', 'pango', 'gdk-pixbuf', 'fontconfig', 'freetype']
-
-[variables]
-PUPPETEER_SKIP_DOWNLOAD = 'true'
+nixPkgs = ['nspr', 'nss', 'alsa-lib', 'atk', 'at-spi2-atk', 'at-spi2-core', 'cairo', 'cups', 'dbus', 'expat', 'fontconfig', 'freetype', 'gdk-pixbuf', 'glib', 'gtk3', 'libdrm', 'libxkbcommon', 'mesa', 'pango', 'xorg.libX11', 'xorg.libxcb', 'xorg.libXcomposite', 'xorg.libXcursor', 'xorg.libXdamage', 'xorg.libXext', 'xorg.libXfixes', 'xorg.libXi', 'xorg.libXrandr', 'xorg.libXrender', 'xorg.libxshmfence', 'xorg.libXtst']
