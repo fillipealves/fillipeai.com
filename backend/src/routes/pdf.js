@@ -35,7 +35,6 @@ router.post('/generate', requireAuth, async (req, res) => {
         '--disable-dev-shm-usage',
         '--disable-gpu',
         '--no-zygote',
-        '--single-process',
       ],
       headless: true,
     });
@@ -49,17 +48,19 @@ router.post('/generate', requireAuth, async (req, res) => {
     // Pequena pausa para fontes renderizarem
     await new Promise(r => setTimeout(r, 500));
 
-    const pdf = await page.pdf({
+    const pdfBytes = await page.pdf({
       format: 'A4',
       printBackground: true,
       margin: { top: '15mm', right: '15mm', bottom: '15mm', left: '15mm' },
     });
 
-    const safeName = filename.replace(/[^a-z0-9_\-]/gi, '-');
+    // Puppeteer v22+ retorna Uint8Array — converter para Buffer antes de enviar
+    const pdfBuffer = Buffer.from(pdfBytes);
+    const safeName  = filename.replace(/[^a-z0-9_\-]/gi, '-');
+
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename="${safeName}.pdf"`);
-    res.setHeader('Content-Length', pdf.length);
-    res.send(pdf);
+    res.end(pdfBuffer);
 
   } catch (err) {
     console.error('PDF generation error:', err.message);
