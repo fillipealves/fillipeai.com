@@ -49,7 +49,7 @@ router.post('/generate', requireAuth, async (req, res) => {
       },
       body: JSON.stringify({
         model: selectedModel,
-        max_tokens: 8192,
+        max_tokens: 32000,
         stream: true,
         system: system || 'Você é um assistente especializado em criar ebooks HTML profissionais.',
         messages: [{ role: 'user', content: prompt }],

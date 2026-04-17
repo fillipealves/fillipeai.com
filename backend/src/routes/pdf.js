@@ -41,8 +41,15 @@ router.post('/generate', requireAuth, async (req, res) => {
     // Renderiza como 'screen' para preservar visual original (gradientes, cores)
     await page.emulateMediaType('screen');
 
+    // Esconde botões e elementos no-print que não devem aparecer no PDF
+    const cleanHtml = html.replace('</head>', `<style>
+      .no-print, button, [class*="btn"], [class*="save"], [class*="pdf-btn"] {
+        display: none !important;
+      }
+    </style></head>`);
+
     // Carrega o HTML e aguarda recursos externos (fonts, imagens)
-    await page.setContent(html, { waitUntil: 'networkidle0', timeout: 30000 });
+    await page.setContent(cleanHtml, { waitUntil: 'networkidle0', timeout: 30000 });
 
     // Pausa para fontes renderizarem
     await new Promise(r => setTimeout(r, 800));
