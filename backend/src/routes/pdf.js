@@ -41,10 +41,23 @@ router.post('/generate', requireAuth, async (req, res) => {
     // Renderiza como 'screen' para preservar visual original (gradientes, cores)
     await page.emulateMediaType('screen');
 
-    // Esconde botões e elementos no-print que não devem aparecer no PDF
+    // Esconde botões e remove container max-width para PDF full-bleed
     const cleanHtml = html.replace('</head>', `<style>
       .no-print, button, [class*="btn"], [class*="save"], [class*="pdf-btn"] {
         display: none !important;
+      }
+      html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      body > div, body > main, body > article, body > section,
+      .container, .wrapper, .ebook, .content, .page {
+        max-width: 100% !important;
+        width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
       }
     </style></head>`);
 
