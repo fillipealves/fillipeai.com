@@ -14,21 +14,26 @@ function requireAuth(req, res, next) {
   }
 }
 
-// POST /pdf/generate — converte HTML em PDF via Puppeteer + @sparticuz/chromium
+// POST /pdf/generate — converte HTML em PDF via Puppeteer + Chromium do sistema
 router.post('/generate', requireAuth, async (req, res) => {
   const { html, filename = 'ebook' } = req.body;
   if (!html) return res.status(400).json({ error: 'html é obrigatório.' });
 
-  const chromium  = require('@sparticuz/chromium');
-  const puppeteer = require('puppeteer-core');
+  const puppeteer      = require('puppeteer-core');
+  const executablePath = process.env.CHROMIUM_PATH || '/usr/bin/chromium';
 
   let browser;
   try {
     browser = await puppeteer.launch({
-      args:            chromium.args,
-      defaultViewport: chromium.defaultViewport,
-      executablePath:  await chromium.executablePath(),
-      headless:        chromium.headless,
+      executablePath,
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-gpu',
+        '--no-zygote',
+      ],
+      headless: true,
     });
 
     const page = await browser.newPage();
@@ -48,7 +53,6 @@ router.post('/generate', requireAuth, async (req, res) => {
       margin: { top: '15mm', right: '15mm', bottom: '15mm', left: '15mm' },
     });
 
-    // Puppeteer v22+ retorna Uint8Array — converter para Buffer
     const pdfBuffer = Buffer.from(pdfBytes);
     const safeName  = filename.replace(/[^a-z0-9_\-]/gi, '-');
 
