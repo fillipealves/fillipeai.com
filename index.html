@@ -422,6 +422,9 @@
     .service-card:nth-child(1) .service-icon { background: rgba(0,255,65,0.1); color: var(--green); }
     .service-card:nth-child(2) .service-icon { background: rgba(0,212,255,0.1); color: var(--cyan); }
     .service-card:nth-child(3) .service-icon { background: rgba(127,90,240,0.1); color: var(--purple); }
+    .service-card:nth-child(4) .service-icon { background: rgba(224,64,251,0.1); color: var(--pink); }
+    .service-card:nth-child(5) .service-icon { background: rgba(255,189,46,0.1); color: #ffbd2e; }
+    .service-card:nth-child(6) .service-icon { background: rgba(0,200,80,0.1); color: #00c850; }
     .service-card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: .6rem; }
     .service-card p { font-size: .875rem; color: var(--muted); line-height: 1.7; }
     .service-list {
@@ -683,6 +686,11 @@
     .tag-automation { background: rgba(0,200,80,0.12); color: #00c850; border: 1px solid rgba(0,200,80,0.25); }
     .tag-saas { background: rgba(224,64,251,0.12); color: var(--pink); border: 1px solid rgba(224,64,251,0.25); }
     .tag-comercial { background: rgba(0,212,255,0.12); color: var(--cyan); border: 1px solid rgba(0,212,255,0.25); }
+    .tag-hotel   { background: rgba(0,212,255,0.12); color: var(--cyan);    border: 1px solid rgba(0,212,255,0.25); }
+    .tag-arena   { background: rgba(0,200,80,0.12);  color: #00c850;        border: 1px solid rgba(0,200,80,0.25); }
+    .tag-chatbot { background: rgba(127,90,240,0.12); color: var(--purple);  border: 1px solid rgba(127,90,240,0.25); }
+    .tag-gestao  { background: rgba(255,189,46,0.12); color: #ffbd2e;       border: 1px solid rgba(255,189,46,0.25); }
+    .tag-site    { background: rgba(224,64,251,0.12); color: var(--pink);    border: 1px solid rgba(224,64,251,0.25); }
     .project-info h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: .4rem; }
     .project-info p { font-size: .85rem; color: var(--muted); line-height: 1.6; margin-bottom: 1rem; }
     .project-tech { display: flex; flex-wrap: wrap; gap: .4rem; }
@@ -931,6 +939,74 @@
       100% { background-position: 0% 0%; }
     }
 
+    /* ─── CHATBOT MOCKUP ─── */
+    .mock-chatbot { display: flex; flex-direction: column; height: 100%; padding: 0; }
+    .chatbot-topbar { height: 22px; background: rgba(127,90,240,0.12); border-bottom: 1px solid rgba(127,90,240,0.15); display: flex; align-items: center; padding: 0 8px; gap: 5px; }
+    .chatbot-topbar .cb-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--purple); animation: pulse 2s infinite; }
+    .chatbot-topbar .cb-line { height: 4px; width: 40px; background: rgba(255,255,255,0.1); border-radius: 2px; }
+    .chatbot-topbar .cb-badge { margin-left: auto; background: rgba(127,90,240,0.3); border-radius: 3px; padding: 1px 5px; font-size: .42rem; color: #e8e8e8; }
+    .chatbot-msgs { flex: 1; padding: 7px 6px; display: flex; flex-direction: column; gap: 4px; overflow: hidden; }
+    .chat-msg { max-width: 78%; padding: 4px 7px; border-radius: 7px; font-size: .48rem; line-height: 1.4; color: #e8e8e8; }
+    .chat-msg.in  { background: rgba(127,90,240,0.2);  border: 1px solid rgba(127,90,240,0.2);  align-self: flex-start; }
+    .chat-msg.out { background: rgba(0,255,65,0.1);    border: 1px solid rgba(0,255,65,0.15);   align-self: flex-end; }
+    .chat-msg.bot { background: rgba(0,212,255,0.1);   border: 1px solid rgba(0,212,255,0.15);  align-self: flex-start; }
+    .chat-typing { display: flex; gap: 2px; align-items: center; padding: 5px 7px; border-radius: 7px; background: rgba(127,90,240,0.12); border: 1px solid rgba(127,90,240,0.15); width: fit-content; }
+    .typing-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--purple); animation: typingBounce 1.2s infinite; }
+    .typing-dot:nth-child(2) { animation-delay: .2s; }
+    .typing-dot:nth-child(3) { animation-delay: .4s; }
+    @keyframes typingBounce { 0%,60%,100%{opacity:.3;transform:translateY(0);} 30%{opacity:1;transform:translateY(-3px);} }
+
+    /* ─── HOTEL MOCKUP ─── */
+    .mock-hotel { display: flex; flex-direction: column; height: 100%; padding: 0; }
+    .hotel-topbar { height: 22px; background: rgba(0,180,255,0.1); border-bottom: 1px solid rgba(0,180,255,0.12); display: flex; align-items: center; padding: 0 8px; gap: 5px; }
+    .hotel-topbar .ht-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--cyan); }
+    .hotel-topbar .ht-label { font-family: var(--mono); font-size: .45rem; color: var(--cyan); margin-left: auto; }
+    .hotel-body { flex: 1; padding: 7px 6px; display: flex; flex-direction: column; gap: 6px; }
+    .hotel-rooms { display: grid; grid-template-columns: repeat(5,1fr); gap: 2px; }
+    .hroom { height: 20px; border-radius: 3px; border: 1px solid rgba(255,255,255,0.05); background: rgba(255,255,255,0.02); display: flex; align-items: center; justify-content: center; font-size: .4rem; color: #555; }
+    .hroom.occ  { background: rgba(0,180,255,0.18); border-color: rgba(0,180,255,0.3);  color: var(--cyan); }
+    .hroom.out  { background: rgba(255,189,46,0.15); border-color: rgba(255,189,46,0.25); color: #ffbd2e; }
+    .hroom.free { background: rgba(0,200,80,0.1);   border-color: rgba(0,200,80,0.2);   color: #00c850; }
+    .hotel-kpis { display: flex; gap: 4px; }
+    .hkpi { flex: 1; background: rgba(0,180,255,0.05); border: 1px solid rgba(0,180,255,0.1); border-radius: 4px; padding: 4px; text-align: center; }
+    .hkpi-n { font-family: var(--mono); font-size: .65rem; font-weight: 700; }
+    .hkpi-l { font-size: .4rem; color: #555; margin-top: 1px; }
+
+    /* ─── ARENA MOCKUP ─── */
+    .mock-arena { display: flex; flex-direction: column; height: 100%; padding: 0; }
+    .arena-topbar { height: 22px; background: rgba(0,200,80,0.1); border-bottom: 1px solid rgba(0,200,80,0.12); display: flex; align-items: center; padding: 0 8px; gap: 5px; }
+    .arena-topbar .ar-dot { width: 7px; height: 7px; border-radius: 50%; background: #00c850; animation: pulse 2s infinite; }
+    .arena-topbar .ar-label { font-family: var(--mono); font-size: .45rem; color: #00c850; }
+    .arena-topbar .ar-date  { font-family: var(--mono); font-size: .42rem; color: #555; margin-left: auto; }
+    .arena-body { flex: 1; padding: 7px 6px; display: flex; flex-direction: column; gap: 5px; }
+    .arena-courts { display: grid; grid-template-columns: repeat(3,1fr); gap: 3px; }
+    .acourt { border-radius: 4px; padding: 5px; border: 1px solid rgba(255,255,255,0.05); background: rgba(255,255,255,0.02); }
+    .acourt.res  { background: rgba(0,200,80,0.1);  border-color: rgba(0,200,80,0.2); }
+    .acourt.free { background: rgba(0,255,65,0.04); border-color: rgba(0,255,65,0.1); }
+    .acourt-name { font-size: .42rem; color: #e8e8e8; margin-bottom: 1px; }
+    .acourt-st   { font-size: .38rem; color: #555; }
+    .acourt.res .acourt-st { color: #00c850; }
+    .arena-slots { display: flex; flex-direction: column; gap: 2px; }
+    .aslot { height: 13px; border-radius: 3px; background: rgba(0,200,80,0.08); border: 1px solid rgba(0,200,80,0.12); display: flex; align-items: center; padding: 0 5px; gap: 4px; }
+    .aslot-t { font-family: var(--mono); font-size: .38rem; color: #00c850; }
+    .aslot-bar { flex: 1; height: 3px; background: rgba(0,200,80,0.25); border-radius: 2px; }
+
+    /* ─── ADM MOCKUP ─── */
+    .mock-adm { display: flex; flex-direction: column; height: 100%; padding: 0; }
+    .adm-topbar { height: 22px; background: rgba(255,189,46,0.1); border-bottom: 1px solid rgba(255,189,46,0.12); display: flex; align-items: center; padding: 0 8px; gap: 5px; }
+    .adm-topbar .adm-logo { font-family: var(--mono); font-size: .5rem; color: #ffbd2e; font-weight: 700; }
+    .adm-topbar .adm-btn  { margin-left: auto; height: 13px; padding: 0 6px; border-radius: 3px; background: rgba(255,189,46,0.3); font-size: .42rem; color: #000; font-weight: 700; display: flex; align-items: center; }
+    .adm-body { flex: 1; padding: 7px 6px; display: flex; flex-direction: column; gap: 4px; }
+    .adm-th-row { display: flex; gap: 3px; margin-bottom: 3px; }
+    .adm-th { flex: 1; height: 11px; background: rgba(255,255,255,0.04); border-radius: 2px; }
+    .adm-row { display: flex; gap: 3px; margin-bottom: 2px; align-items: center; }
+    .adm-td { flex: 1; height: 15px; background: rgba(255,255,255,0.02); border-radius: 2px; border: 1px solid rgba(255,255,255,0.03); }
+    .adm-td.st { flex: 0 0 44px; display: flex; align-items: center; justify-content: center; }
+    .adm-badge { height: 10px; width: 38px; border-radius: 10px; font-size: .35rem; display: flex; align-items: center; justify-content: center; }
+    .adm-badge.ap { background: rgba(0,255,65,0.15);   color: var(--green);  border: 1px solid rgba(0,255,65,0.2); }
+    .adm-badge.ag { background: rgba(255,189,46,0.15); color: #ffbd2e;       border: 1px solid rgba(255,189,46,0.2); }
+    .adm-badge.em { background: rgba(0,212,255,0.15);  color: var(--cyan);   border: 1px solid rgba(0,212,255,0.2); }
+
     /* ─── NOISE OVERLAY ─── */
     body::before {
       content: '';
@@ -1163,9 +1239,11 @@
 
 <span class="t-comment">━━━ O que entrego ━━━</span>
 
-<span class="t-key"> ✓</span> <span class="t-string">Sistemas feitos do zero para o seu negócio</span>
-<span class="t-key"> ✓</span> <span class="t-string">Processos que rodam no automático</span>
-<span class="t-key"> ✓</span> <span class="t-string">Sites e plataformas profissionais</span>
+<span class="t-key"> ✓</span> <span class="t-string">Sistemas de gestão completos (ERP e CRM)</span>
+<span class="t-key"> ✓</span> <span class="t-string">Chatbot com IA para atendimento 24h</span>
+<span class="t-key"> ✓</span> <span class="t-string">Sites, landing pages e bio de Instagram</span>
+<span class="t-key"> ✓</span> <span class="t-string">Hotelaria, arenas e gestão de containers</span>
+<span class="t-key"> ✓</span> <span class="t-string">Automação via WhatsApp API e integrações</span>
 <span class="t-key"> ✓</span> <span class="t-string">Consultoria para decisões tecnológicas</span>
 
 <span class="t-comment">━━━ Contato ━━━</span>
@@ -1191,9 +1269,13 @@
         </p>
         <div class="tech-pills">
           <span class="pill">Sistemas Web</span>
-          <span class="pill">Aplicativos</span>
-          <span class="pill">Automação</span>
+          <span class="pill">CRM & ERP</span>
+          <span class="pill">Chatbot com IA</span>
           <span class="pill">WhatsApp API</span>
+          <span class="pill">Gestão Hoteleira</span>
+          <span class="pill">Gestão de Arenas</span>
+          <span class="pill">Sites Profissionais</span>
+          <span class="pill">Bio de Instagram</span>
           <span class="pill">Inteligência Artificial</span>
           <span class="pill">Dashboard & Relatórios</span>
           <span class="pill">Geração de PDF</span>
@@ -1217,24 +1299,57 @@
     </p>
     <div class="servicos-grid">
       <div class="service-card glow-border fade-up delay-1">
-        <div class="service-icon"><i class="fas fa-code"></i></div>
-        <h3>Desenvolvimento Web</h3>
-        <p>Sites, landing pages e sistemas web modernos, rápidos e responsivos — do design à produção.</p>
+        <div class="service-icon"><i class="fas fa-globe"></i></div>
+        <h3>Sites & Landing Pages</h3>
+        <p>Sites institucionais, landing pages de alta conversão, bio de Instagram interativa e portais — do design ao ar.</p>
         <ul class="service-list">
-          <li>Landing pages de alta conversão</li>
-          <li>Sistemas internos com dashboard</li>
-          <li>APIs e integrações</li>
-          <li>E-commerces e portais</li>
+          <li>Landing pages que convertem visitas</li>
+          <li>Sites institucionais profissionais</li>
+          <li>Bio de Instagram com links e agenda</li>
+          <li>Portais e e-commerces</li>
         </ul>
       </div>
       <div class="service-card glow-border fade-up delay-2">
-        <div class="service-icon"><i class="fas fa-robot"></i></div>
-        <h3>Sistemas & Automações</h3>
-        <p>CRMs, ERPs e automações que eliminam trabalho manual e centralizam operações da sua empresa.</p>
+        <div class="service-icon"><i class="fas fa-layer-group"></i></div>
+        <h3>Sistemas de Gestão & ERP</h3>
+        <p>Sistemas completos para gerir clientes, financeiro, estoque, usuários e operação — tudo num só lugar.</p>
         <ul class="service-list">
-          <li>CRM sob medida para o seu negócio</li>
-          <li>Automação via WhatsApp</li>
-          <li>Geração automática de documentos</li>
+          <li>Dashboard e relatórios em tempo real</li>
+          <li>Controle financeiro e operacional</li>
+          <li>Multi-módulos e multi-usuário</li>
+          <li>Gestão hoteleira, arenas e mais</li>
+        </ul>
+      </div>
+      <div class="service-card glow-border fade-up delay-3">
+        <div class="service-icon"><i class="fas fa-handshake"></i></div>
+        <h3>CRM Completo</h3>
+        <p>Funil de vendas, propostas digitais, clientes e histórico de negociações — sem perder nenhum lead.</p>
+        <ul class="service-list">
+          <li>Gestão de clientes e leads</li>
+          <li>Propostas e contratos em PDF</li>
+          <li>Funil de vendas visual</li>
+          <li>Histórico completo de interações</li>
+        </ul>
+      </div>
+      <div class="service-card glow-border fade-up delay-1">
+        <div class="service-icon"><i class="fas fa-robot"></i></div>
+        <h3>Chatbot & Atendimento com IA</h3>
+        <p>Bots inteligentes que atendem clientes 24h, qualificam leads e respondem com contexto — sem trabalho manual.</p>
+        <ul class="service-list">
+          <li>Integração com WhatsApp e Instagram</li>
+          <li>IA treinada com seu conteúdo</li>
+          <li>Multi-empresa (multi-tenant)</li>
+          <li>Painel de atendimento humano</li>
+        </ul>
+      </div>
+      <div class="service-card glow-border fade-up delay-2">
+        <div class="service-icon"><i class="fas fa-bolt"></i></div>
+        <h3>Automação & Integrações</h3>
+        <p>Processos que rodam sozinhos: disparos, notificações, geração de documentos e APIs conectadas.</p>
+        <ul class="service-list">
+          <li>Disparos via WhatsApp API</li>
+          <li>Notificações e alertas automáticos</li>
+          <li>Geração automática de documentos PDF</li>
           <li>Integração com IA (Claude, GPT)</li>
         </ul>
       </div>
@@ -1258,23 +1373,255 @@
 ══════════════════════════════════════════ -->
 <section id="projetos">
   <div class="section-inner section-reveal">
-    <div class="section-label fade-up">Projetos entregues</div>
+    <div class="section-label fade-up">Portfólio</div>
     <div class="divider fade-up delay-1"></div>
-    <h2 class="section-title fade-up delay-1">Sistemas que<br>já <span style="color:var(--green)">entreguei</span></h2>
+    <h2 class="section-title fade-up delay-1">Soluções que<br>já <span style="color:var(--green)">entreguei</span></h2>
     <p class="section-desc fade-up delay-2">
-      Cada projeto resolveu uma dor real de um cliente real. Veja como penso e executo.
+      Chatbots, sistemas de hotelaria, arenas, CRMs, ERP e sites — cada projeto resolveu uma dor real.
     </p>
 
     <div class="projetos-grid">
 
-      <!-- CARD 1: CRM Studio Luana -->
+      <!-- CARD 1: Chatbot com IA -->
       <div class="project-card glow-border fade-up delay-1">
         <div class="project-mockup">
           <div class="mockup-browser">
             <div class="mockup-bar">
-              <div class="m-dot r"></div>
-              <div class="m-dot y"></div>
-              <div class="m-dot g"></div>
+              <div class="m-dot r"></div><div class="m-dot y"></div><div class="m-dot g"></div>
+              <span class="mockup-url">chatbot.fillipeai.com</span>
+            </div>
+            <div class="mockup-content mock-chatbot">
+              <div class="chatbot-topbar">
+                <div class="cb-dot"></div>
+                <div class="cb-line"></div>
+                <div class="cb-badge">14 online</div>
+              </div>
+              <div class="chatbot-msgs">
+                <div class="chat-msg in">Olá! Gostaria de saber o horário de atendimento</div>
+                <div class="chat-msg bot">Nosso atendimento é de seg–sex das 8h às 18h. Posso ajudar com mais alguma coisa? 😊</div>
+                <div class="chat-msg out">Sim! Quero fazer um agendamento</div>
+                <div class="chat-typing">
+                  <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="project-info">
+          <div class="project-header"><span class="project-tag tag-chatbot">Chatbot + IA</span></div>
+          <h3>Plataforma de Chatbot com IA</h3>
+          <p>Clientes sem resposta fora do horário, atendentes sobrecarregados e histórico de conversa perdido. Criamos uma plataforma multi-empresa onde cada marca tem seu bot treinado com IA, integrado ao WhatsApp com painel de atendimento humano.</p>
+          <div class="project-tech">
+            <span class="tech-badge">Next.js</span>
+            <span class="tech-badge">TypeScript</span>
+            <span class="tech-badge">Claude AI</span>
+            <span class="tech-badge">WhatsApp API</span>
+            <span class="tech-badge">Prisma</span>
+            <span class="tech-badge">PostgreSQL</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 2: HotelX -->
+      <div class="project-card glow-border fade-up delay-2">
+        <div class="project-mockup">
+          <div class="mockup-browser">
+            <div class="mockup-bar">
+              <div class="m-dot r"></div><div class="m-dot y"></div><div class="m-dot g"></div>
+              <span class="mockup-url">hotelx.app</span>
+            </div>
+            <div class="mockup-content mock-hotel">
+              <div class="hotel-topbar">
+                <div class="ht-dot"></div>
+                <div style="height:4px;width:40px;background:rgba(255,255,255,0.08);border-radius:2px"></div>
+                <div class="ht-label">Mapa de Quartos</div>
+              </div>
+              <div class="hotel-body">
+                <div class="hotel-rooms">
+                  <div class="hroom occ">101</div><div class="hroom occ">102</div><div class="hroom free">103</div><div class="hroom out">104</div><div class="hroom occ">105</div>
+                  <div class="hroom free">201</div><div class="hroom occ">202</div><div class="hroom occ">203</div><div class="hroom free">204</div><div class="hroom out">205</div>
+                </div>
+                <div class="hotel-kpis">
+                  <div class="hkpi"><div class="hkpi-n" style="color:var(--cyan)">7</div><div class="hkpi-l">Ocupados</div></div>
+                  <div class="hkpi"><div class="hkpi-n" style="color:#00c850">3</div><div class="hkpi-l">Livres</div></div>
+                  <div class="hkpi"><div class="hkpi-n" style="color:#ffbd2e">2</div><div class="hkpi-l">Check-out</div></div>
+                  <div class="hkpi"><div class="hkpi-n" style="color:var(--purple)">R$4.8k</div><div class="hkpi-l">Hoje</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="project-info">
+          <div class="project-header"><span class="project-tag tag-hotel">Hotelaria</span></div>
+          <h3>Sistema de Gestão Hoteleira</h3>
+          <p>Reservas no caderno, controle de quartos em planilha e check-in que trava na recepção. Centralizamos tudo: mapa de quartos em tempo real, reservas online, FNRH digital, financeiro e relatórios de ocupação.</p>
+          <div class="project-tech">
+            <span class="tech-badge">Next.js</span>
+            <span class="tech-badge">TypeScript</span>
+            <span class="tech-badge">Prisma</span>
+            <span class="tech-badge">PostgreSQL</span>
+            <span class="tech-badge">NextAuth</span>
+            <span class="tech-badge">Railway</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 3: 1BoraJogar -->
+      <div class="project-card glow-border fade-up delay-3">
+        <div class="project-mockup">
+          <div class="mockup-browser">
+            <div class="mockup-bar">
+              <div class="m-dot r"></div><div class="m-dot y"></div><div class="m-dot g"></div>
+              <span class="mockup-url">1borajogar.app</span>
+            </div>
+            <div class="mockup-content mock-arena">
+              <div class="arena-topbar">
+                <div class="ar-dot"></div>
+                <div class="ar-label">1BoraJogar</div>
+                <div class="ar-date">Qui 01/05</div>
+              </div>
+              <div class="arena-body">
+                <div class="arena-courts">
+                  <div class="acourt res"><div class="acourt-name">Quadra 1</div><div class="acourt-st">Reservada</div></div>
+                  <div class="acourt free"><div class="acourt-name">Quadra 2</div><div class="acourt-st">Disponível</div></div>
+                  <div class="acourt res"><div class="acourt-name">Quadra 3</div><div class="acourt-st">Reservada</div></div>
+                </div>
+                <div class="arena-slots">
+                  <div class="aslot"><span class="aslot-t">08:00</span><div class="aslot-bar" style="width:100%"></div></div>
+                  <div class="aslot"><span class="aslot-t">10:00</span><div class="aslot-bar" style="width:60%"></div></div>
+                  <div class="aslot"><span class="aslot-t">14:00</span><div class="aslot-bar" style="width:80%"></div></div>
+                  <div class="aslot"><span class="aslot-t">18:00</span><div class="aslot-bar" style="width:45%"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="project-info">
+          <div class="project-header"><span class="project-tag tag-arena">Esportes & Arenas</span></div>
+          <h3>1BoraJogar — Gestão de Arenas</h3>
+          <p>Quadras reservadas no caderno, cancelamento por mensagem de voz e recorrência impossível de controlar. Criamos um sistema completo de agendamento online com quadras em tempo real, reservas recorrentes e controle financeiro.</p>
+          <div class="project-tech">
+            <span class="tech-badge">Next.js</span>
+            <span class="tech-badge">TypeScript</span>
+            <span class="tech-badge">Prisma</span>
+            <span class="tech-badge">PostgreSQL</span>
+            <span class="tech-badge">NextAuth</span>
+            <span class="tech-badge">Railway</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 4: containex -->
+      <div class="project-card glow-border fade-up delay-4">
+        <div class="project-mockup">
+          <div class="mockup-browser">
+            <div class="mockup-bar">
+              <div class="m-dot r"></div><div class="m-dot y"></div><div class="m-dot g"></div>
+              <span class="mockup-url">containex.app</span>
+            </div>
+            <div class="mockup-content mock-giuvan">
+              <div class="mock-nav">
+                <span class="n-logo">CONTAINEX</span>
+                <span class="n-sep"></span>
+                <span class="n-btn">+ Nova Proposta</span>
+              </div>
+              <div class="mock-table-area">
+                <div class="mock-table-head">
+                  <div class="mock-th"></div><div class="mock-th"></div><div class="mock-th" style="flex:0 0 40px"></div>
+                </div>
+                <div class="mock-table-row">
+                  <div class="mock-td"></div><div class="mock-td"></div>
+                  <div class="mock-td status"><span class="status-badge green">Aprovado</span></div>
+                </div>
+                <div class="mock-table-row">
+                  <div class="mock-td"></div><div class="mock-td"></div>
+                  <div class="mock-td status"><span class="status-badge yellow">Aguardo</span></div>
+                </div>
+                <div class="mock-table-row">
+                  <div class="mock-td"></div><div class="mock-td"></div>
+                  <div class="mock-td status"><span class="status-badge blue">Enviada</span></div>
+                </div>
+                <div class="mock-table-row">
+                  <div class="mock-td"></div><div class="mock-td"></div>
+                  <div class="mock-td status"><span class="status-badge green">Aprovado</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="project-info">
+          <div class="project-header"><span class="project-tag tag-comercial">Gestão & CRM</span></div>
+          <h3>containex — Gestão de Containers</h3>
+          <p>Contratos de locação espalhados, frota de containers sem histórico e propostas feitas no Word. Construímos um sistema completo: CRM de clientes, gestão de frota, locações, ordens de serviço, financeiro e propostas em PDF enviadas pelo WhatsApp.</p>
+          <div class="project-tech">
+            <span class="tech-badge">Next.js</span>
+            <span class="tech-badge">TypeScript</span>
+            <span class="tech-badge">React PDF</span>
+            <span class="tech-badge">WhatsApp API</span>
+            <span class="tech-badge">Prisma</span>
+            <span class="tech-badge">PostgreSQL</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 5: ADM365 -->
+      <div class="project-card glow-border fade-up delay-1">
+        <div class="project-mockup">
+          <div class="mockup-browser">
+            <div class="mockup-bar">
+              <div class="m-dot r"></div><div class="m-dot y"></div><div class="m-dot g"></div>
+              <span class="mockup-url">adm365.app</span>
+            </div>
+            <div class="mockup-content mock-adm">
+              <div class="adm-topbar">
+                <div class="adm-logo">ADM365</div>
+                <div class="adm-btn">+ Cotação</div>
+              </div>
+              <div class="adm-body">
+                <div class="adm-th-row">
+                  <div class="adm-th"></div><div class="adm-th"></div><div class="adm-th" style="flex:0 0 44px"></div>
+                </div>
+                <div class="adm-row">
+                  <div class="adm-td"></div><div class="adm-td"></div>
+                  <div class="adm-td st"><span class="adm-badge ap">Aprovado</span></div>
+                </div>
+                <div class="adm-row">
+                  <div class="adm-td"></div><div class="adm-td"></div>
+                  <div class="adm-td st"><span class="adm-badge em">Em análise</span></div>
+                </div>
+                <div class="adm-row">
+                  <div class="adm-td"></div><div class="adm-td"></div>
+                  <div class="adm-td st"><span class="adm-badge ag">Aguardando</span></div>
+                </div>
+                <div class="adm-row">
+                  <div class="adm-td"></div><div class="adm-td"></div>
+                  <div class="adm-td st"><span class="adm-badge ap">Aprovado</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="project-info">
+          <div class="project-header"><span class="project-tag tag-gestao">Comercial & ERP</span></div>
+          <h3>ADM365 — Sistema Comercial</h3>
+          <p>Cotações perdidas no e-mail, proposta feita no Excel e comissão calculada na calculadora. Centralizamos todo o processo: cotações, propostas, aprovações, cálculo de comissões, tabelas de preço e embarques — em um único sistema.</p>
+          <div class="project-tech">
+            <span class="tech-badge">React</span>
+            <span class="tech-badge">TypeScript</span>
+            <span class="tech-badge">Fastify</span>
+            <span class="tech-badge">Prisma</span>
+            <span class="tech-badge">PostgreSQL</span>
+            <span class="tech-badge">Railway</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 6: CRM Studio Luana -->
+      <div class="project-card glow-border fade-up delay-2">
+        <div class="project-mockup">
+          <div class="mockup-browser">
+            <div class="mockup-bar">
+              <div class="m-dot r"></div><div class="m-dot y"></div><div class="m-dot g"></div>
               <span class="mockup-url">studio-crm.vercel.app</span>
             </div>
             <div class="mockup-content mock-crm">
@@ -1305,11 +1652,9 @@
           </div>
         </div>
         <div class="project-info">
-          <div class="project-header">
-            <span class="project-tag tag-crm">CRM</span>
-          </div>
+          <div class="project-header"><span class="project-tag tag-crm">CRM</span></div>
           <h3>Studio Luana Ferreira</h3>
-          <p>Agenda bagunçada, cliente que não aparece e faturamento que ninguém sabe ao certo. Criamos um sistema que organiza tudo isso em um só lugar — e ainda avisa o cliente automaticamente pelo WhatsApp.</p>
+          <p>Agenda bagunçada, cliente que não aparece e faturamento que ninguém sabe ao certo. Criamos um CRM completo com agendamentos, controle de clientes, faturamento e confirmações automáticas pelo WhatsApp.</p>
           <div class="project-tech">
             <span class="tech-badge">React</span>
             <span class="tech-badge">Node.js</span>
@@ -1321,14 +1666,12 @@
         </div>
       </div>
 
-      <!-- CARD 2: Cequip -->
-      <div class="project-card glow-border fade-up delay-2">
+      <!-- CARD 7: Disparos WhatsApp -->
+      <div class="project-card glow-border fade-up delay-3">
         <div class="project-mockup">
           <div class="mockup-browser">
             <div class="mockup-bar">
-              <div class="m-dot r"></div>
-              <div class="m-dot y"></div>
-              <div class="m-dot g"></div>
+              <div class="m-dot r"></div><div class="m-dot y"></div><div class="m-dot g"></div>
               <span class="mockup-url">cliente-privado.app</span>
             </div>
             <div class="mockup-content mock-cequip">
@@ -1366,11 +1709,9 @@
           </div>
         </div>
         <div class="project-info">
-          <div class="project-header">
-            <span class="project-tag tag-automation">Automação + IA</span>
-          </div>
+          <div class="project-header"><span class="project-tag tag-automation">Automação + IA</span></div>
           <h3>Disparos Automáticos via WhatsApp</h3>
-          <p>Centenas de clientes atendidos por mês e nenhuma forma eficiente de saber o que acharam. Automatizamos o contato pós-atendimento via WhatsApp e usamos inteligência artificial para entender cada resposta — sem trabalho manual.</p>
+          <p>Centenas de clientes atendidos por mês sem nenhuma forma eficiente de saber o que acharam. Automatizamos o contato pós-atendimento via WhatsApp e usamos inteligência artificial para classificar cada resposta — sem trabalho manual.</p>
           <div class="project-tech">
             <span class="tech-badge">Next.js</span>
             <span class="tech-badge">TypeScript</span>
@@ -1382,14 +1723,12 @@
         </div>
       </div>
 
-      <!-- CARD 3: No Beat Hub -->
-      <div class="project-card glow-border fade-up delay-3">
+      <!-- CARD 8: No Beat Hub -->
+      <div class="project-card glow-border fade-up delay-4">
         <div class="project-mockup">
           <div class="mockup-browser">
             <div class="mockup-bar">
-              <div class="m-dot r"></div>
-              <div class="m-dot y"></div>
-              <div class="m-dot g"></div>
+              <div class="m-dot r"></div><div class="m-dot y"></div><div class="m-dot g"></div>
               <span class="mockup-url">nobeathub.vercel.app</span>
             </div>
             <div class="mockup-content mock-beat">
@@ -1402,33 +1741,23 @@
                   <div class="mock-track playing">
                     <div class="tr-play"></div>
                     <div class="tr-wave">
-                      <div class="wv active" style="height:8px"></div>
-                      <div class="wv active" style="height:14px"></div>
-                      <div class="wv active" style="height:10px"></div>
-                      <div class="wv active" style="height:16px"></div>
-                      <div class="wv active" style="height:6px"></div>
-                      <div class="wv" style="height:12px"></div>
-                      <div class="wv" style="height:8px"></div>
-                      <div class="wv" style="height:14px"></div>
+                      <div class="wv active" style="height:8px"></div><div class="wv active" style="height:14px"></div>
+                      <div class="wv active" style="height:10px"></div><div class="wv active" style="height:16px"></div>
+                      <div class="wv active" style="height:6px"></div><div class="wv" style="height:12px"></div>
                     </div>
                   </div>
                   <div class="mock-track">
                     <div class="tr-play" style="background:rgba(255,255,255,0.1)"></div>
                     <div class="tr-wave">
-                      <div class="wv" style="height:6px"></div>
-                      <div class="wv" style="height:12px"></div>
-                      <div class="wv" style="height:8px"></div>
-                      <div class="wv" style="height:14px"></div>
-                      <div class="wv" style="height:10px"></div>
+                      <div class="wv" style="height:6px"></div><div class="wv" style="height:12px"></div>
+                      <div class="wv" style="height:8px"></div><div class="wv" style="height:14px"></div>
                     </div>
                   </div>
                   <div class="mock-track">
                     <div class="tr-play" style="background:rgba(255,255,255,0.1)"></div>
                     <div class="tr-wave">
-                      <div class="wv" style="height:10px"></div>
-                      <div class="wv" style="height:8px"></div>
-                      <div class="wv" style="height:16px"></div>
-                      <div class="wv" style="height:6px"></div>
+                      <div class="wv" style="height:10px"></div><div class="wv" style="height:8px"></div>
+                      <div class="wv" style="height:16px"></div><div class="wv" style="height:6px"></div>
                     </div>
                   </div>
                 </div>
@@ -1437,9 +1766,7 @@
                   <div>
                     <div class="player-progress"><div class="player-bar"></div></div>
                     <div class="player-controls">
-                      <div class="p-btn">◂</div>
-                      <div class="p-btn main">▸</div>
-                      <div class="p-btn">▸</div>
+                      <div class="p-btn">◂</div><div class="p-btn main">▸</div><div class="p-btn">▸</div>
                     </div>
                   </div>
                 </div>
@@ -1448,11 +1775,9 @@
           </div>
         </div>
         <div class="project-info">
-          <div class="project-header">
-            <span class="project-tag tag-saas">SaaS</span>
-          </div>
+          <div class="project-header"><span class="project-tag tag-saas">SaaS</span></div>
           <h3>Sistema de Gerenciamento Musical</h3>
-          <p>Músicas chegando por e-mail, link de Drive e WhatsApp ao mesmo tempo — sem controle nenhum. Criamos uma plataforma onde cada compositor envia pelo próprio portal e o produtor aprova ou rejeita com um clique.</p>
+          <p>Músicas chegando por e-mail, Drive e WhatsApp ao mesmo tempo — sem controle nenhum. Criamos uma plataforma onde cada compositor envia pelo próprio portal e o produtor aprova ou rejeita com um clique.</p>
           <div class="project-tech">
             <span class="tech-badge">Next.js</span>
             <span class="tech-badge">TypeScript</span>
@@ -1460,69 +1785,6 @@
             <span class="tech-badge">Prisma</span>
             <span class="tech-badge">PostgreSQL</span>
             <span class="tech-badge">NextAuth</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- CARD 4: Giuvan -->
-      <div class="project-card glow-border fade-up delay-4">
-        <div class="project-mockup">
-          <div class="mockup-browser">
-            <div class="mockup-bar">
-              <div class="m-dot r"></div>
-              <div class="m-dot y"></div>
-              <div class="m-dot g"></div>
-              <span class="mockup-url">giuvan.vercel.app</span>
-            </div>
-            <div class="mockup-content mock-giuvan">
-              <div class="mock-nav">
-                <span class="n-logo">GIUVAN</span>
-                <span class="n-sep"></span>
-                <span class="n-btn">+ Nova Proposta</span>
-              </div>
-              <div class="mock-table-area">
-                <div class="mock-table-head">
-                  <div class="mock-th"></div>
-                  <div class="mock-th"></div>
-                  <div class="mock-th" style="flex:0 0 40px"></div>
-                </div>
-                <div class="mock-table-row">
-                  <div class="mock-td"></div>
-                  <div class="mock-td"></div>
-                  <div class="mock-td status"><span class="status-badge green">Aprovado</span></div>
-                </div>
-                <div class="mock-table-row">
-                  <div class="mock-td"></div>
-                  <div class="mock-td"></div>
-                  <div class="mock-td status"><span class="status-badge yellow">Aguardo</span></div>
-                </div>
-                <div class="mock-table-row">
-                  <div class="mock-td"></div>
-                  <div class="mock-td"></div>
-                  <div class="mock-td status"><span class="status-badge blue">Enviada</span></div>
-                </div>
-                <div class="mock-table-row">
-                  <div class="mock-td"></div>
-                  <div class="mock-td"></div>
-                  <div class="mock-td status"><span class="status-badge green">Aprovado</span></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="project-info">
-          <div class="project-header">
-            <span class="project-tag tag-comercial">Comercial</span>
-          </div>
-          <h3>CRM de Vendas e Aluguel de Containers</h3>
-          <p>Proposta feita no Word, enviada por e-mail, aprovada por mensagem de voz. Ninguém sabe em que pé está cada negociação. Resolvemos isso com um sistema que gera propostas profissionais em PDF e envia direto no WhatsApp do cliente.</p>
-          <div class="project-tech">
-            <span class="tech-badge">Next.js</span>
-            <span class="tech-badge">TypeScript</span>
-            <span class="tech-badge">React PDF</span>
-            <span class="tech-badge">W-API</span>
-            <span class="tech-badge">Prisma</span>
-            <span class="tech-badge">PostgreSQL</span>
           </div>
         </div>
       </div>
@@ -1763,10 +2025,11 @@
   const el = document.getElementById('typed-text');
   const phrases = [
     "Sistemas que resolvem problemas reais.",
-    "CRMs, automações e integrações sob medida.",
+    "Chatbot com IA que atende seus clientes 24h.",
+    "Gestão hoteleira, arenas e containers num sistema só.",
+    "CRMs, ERPs e automações sob medida para o seu negócio.",
+    "Sites, landing pages e bio de Instagram profissionais.",
     "Seu processo no automático, sua equipe no que importa.",
-    "Do problema à solução funcionando. Sem enrolação.",
-    "Tecnologia que qualquer um da sua equipe consegue usar."
   ];
   let pi=0, ci=0, deleting=false;
   function type(){
